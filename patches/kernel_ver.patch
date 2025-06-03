@@ -1,0 +1,43 @@
+diff --git a/include/kernel-version.mk b/include/kernel-version.mk
+index 6627eda1a5..e22c24c523 100644
+--- a/include/kernel-version.mk
++++ b/include/kernel-version.mk
+@@ -6,9 +6,9 @@ ifdef CONFIG_TESTING_KERNEL
+   KERNEL_PATCHVER:=$(KERNEL_TESTING_PATCHVER)
+ endif
+
+-LINUX_VERSION-5.4 = .219
++LINUX_VERSION-5.4 = .218
+
+-LINUX_KERNEL_HASH-5.4.219 = 5293ad927269dfb697bc80e9dd95c1d9fd2e4bad7d8422300e012fd31950a261
++LINUX_KERNEL_HASH-5.4.218 = 3ddd74028537d677b0c02b17cfdf881f4ebddf755526ccb9cd7f988371a9f438
+
+ remove_uri_prefix=$(subst git://,,$(subst http://,,$(subst https://,,$(1))))
+ sanitize_uri=$(call qstrip,$(subst @,_,$(subst :,_,$(subst .,_,$(subst -,_,$(subst /,_,$(1)))))))
+diff --git a/include/kernel-defaults.mk b/include/kernel-defaults.mk
+index 3aa1baa761..4aa61a972a 100644
+--- a/include/kernel-defaults.mk
++++ b/include/kernel-defaults.mk
+@@ -106,7 +106,7 @@ define Kernel/Configure/Default
+                cp $(LINUX_DIR)/.config.set $(LINUX_DIR)/.config.prev; \
+        }
+        $(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
+-	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | mkhash md5 > $(LINUX_DIR)/.vermagic
++	cp $(TOPDIR)/vermagic $(LINUX_DIR)/.vermagic
+ endef
+
+ define Kernel/Configure/Initramfs
+diff --git a/package/kernel/linux/Makefile b/package/kernel/linux/Makefile
+index 39b9e82c27..38944f30cb 100644
+--- a/package/kernel/linux/Makefile
++++ b/package/kernel/linux/Makefile
+@@ -24,7 +24,7 @@ export SHELL:=/bin/sh
+ include $(INCLUDE_DIR)/package.mk
+
+ ifeq ($(DUMP),)
+-  STAMP_BUILT:=$(STAMP_BUILT)_$(shell $(SCRIPT_DIR)/kconfig.pl $(LINUX_DIR)/.config | mkhash md5)
++  STAMP_BUILT:=$(STAMP_BUILT)_$(shell cat $(LINUX_DIR)/.vermagic)
+   -include $(LINUX_DIR)/.config
+ endif
+
+
