@@ -8,4 +8,4 @@ cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
 
 ./scripts/feeds update -a               
 ./scripts/feeds install -a -f
-     
+cp config.aarch64.3 .config
