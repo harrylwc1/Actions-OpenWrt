@@ -63,12 +63,11 @@ EXTRA_CFLAGS:= \
 	-DCONFIG_IOCTL_CFG80211 \
 	-DCONFIG_CONCURRENT_MODE \
 	-Wno-unused-variable \
-	-msoft-float \
 	-DBUILD_OPENWRT
 
 ifeq ($(ARCH),arm)
 	#EXTRA_CFLAGS += -mfloat-abi=softfp
-        EXTRA_CFLAGS += -msoft-float
+        EXTRA_CFLAGS += 
 
 endif
 ifeq ($(BOARD),x86)
