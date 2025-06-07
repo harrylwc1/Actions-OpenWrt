@@ -290,7 +290,7 @@ jobs:
         run: |
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
-           sed -i 's/CONFIG_PREEMPT_NONE_BUILD=y/CONFIG_PREEMPT=y/g' $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
+           #sed -i 's/CONFIG_PREEMPT_NONE_BUILD=y/CONFIG_PREEMPT=y/g' $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
            #[ -e $KERNEL_MODULE ] && cat $KERNEL_MODULE >> $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION 
            cd x-wrt 
            
