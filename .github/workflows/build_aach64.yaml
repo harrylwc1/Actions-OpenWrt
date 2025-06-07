@@ -47,7 +47,7 @@ env:
   KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
   #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu  
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: false
+  KERNEL_MENUCONFIG: true
   CPU_MULTI_CORE: true
   #5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4
   KERNEL_VERSION: '5.4'
@@ -290,8 +290,10 @@ jobs:
         run: |
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
+           sed -i 's/CONFIG_PREEMPT_NONE_BUILD=y/CONFIG_PREEMPT=y/g' $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
            #[ -e $KERNEL_MODULE ] && cat $KERNEL_MODULE >> $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION 
            cd x-wrt 
+           
            sudo rm -rf "$AGENT_TOOLSDIRECTORY"
            echo cpu core=$(nproc)
            make -j$(nproc)
