@@ -13,7 +13,9 @@ cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvh
 rm -r feeds/packages/multimedia/tvheadend
 ln -s $GITHUB_WORKSPACE/lede/feeds/luci/applications/luci-app-nlbwmon $GITHUB_WORKSPACE/x-wrt/package/
 #rm $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/rust/patches/0003-bump-libc-deps-to-0.2.146.patch
-cp $GITHUB_WORKSPACE/patches/swconfig* $GITHUB_WORKSPACE/x-wrt/target/linux/generic/files/drivers/net/phy/
+
+
+#cp $GITHUB_WORKSPACE/patches/swconfig* $GITHUB_WORKSPACE/x-wrt/target/linux/generic/files/drivers/net/phy/
 #cp $GITHUB_WORKSPACE/patches/Makefile.rust  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/rust/Makefile
 #cp $GITHUB_WORKSPACE/patches/Makefile.ruby  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/ruby/Makefile
 #cp $GITHUB_WORKSPACE/patches/422.patch $GITHUB_WORKSPACE/patches/x-wrt/package/kernel/mwlwifi/patches/
