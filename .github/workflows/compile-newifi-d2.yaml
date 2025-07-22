@@ -220,11 +220,16 @@ jobs:
       - name: SSH链接管理
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-         
+        env:
+         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+         TELEGRAM_CHAT_ID: 1373335316         
             
       - name: SSH connection for make menuconfig    
         if: env.MAKEMENU_CONFIG == 'true'
         uses: P3TERX/ssh2actions@main
+        env:
+         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+         TELEGRAM_CHAT_ID: 1373335316
          
       - name: 开始编译固件
         run: |
@@ -267,12 +272,17 @@ jobs:
          if: ${{ failure() }}
            #uses: lhotari/action-upterm@v1
          uses: P3TERX/ssh2actions@main
+         env:
+          TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+          TELEGRAM_CHAT_ID: 1373335316
 
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
           # uses: lhotari/action-upterm@v1
         uses: P3TERX/ssh2actions@main
-
+        env:
+         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+         TELEGRAM_CHAT_ID: 1373335316
  
       - name: 再次编译固件 after updated kernel_menuconfig
         if: env.BUILD_KERNEL_MODULES == 'true'
@@ -312,6 +322,9 @@ jobs:
         if: ${{ failure() }}
         #uses: lhotari/action-upterm@v1
         uses: P3TERX/ssh2actions@main
+        env:
+         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+         TELEGRAM_CHAT_ID: 1373335316
       - name: Prepare artifact
         run: |
           sudo rm -r lede
@@ -358,6 +371,9 @@ jobs:
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: P3TERX/ssh2actions@main
+        env:
+         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
+         TELEGRAM_CHAT_ID: 1373335316
         
       - name: Upload bin directory if failure
         uses: actions/upload-artifact@master
