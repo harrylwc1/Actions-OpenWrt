@@ -21,9 +21,10 @@ ln -s $GITHUB_WORKSPACE/lede/feeds/luci/applications/luci-app-nlbwmon $GITHUB_WO
 #cp $GITHUB_WORKSPACE/patches/422.patch $GITHUB_WORKSPACE/patches/x-wrt/package/kernel/mwlwifi/patches/
 
 cp $GITHUB_WORKSPACE/patches/0003-mutils_time.patch $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/mailsend/patches/
-cp $GITHUB_WORKSPACE/patches/060-binutils.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg/patches/
+#cp $GITHUB_WORKSPACE/patches/060-binutils.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg/patches/
 cp $GITHUB_WORKSPACE/patches/030-h264-mips.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg/patches/
 
+cp $GITHUB_WORKSPACE/patches/Makefile.libx264 $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libx264/Makefile
 
 #mkdir $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw
 #/usr/bin/opencc -i $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-cn/nlbwmon.po -o $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw/nlbwmon.po 
