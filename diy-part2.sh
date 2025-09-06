@@ -25,6 +25,9 @@ cp $GITHUB_WORKSPACE/patches/0003-mutils_time.patch $GITHUB_WORKSPACE/x-wrt/pack
 cp $GITHUB_WORKSPACE/patches/030-h264-mips.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg/patches/
 cp $GITHUB_WORKSPACE/patches/Makefile.libconfig  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libconfig/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.libx264 $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libx264/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/small/pdnsd-alt/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/pdnsd-alt/Makefile
+
 
 #mkdir $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw
 #/usr/bin/opencc -i $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-cn/nlbwmon.po -o $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw/nlbwmon.po 
