@@ -27,6 +27,10 @@ cp $GITHUB_WORKSPACE/patches/Makefile.libconfig  $GITHUB_WORKSPACE/x-wrt/package
 cp $GITHUB_WORKSPACE/patches/Makefile.libx264 $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libx264/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/small/pdnsd-alt/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/pdnsd-alt/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/small/simple-obfs/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/simple-obfs/Makefile
+
+
 mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches
 cp $GITHUB_WORKSPACE/patches/000*Fix*atftp*  $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches/
 
