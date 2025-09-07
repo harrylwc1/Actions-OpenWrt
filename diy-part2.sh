@@ -26,7 +26,7 @@ cp $GITHUB_WORKSPACE/patches/030-h264-mips.patch $GITHUB_WORKSPACE/x-wrt/feeds/p
 cp $GITHUB_WORKSPACE/patches/Makefile.libconfig  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libconfig/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.libx264 $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libx264/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/feeds/small/pdnsd-alt/Makefile
-cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/pdnsd-alt/Makefile
+#cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/pdnsd-alt/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/feeds/small/simple-obfs/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/simple-obfs/Makefile
 
@@ -50,7 +50,7 @@ cp -r $GITHUB_WORKSPACE/lede/feeds/luci/applications/luci-app-turboacc $GITHUB_W
 mkdir $GITHUB_WORKSPACE/x-wrt/package/luci-app-turboacc/po/zh_Hant
 ln -s $GITHUB_WORKSPACE/lede/feeds/luci/applications/luci-app-ttyd $GITHUB_WORKSPACE/x-wrt/package/
 ln -s $GITHUB_WORKSPACE/lede/feeds/packages/net/dnsforwarder $GITHUB_WORKSPACE/x-wrt/package/
-ln -s $GITHUB_WORKSPACE/lede/feeds/packages/net/pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/
+#ln -s $GITHUB_WORKSPACE/lede/feeds/packages/net/pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/
 git clone https://github.com/brvphoenix/wrtbwmon $GITHUB_WORKSPACE/x-wrt/package/wrtbwmon
 git clone https://github.com/muink/luci-app-netdata $GITHUB_WORKSPACE/x-wrt/package/luci-app-netdata
 cp $GITHUB_WORKSPACE/patches/Makefile.netdata $GITHUB_WORKSPACE/x-wrt/package/luci-app-netdata/Makefile
