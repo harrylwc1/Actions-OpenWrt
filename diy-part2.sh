@@ -31,8 +31,8 @@ cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/packag
 cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/simple-obfs/Makefile
 
 
-mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches
-cp $GITHUB_WORKSPACE/patches/000*Fix*atftp*  $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches/
+#mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches
+#cp $GITHUB_WORKSPACE/patches/000*Fix*atftp*  $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches/
 
 #mkdir $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw
 #/usr/bin/opencc -i $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-cn/nlbwmon.po -o $GITHUB_WORKSPACE/x-wrt/package/luci-app-nlbwmon/po/zh-tw/nlbwmon.po 
