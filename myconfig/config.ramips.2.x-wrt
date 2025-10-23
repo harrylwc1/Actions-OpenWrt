@@ -718,8 +718,8 @@ CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 #
 # CONFIG_GCC_USE_VERSION_12 is not set
 # CONFIG_GCC_USE_VERSION_13 is not set
-CONFIG_GCC_USE_VERSION_14=y
-# CONFIG_GCC_USE_VERSION_15 is not set
+# CONFIG_GCC_USE_VERSION_14 is not set
+CONFIG_GCC_USE_VERSION_15=y
 # CONFIG_GCC_USE_GRAPHITE is not set
 CONFIG_EXTRA_GCC_CONFIG_OPTIONS=""
 # CONFIG_GCC_DEFAULT_PIE is not set
@@ -745,8 +745,8 @@ CONFIG_USE_MUSL=y
 CONFIG_SSP_SUPPORT=y
 CONFIG_BINUTILS_VERSION_2_45=y
 CONFIG_BINUTILS_VERSION="2.45"
-CONFIG_GCC_VERSION="14.3.0"
-CONFIG_GCC_USE_DEFAULT_VERSION=y
+CONFIG_GCC_VERSION_15=y
+CONFIG_GCC_VERSION="15.2.0"
 CONFIG_LIBC="musl"
 CONFIG_TARGET_SUFFIX="musl"
 # CONFIG_IB is not set
@@ -6375,6 +6375,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
 # CONFIG_PACKAGE_luci-app-modemband is not set
+# CONFIG_PACKAGE_luci-app-momo is not set
 # CONFIG_PACKAGE_luci-app-mosdns is not set
 # CONFIG_PACKAGE_luci-app-mosquitto is not set
 # CONFIG_PACKAGE_luci-app-mtwifi is not set
@@ -6383,6 +6384,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-netdata is not set
 # CONFIG_PACKAGE_luci-app-netspeedtest is not set
 # CONFIG_PACKAGE_luci-app-nextdns is not set
+# CONFIG_PACKAGE_luci-app-nikki is not set
 # CONFIG_PACKAGE_luci-app-nlbwmon is not set
 # CONFIG_PACKAGE_luci-app-nut is not set
 # CONFIG_PACKAGE_luci-app-ocserv is not set
@@ -8209,6 +8211,7 @@ CONFIG_PACKAGE_libipset=m
 # CONFIG_PACKAGE_minimalist-pcproxy is not set
 # CONFIG_PACKAGE_modemband is not set
 # CONFIG_PACKAGE_modemmanager is not set
+# CONFIG_PACKAGE_momo is not set
 # CONFIG_PACKAGE_mosquitto-client-nossl is not set
 # CONFIG_PACKAGE_mosquitto-client-ssl is not set
 # CONFIG_PACKAGE_mosquitto-nossl is not set
@@ -8236,6 +8239,7 @@ CONFIG_PACKAGE_libipset=m
 # CONFIG_PACKAGE_netsniff-ng is not set
 # CONFIG_PACKAGE_netstinky is not set
 # CONFIG_PACKAGE_nfdump is not set
+# CONFIG_PACKAGE_nikki is not set
 # CONFIG_PACKAGE_nlbwmon is not set
 # CONFIG_PACKAGE_noping is not set
 # CONFIG_PACKAGE_nqptp is not set
