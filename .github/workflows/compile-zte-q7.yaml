@@ -244,7 +244,7 @@ jobs:
            ls -alt $GITHUB_WORKSPACE/x-wrt/.config
            echo cpu core=$(nproc)
            make -j$(nproc) #| tee makelog.txt
-           #curl -i -X POST http://r619ac.ubddns.org:8080/store.json --data-binary "@makelog.txt"
+           #curl -i -X POST http://r619ac.ddnsfree.com:8080/store.json --data-binary "@makelog.txt"
            #|| make -j1 V=s
            [ $? != 0 ] && make V=s || echo "build success"
            #cp $GITHUB_WORKSPACE/myconfig/config.ramips.3 $GITHUB_WORKSPACE/x-wrt/.config
@@ -289,7 +289,7 @@ jobs:
           #strings $DRIVERS_DIR/usbcore.ko| grep linux-|tail -1|tail -c15|cut -d - -f2 > KERNEL_VER
           [ -s KERNEL_VER ] && echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
 
-          wget http://be6500.ubddns.org:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
+          wget http://be6500.ddnsfree.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
           upload=`cat ${{ env.ROUTER_MODEL }}`
           echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
           echo "UPLOAD ROUTER=$upload"
