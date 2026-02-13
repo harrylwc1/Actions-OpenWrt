@@ -3014,6 +3014,13 @@ CONFIG_PACKAGE_wifi-scripts=y
 # CONFIG_PACKAGE_zabbix-get-openssl is not set
 # CONFIG_PACKAGE_zabbix-proxy-gnutls is not set
 # CONFIG_PACKAGE_zabbix-proxy-nossl is not set
+
+#
+# Database Software
+#
+# CONFIG_ZABBIX_MYSQL is not set
+CONFIG_ZABBIX_POSTGRESQL=y
+# CONFIG_ZABBIX_SQLITE is not set
 # CONFIG_PACKAGE_zabbix-proxy-openssl is not set
 # CONFIG_PACKAGE_zabbix-sender-gnutls is not set
 # CONFIG_PACKAGE_zabbix-sender-nossl is not set
@@ -3119,15 +3126,6 @@ CONFIG_PACKAGE_wifi-scripts=y
 CONFIG_PACKAGE_autosamba_INCLUDE_KSMBD=y
 # CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA3 is not set
 # CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA4 is not set
-
-#
-# Configuration
-#
-CONFIG_GOLANG_EXTERNAL_BOOTSTRAP_ROOT=""
-CONFIG_GOLANG_BUILD_CACHE_DIR=""
-# CONFIG_GOLANG_MOD_CACHE_WORLD_READABLE is not set
-# end of Configuration
-
 # CONFIG_PACKAGE_ipv6helper is not set
 # CONFIG_PACKAGE_jose is not set
 CONFIG_PACKAGE_libiwinfo-data=y
@@ -4520,20 +4518,25 @@ CONFIG_PACKAGE_kmod-usb-common=y
 #
 # Go
 #
-# CONFIG_PACKAGE_golang-github-jedisct1-dnscrypt-proxy2-dev is not set
-# CONFIG_PACKAGE_golang-github-nextdns-nextdns-dev is not set
-# CONFIG_PACKAGE_golang-gitlab-yawning-obfs4-dev is not set
-# CONFIG_PACKAGE_golang1.25 is not set
+# CONFIG_PACKAGE_golang-bootstrap is not set
 
 #
 # Configuration
 #
+CONFIG_GOLANG_EXTERNAL_BOOTSTRAP_ROOT=""
+CONFIG_GOLANG_BUILD_BOOTSTRAP=y
+CONFIG_GOLANG_BUILD_CACHE_DIR=""
+# CONFIG_GOLANG_MOD_CACHE_WORLD_READABLE is not set
 # end of Configuration
 
-# CONFIG_PACKAGE_golang1.25-doc is not set
-# CONFIG_PACKAGE_golang1.25-misc is not set
-# CONFIG_PACKAGE_golang1.25-src is not set
-# CONFIG_PACKAGE_golang1.25-tests is not set
+# CONFIG_PACKAGE_golang-github-jedisct1-dnscrypt-proxy2-dev is not set
+# CONFIG_PACKAGE_golang-github-nextdns-nextdns-dev is not set
+# CONFIG_PACKAGE_golang-gitlab-yawning-obfs4-dev is not set
+# CONFIG_PACKAGE_golang1.26 is not set
+# CONFIG_PACKAGE_golang1.26-doc is not set
+# CONFIG_PACKAGE_golang1.26-misc is not set
+# CONFIG_PACKAGE_golang1.26-src is not set
+# CONFIG_PACKAGE_golang1.26-tests is not set
 # end of Go
 
 #
@@ -6367,7 +6370,6 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-lorawan-basicstation is not set
 # CONFIG_PACKAGE_luci-app-lucky is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
-# CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
 # CONFIG_PACKAGE_luci-app-modemband is not set
 # CONFIG_PACKAGE_luci-app-mosdns is not set
 # CONFIG_PACKAGE_luci-app-mosquitto is not set
@@ -6458,6 +6460,7 @@ CONFIG_PACKAGE_luci-app-ttyd=m
 # CONFIG_PACKAGE_luci-app-unbound is not set
 # CONFIG_PACKAGE_luci-app-upnp is not set
 # CONFIG_PACKAGE_luci-app-usteer is not set
+# CONFIG_PACKAGE_luci-app-ustreamer is not set
 # CONFIG_PACKAGE_luci-app-v2raya is not set
 # CONFIG_PACKAGE_luci-app-vnstat2 is not set
 # CONFIG_PACKAGE_luci-app-watchcat is not set
@@ -6465,6 +6468,7 @@ CONFIG_PACKAGE_luci-app-wechatpush=m
 CONFIG_PACKAGE_luci-app-wechatpush_Enable_Traffic_Monitoring=y
 CONFIG_PACKAGE_luci-app-wechatpush_Local_Disk_Information_Detection=y
 CONFIG_PACKAGE_luci-app-wechatpush_Host_Information_Detection=y
+# CONFIG_PACKAGE_luci-app-wifihistory is not set
 # CONFIG_PACKAGE_luci-app-wifischedule is not set
 CONFIG_PACKAGE_luci-app-wol=m
 # CONFIG_PACKAGE_luci-app-wrtbwmon is not set
@@ -7132,10 +7136,10 @@ CONFIG_PACKAGE_luci-i18n-wol-zh-tw=m
 # CONFIG_PACKAGE_lcdgrilo is not set
 # CONFIG_PACKAGE_minidlna is not set
 # CONFIG_PACKAGE_minisatip is not set
-# CONFIG_PACKAGE_mjpg-streamer is not set
 # CONFIG_PACKAGE_motion-ffmpeg is not set
 # CONFIG_PACKAGE_motion-noffmpeg is not set
 # CONFIG_PACKAGE_tvheadend is not set
+# CONFIG_PACKAGE_ustreamer is not set
 # CONFIG_PACKAGE_v4l2camera is not set
 # CONFIG_PACKAGE_v4l2rtspserver is not set
 # CONFIG_PACKAGE_v4l2tools is not set
