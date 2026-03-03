@@ -176,6 +176,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"          
+          pip install asciidoc 
           #sudo pip install ply 
           #sudo -E python3 -m pip install --upgrade pip 
           #sudo -E pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pip setuptools
