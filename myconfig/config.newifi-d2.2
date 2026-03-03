@@ -414,6 +414,7 @@ CONFIG_USES_SQUASHFS=y
 CONFIG_USES_MINOR=y
 CONFIG_HAS_MIPS16=y
 CONFIG_NAND_SUPPORT=y
+CONFIG_REGULATOR_SUPPORT=y
 CONFIG_mipsel=y
 CONFIG_ARCH="mipsel"
 
@@ -3727,6 +3728,11 @@ CONFIG_PACKAGE_kmod-oid-registry=m
 # end of Libraries
 
 #
+# MultiFunction Device (MFD) Support
+#
+# end of MultiFunction Device (MFD) Support
+
+#
 # Multiplexer Support
 #
 # CONFIG_PACKAGE_kmod-mux-core is not set
@@ -3888,6 +3894,9 @@ CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-dsa-b53 is not set
 # CONFIG_PACKAGE_kmod-dsa-b53-mdio is not set
 # CONFIG_PACKAGE_kmod-dsa-ks8995 is not set
+# CONFIG_PACKAGE_kmod-dsa-ksz9477 is not set
+# CONFIG_PACKAGE_kmod-dsa-ksz9477-i2c is not set
+# CONFIG_PACKAGE_kmod-dsa-ksz9477-spi is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6060 is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6xxx is not set
 # CONFIG_PACKAGE_kmod-dsa-notag is not set
@@ -4163,6 +4172,12 @@ CONFIG_PACKAGE_kmod-sdhci-mt7620=y
 # end of PCMCIA support
 
 #
+# PSE-PD / PoE support
+#
+# CONFIG_PACKAGE_kmod-pse-pd is not set
+# end of PSE-PD / PoE support
+
+#
 # RTC Real-Time Clock Support
 #
 # CONFIG_PACKAGE_kmod-rtc-bq32k is not set
@@ -4323,6 +4338,7 @@ CONFIG_PACKAGE_kmod-usb3=y
 #
 # CONFIG_PACKAGE_kmod-vhost is not set
 # CONFIG_PACKAGE_kmod-vhost-net is not set
+# CONFIG_PACKAGE_kmod-vsock is not set
 # end of Virtualization
 
 #
@@ -4760,7 +4776,7 @@ CONFIG_PACKAGE_python3-attrs=m
 # CONFIG_PACKAGE_python3-babel is not set
 CONFIG_PACKAGE_python3-base=y
 # CONFIG_PACKAGE_python3-base-src is not set
-# CONFIG_PACKAGE_python3-bcrypt=m
+#CONFIG_PACKAGE_python3-bcrypt=m
 # CONFIG_PACKAGE_python3-bcrypt-src is not set
 # CONFIG_PACKAGE_python3-bidict is not set
 # CONFIG_PACKAGE_python3-ble2mqtt is not set
@@ -4789,7 +4805,7 @@ CONFIG_PACKAGE_python3-codecs=y
 # CONFIG_PACKAGE_python3-crcmod is not set
 # CONFIG_PACKAGE_python3-cryptodome is not set
 # CONFIG_PACKAGE_python3-cryptodomex is not set
-# CONFIG_PACKAGE_python3-cryptography=m
+#CONFIG_PACKAGE_python3-cryptography=m
 # CONFIG_PACKAGE_python3-cryptography-src is not set
 CONFIG_PACKAGE_python3-ctypes=y
 # CONFIG_PACKAGE_python3-ctypes-src is not set
@@ -6726,7 +6742,6 @@ CONFIG_PACKAGE_luci-app-ddns-go=m
 CONFIG_PACKAGE_luci-app-ddnsto=m
 CONFIG_PACKAGE_luci-app-design-config=m
 # CONFIG_PACKAGE_luci-app-dnsfilter is not set
-# CONFIG_PACKAGE_luci-app-docker is not set
 # CONFIG_PACKAGE_luci-app-dump1090 is not set
 # CONFIG_PACKAGE_luci-app-easymesh is not set
 CONFIG_PACKAGE_luci-app-email=m
@@ -6779,7 +6794,6 @@ CONFIG_PACKAGE_luci-app-nlbwmon=m
 # CONFIG_PACKAGE_luci-app-openlist is not set
 # CONFIG_PACKAGE_luci-app-openlist2 is not set
 # CONFIG_PACKAGE_luci-app-openthread is not set
-# CONFIG_PACKAGE_luci-app-openvpn is not set
 # CONFIG_PACKAGE_luci-app-openwisp is not set
 # CONFIG_PACKAGE_luci-app-p910nd is not set
 CONFIG_PACKAGE_luci-app-package-manager=y
@@ -6868,7 +6882,6 @@ CONFIG_PACKAGE_luci-app-wrtbwmon=m
 #
 CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-theme-argone=m
-CONFIG_PACKAGE_luci-theme-atmaterial_new=m
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 # CONFIG_PACKAGE_luci-theme-design is not set
 CONFIG_PACKAGE_luci-theme-ifit=m
@@ -6876,7 +6889,6 @@ CONFIG_PACKAGE_luci-theme-ifit=m
 # CONFIG_PACKAGE_luci-theme-material3 is not set
 # CONFIG_PACKAGE_luci-theme-openwrt is not set
 CONFIG_PACKAGE_luci-theme-openwrt-2020=m
-# CONFIG_PACKAGE_luci-theme-tomato is not set
 # end of 4. Themes
 
 #
@@ -6896,6 +6908,7 @@ CONFIG_PACKAGE_luci-proto-ipv6=y
 # CONFIG_PACKAGE_luci-proto-nebula is not set
 # CONFIG_PACKAGE_luci-proto-openconnect is not set
 # CONFIG_PACKAGE_luci-proto-openfortivpn is not set
+# CONFIG_PACKAGE_luci-proto-openvpn is not set
 CONFIG_PACKAGE_luci-proto-ppp=y
 # CONFIG_PACKAGE_luci-proto-pppossh is not set
 # CONFIG_PACKAGE_luci-proto-qmap is not set
@@ -7088,6 +7101,7 @@ CONFIG_PACKAGE_luci-i18n-adblock-fast-zh-tw=m
 CONFIG_PACKAGE_luci-i18n-adblock-zh-cn=m
 CONFIG_PACKAGE_luci-i18n-adblock-zh-tw=m
 # CONFIG_PACKAGE_luci-i18n-argon-config-es is not set
+# CONFIG_PACKAGE_luci-i18n-argon-config-ru is not set
 CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=m
 CONFIG_PACKAGE_luci-i18n-argon-config-zh-tw=m
 # CONFIG_PACKAGE_luci-i18n-argone-config-es is not set
@@ -8511,6 +8525,7 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-porkbun is not set
 # CONFIG_PACKAGE_ddns-scripts-route53 is not set
 # CONFIG_PACKAGE_ddns-scripts-scaleway is not set
+# CONFIG_PACKAGE_ddns-scripts-servercow is not set
 CONFIG_PACKAGE_ddns-scripts-services=y
 # CONFIG_PACKAGE_ddns-scripts-transip is not set
 # CONFIG_PACKAGE_ddns-scripts-utils is not set
@@ -8541,7 +8556,6 @@ CONFIG_PACKAGE_geoview=m
 # CONFIG_PACKAGE_hostip is not set
 # CONFIG_PACKAGE_idn is not set
 # CONFIG_PACKAGE_idn2 is not set
-# CONFIG_PACKAGE_inadyn is not set
 # CONFIG_PACKAGE_isc-dhcp-client-ipv4 is not set
 # CONFIG_PACKAGE_isc-dhcp-client-ipv6 is not set
 # CONFIG_PACKAGE_isc-dhcp-omshell-ipv4 is not set
@@ -9294,6 +9308,11 @@ CONFIG_PACKAGE_batctl-default=m
 # CONFIG_PACKAGE_bpfcountd is not set
 # CONFIG_PACKAGE_bpftool-full is not set
 # CONFIG_PACKAGE_bpftool-minimal is not set
+# CONFIG_PACKAGE_bsbf-mptcp is not set
+# CONFIG_PACKAGE_bsbf-netspeed is not set
+# CONFIG_PACKAGE_bsbf-quectel-usbnet is not set
+# CONFIG_PACKAGE_bsbf-route is not set
+# CONFIG_PACKAGE_bsbf-usb-netdev-autodhcp is not set
 # CONFIG_PACKAGE_bwm-ng is not set
 # CONFIG_PACKAGE_bwping is not set
 # CONFIG_PACKAGE_chat is not set
@@ -10756,4 +10775,4 @@ CONFIG_PACKAGE_urllogger=m
 # end of Font-Utils
 # end of Xorg
 
-CONFIG_OVERRIDE_PKGS="UnblockNeteaseMusic adguardhome brook chinadns-ng ddns-go ddnsto dns2socks dns2socks-rust dns2tcp geoview gn gost hysteria ipt2socks lua-neturl luci-app-adguardhome luci-app-aliddns luci-app-amlogic luci-app-argon-config luci-app-argone-config luci-app-bypass luci-app-ddns-go luci-app-ddnsto luci-app-design-config luci-app-dnsfilter luci-app-dockerman luci-app-easymesh luci-app-eqos luci-app-fchomo luci-app-fileassistant luci-app-gost luci-app-guest-wifi luci-app-homeproxy luci-app-istorex luci-app-lucky luci-app-momo luci-app-mosdns luci-app-nikki luci-app-openclash luci-app-openlist2 luci-app-partexp luci-app-passwall luci-app-passwall2 luci-app-quickstart luci-app-shadowsocks-libev luci-app-smartdns luci-app-ssr-plus luci-app-store luci-app-unblockneteasemusic luci-lib-taskd luci-lib-xterm luci-theme-alpha luci-theme-argon luci-theme-argone luci-theme-atmaterial_new luci-theme-design luci-theme-ifit luci-theme-material3 luci-theme-tomato lucky mentohust microsocks mihomo momo mosdns naiveproxy nikki openlist2 pdnsd-alt quickstart redsocks2 shadow-tls shadowsocks-libev shadowsocks-rust shadowsocksr-libev simple-obfs sing-box smartdns ssocks taskd tcping trojan trojan-go trojan-plus tuic-client ucl upx v2dat v2ray-core v2ray-geodata v2ray-plugin v2raya xray-core xray-plugin"
+CONFIG_OVERRIDE_PKGS="UnblockNeteaseMusic adguardhome brook chinadns-ng ddns-go ddnsto dns2socks dns2socks-rust dns2tcp geoview gn gost hysteria ipt2socks lua-neturl luci-app-adguardhome luci-app-aliddns luci-app-amlogic luci-app-argon-config luci-app-argone-config luci-app-bypass luci-app-ddns-go luci-app-ddnsto luci-app-design-config luci-app-dnsfilter luci-app-dockerman luci-app-easymesh luci-app-eqos luci-app-fchomo luci-app-fileassistant luci-app-gost luci-app-guest-wifi luci-app-homeproxy luci-app-istorex luci-app-lucky luci-app-momo luci-app-mosdns luci-app-nikki luci-app-openclash luci-app-openlist2 luci-app-partexp luci-app-passwall luci-app-passwall2 luci-app-quickstart luci-app-shadowsocks-libev luci-app-smartdns luci-app-ssr-plus luci-app-store luci-app-unblockneteasemusic luci-lib-taskd luci-lib-xterm luci-theme-alpha luci-theme-argon luci-theme-argone luci-theme-design luci-theme-ifit luci-theme-material3 lucky mentohust microsocks mihomo momo mosdns naiveproxy nikki openlist2 pdnsd-alt quickstart redsocks2 shadow-tls shadowsocks-libev shadowsocks-rust shadowsocksr-libev simple-obfs sing-box smartdns ssocks taskd tcping trojan trojan-go trojan-plus tuic-client ucl upx v2dat v2ray-core v2ray-geodata v2ray-plugin v2raya xray-core xray-plugin"

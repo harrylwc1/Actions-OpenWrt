@@ -164,7 +164,7 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           #sudo -E python get-pip.py
           #python -m pip install --upgrade pip
-          
+          pip install asciidoc 
           sudo -E apt-get clean
           sudo apt-get autoremove
           sudo apt-get autoclean -y 
