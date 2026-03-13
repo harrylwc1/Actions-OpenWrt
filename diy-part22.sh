@@ -3,8 +3,11 @@ cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
+#kernel 250
+#git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
+#kernel 213
+git checkout 8444302a92e601a1e05cb8468aaffa140d5a5b80
 
-git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
 
 ./scripts/feeds update -a               
