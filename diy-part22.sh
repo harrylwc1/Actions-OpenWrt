@@ -26,7 +26,7 @@ rm -r feeds/packages/multimedia/tvheadend
 cp $GITHUB_WORKSPACE/patches/kernel-5.4 $GITHUB_WORKSPACE/x-wrt/include/
 cp $GITHUB_WORKSPACE/patches/Makefile.rtl8821cu.5.4 $GITHUB_WORKSPACE/x-wrt/package/rtl8821cu/Makefile
 
-cp $GITHUB_WORKSPACE/patches/Makefile.openssl cp $GITHUB_WORKSPACE/package/libs/openssl/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.openssl $GITHUB_WORKSPACE/x-wrt/package/libs/openssl/Makefile
 ##kernel 5.4.213 need to delete following patches
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/013-net-mvneta-rely-on-page_pool_recycle_direct-in-mvnet.patch
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/009-net-mvneta-add-XDP_TX-support.patch 
