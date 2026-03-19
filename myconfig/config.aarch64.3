@@ -110,6 +110,7 @@ CONFIG_ARCH_64BIT=y
 CONFIG_USES_ROOTFS_PART=y
 CONFIG_USES_BOOT_PART=y
 CONFIG_aarch64=y
+CONFIG_arm_v7=y
 CONFIG_ARCH="aarch64"
 
 #
@@ -2901,7 +2902,7 @@ CONFIG_PACKAGE_kmod-fs-ntfs=y
 # CONFIG_PACKAGE_kmod-fs-udf is not set
 CONFIG_PACKAGE_kmod-fs-vfat=y
 # CONFIG_PACKAGE_kmod-fs-xfs is not set
-CONFIG_PACKAGE_kmod-fuse=y
+CONFIG_PACKAGE_kmod-fuse=m
 # end of Filesystems
 
 #
@@ -4491,7 +4492,7 @@ CONFIG_SQLITE3_RTREE=y
 #
 # CONFIG_PACKAGE_libacl is not set
 CONFIG_PACKAGE_libattr=y
-CONFIG_PACKAGE_libfuse=y
+CONFIG_PACKAGE_libfuse=m
 CONFIG_PACKAGE_libfuse3=m
 CONFIG_PACKAGE_libow=m
 
@@ -5069,9 +5070,9 @@ CONFIG_OPENSSL_WITH_PSK=y
 #
 CONFIG_OPENSSL_ENGINE=y
 # CONFIG_OPENSSL_ENGINE_BUILTIN is not set
-# CONFIG_OPENSSL_WITH_GOST is not set
 # CONFIG_PACKAGE_libopenssl-afalg_sync is not set
 CONFIG_PACKAGE_libopenssl-conf=y
+# CONFIG_PACKAGE_libopenssl-devcrypto is not set
 CONFIG_PACKAGE_libwolfssl=y
 CONFIG_WOLFSSL_HAS_AES_CCM=y
 CONFIG_WOLFSSL_HAS_CHACHA_POLY=y
@@ -5489,7 +5490,6 @@ CONFIG_PACKAGE_libogg=m
 # CONFIG_PACKAGE_libopendkim is not set
 # CONFIG_PACKAGE_libopenobex is not set
 # CONFIG_PACKAGE_libopensc is not set
-# CONFIG_PACKAGE_libopenssl-devcrypto is not set
 # CONFIG_PACKAGE_libopenzwave is not set
 # CONFIG_PACKAGE_liboping is not set
 CONFIG_PACKAGE_libopus=m
@@ -7593,7 +7593,7 @@ CONFIG_PACKAGE_exfat-mkfs=m
 # CONFIG_PACKAGE_f2fsck-selinux is not set
 # CONFIG_PACKAGE_filefrag is not set
 # CONFIG_PACKAGE_fstrim is not set
-CONFIG_PACKAGE_fuse-utils=y
+CONFIG_PACKAGE_fuse-utils=m
 CONFIG_PACKAGE_fuse3-utils=m
 # CONFIG_PACKAGE_hfsfsck is not set
 # CONFIG_PACKAGE_lsattr is not set
@@ -7603,11 +7603,9 @@ CONFIG_PACKAGE_fuse3-utils=m
 # CONFIG_PACKAGE_ncdu is not set
 # CONFIG_PACKAGE_nfs-utils is not set
 # CONFIG_PACKAGE_nfs-utils-libs is not set
-CONFIG_PACKAGE_ntfs-3g=y
-# CONFIG_PACKAGE_NTFS-3G_USE_LIBFUSE is not set
-CONFIG_PACKAGE_NTFS-3G_HAS_PROBE=y
+# CONFIG_PACKAGE_ntfs-3g is not set
 # CONFIG_PACKAGE_ntfs-3g-low is not set
-CONFIG_PACKAGE_ntfs-3g-utils=y
+# CONFIG_PACKAGE_ntfs-3g-utils is not set
 # CONFIG_PACKAGE_owfs is not set
 # CONFIG_PACKAGE_owshell is not set
 # CONFIG_PACKAGE_resize2fs is not set
