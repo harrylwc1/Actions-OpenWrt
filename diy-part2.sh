@@ -158,6 +158,7 @@ git apply -R --ignore-space-change --ignore-whitespace reset_user_to_root.patch
 cd $GITHUB_WORKSPACE/x-wrt/feeds/packages/
 cd ../../
 
+sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/feeds/small/tcping 
 #if [ -e $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch ]; then
 #cp $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch $GITHUB_WORKSPACE/x-wrt/target/linux/generic/hack-6.12/
 #fi
