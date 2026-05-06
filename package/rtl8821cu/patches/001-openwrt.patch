@@ -2,14 +2,6 @@ diff --git a/Makefile b/Makefile
 index 8b9c95a..43b4709 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -23,6 +23,7 @@ EXTRA_CFLAGS += -Wno-missing-prototypes
- EXTRA_CFLAGS += -Wno-missing-declarations
- # Activates Concurrent Mode if uncommented
- #EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
-+EXTRA_CFLAGS += -Wno-incompatible-pointer-types
- 
- # LED Control
- EXTRA_CFLAGS += -DCONFIG_LED_CONTROL
 @@ -78,7 +79,7 @@ CONFIG_GSPI_HCI = n
  ######################### Features ############################
  CONFIG_AP_MODE = y
@@ -239,8 +231,8 @@ index 8610688..c7ef3c6 100644
   * This declaration was created to resolve an error on Rockchip.
   * You can modify or add flags in the fs/Makefile.
   */
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 97)
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 97) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
  	MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
  #endif
  
