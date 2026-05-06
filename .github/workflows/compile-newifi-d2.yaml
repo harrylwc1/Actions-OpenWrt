@@ -42,9 +42,9 @@ env:
   KERNEL_CONFIG_DIR: x-wrt/target/linux/ramips/mt7621
   #KERNEL_CONFIG_DIR: target/linux/mvebu
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: true
+  KERNEL_MENUCONFIG: false
   CPU_MULTI_CORE: true
-  KERNEL_VERSION: '6.12'
+  KERNEL_VERSION: '6.18'
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
   KERNEL_MODULE: myconfig/kernel_newifid2
@@ -251,9 +251,9 @@ jobs:
           #cd ../
           #[ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
           #[ $? != 0 ] && make V=s || echo "zteq7 build success"
-          cp config.$ROUTER_MODEL.0 .config
+          #cp config.$ROUTER_MODEL.0 .config
           #echo cpu core=$(nproc)
-          make -j$(nproc) || make -j1 V=s
+          #make -j$(nproc) || make -j1 V=s
           #[ $? != 0 ] && make V=s || echo "zteq7 build success"
           #cp -f bin/targets/ramips/mt7620/openwrt-ramips-*squashfs-sysupgrade.bin bin/targets/ramips/drivers/
           #mv bin/targets bin/targets_mt7620
