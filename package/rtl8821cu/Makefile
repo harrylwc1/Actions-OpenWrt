@@ -59,6 +59,7 @@ ifeq ($(ARCH),aarch64)
 endif
 
 EXTRA_CFLAGS:= \
+        -Wno-incompatible-pointer-types \
 	-DRTW_SINGLE_WIPHY \
 	-DRTW_USE_CFG80211_STA_EVENT \
 	-DCONFIG_IOCTL_CFG80211 \
