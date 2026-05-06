@@ -31,7 +31,7 @@ index b6294b6..106e1fd 100644
 -
 -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
 -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 131)) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 39))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 131) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 39)))
  		cfg80211_ch_switch_started_notify(adapter->pnetdev, &chdef, 0, 0, false, 0);
 -#else
 +#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 82))
@@ -232,7 +232,7 @@ index 8610688..c7ef3c6 100644
   * You can modify or add flags in the fs/Makefile.
   */
 -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 97) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 97) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
  	MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
  #endif
  
@@ -349,3 +349,4 @@ index 8610688..c7ef3c6 100644
 +		#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 97))
  		set_fs(oldfs);
  		#endif
+ 
