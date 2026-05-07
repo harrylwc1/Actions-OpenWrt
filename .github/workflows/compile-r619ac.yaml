@@ -263,6 +263,7 @@ jobs:
           ln -s /mnt/dl .
           [ -d "bin" ] && sudo mv bin /mnt/ || ( mkdir bin;sudo mv bin /mnt/ )
           ln -s /mnt/bin .
+          sudo ln -s  /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt/staging_dir/ /mnt/ 
           # rm dl/rrdtool*
           #wget https://oss.oetiker.ch/rrdtool/pub/archive/rrdtool-1.0.x/rrdtool-1.0.50.tar.gz
           #wget https://lftp.yar.ru/ftp/lftp-4.9.2.tar.xz

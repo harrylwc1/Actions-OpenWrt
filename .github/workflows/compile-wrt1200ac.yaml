@@ -254,7 +254,7 @@ jobs:
           ln -s /mnt/dl .
           [ -d "bin" ] && sudo mv bin /mnt/ || ( mkdir bin;sudo mv bin /mnt/ )
           ln -s /mnt/bin .
-          
+          sudo ln -s  /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt/staging_dir/ /mnt/ 
   
           #echo cpu core=$(nproc)
           
