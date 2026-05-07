@@ -162,9 +162,9 @@ rm -r $GITHUB_WORKSPACE/x-wrt/package/small/pdnsd-alt
 
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/feeds/small/tcping 
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/small/tcping
+cp $GITHUB_WORKSPACE/patches/Makefile.eqos $GITHUB_WORKSPACE/x-wrt/feeds/kenzo/luci-app-eqos/Makefile
 
 #if [ -e $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch ]; then
 #cp $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch $GITHUB_WORKSPACE/x-wrt/target/linux/generic/hack-6.12/
 #fi
 exit 0
-
