@@ -31,7 +31,7 @@ cp $GITHUB_WORKSPACE/patches/Makefile.pdnsd-alt $GITHUB_WORKSPACE/x-wrt/package/
 cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/feeds/small/simple-obfs/Makefile
 cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/simple-obfs/Makefile
 #rm $GITHUB_WORKSPACE/x-wrt/target/linux/ramips/patches-6.12/995-0001-hwnat-add-natflow-flow-offload-support.patch
-cp $GITHUB_WORKSPACE/patches/Makefile.ss $GITHUB_WORKSPACE/x-wrt/package/small/shadowsocks-libev/Makefile
+cp $GITHUB_WORKSPACE/patches/Makefile.ss $GITHUB_WORKSPACE/x-wrt/package/feeds/small/shadowsocks-libev/Makefile
 #mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches
 #cp $GITHUB_WORKSPACE/patches/000*Fix*atftp*  $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/atftp/patches/
 
