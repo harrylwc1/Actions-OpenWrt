@@ -46,9 +46,9 @@ env:
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7621
   KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: false
+  KERNEL_MENUCONFIG: true
   CPU_MULTI_CORE: true
-  KERNEL_VERSION: '6.12'
+  KERNEL_VERSION: '6.18'
   #KERNEL_VERSION: '5.15'                                                                            
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
@@ -255,10 +255,10 @@ jobs:
           [ -d "bin" ] && sudo mv bin /mnt/ || ( mkdir bin;sudo mv bin /mnt/ )
           ln -s /mnt/bin .
           sudo ln -s  /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt/staging_dir/ /mnt/ 
-  
-          #echo cpu core=$(nproc)
+          cp config.wrt1200ac.0 .config 
+          echo cpu core=$(nproc)
           
-          #make -j$(nproc) || make -j1 V=s
+          make -j$(nproc) || make -j1 V=s
           #[ $? != 0 ] && make V=s || echo "build success"
           
           
