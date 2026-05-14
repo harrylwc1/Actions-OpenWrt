@@ -43,7 +43,7 @@ env:
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7621
   #KERNEL_CONFIG_DIR: target/linux/mvebu
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: true
+  KERNEL_MENUCONFIG: false
   CPU_MULTI_CORE: true
   #KERNEL_VERSION: '5.15'
   KERNEL_VERSION: '6.18'                                                                            
@@ -269,8 +269,8 @@ jobs:
           #wget https://lftp.yar.ru/ftp/lftp-4.9.2.tar.xz
           #cd ../
           #echo cpu core=$(nproc)
-          cp config.r619ac.0 .config 
-          make -j$(nproc) || make -j1 V=s
+          #cp config.r619ac.0 .config 
+          #make -j$(nproc) || make -j1 V=s
           #[ $? != 0 ] && make V=s || echo "build success"
           df -kh
           #rm `find $GITHUB_WORKSPACE/x-wrt/build_dir/ -name *.o`
