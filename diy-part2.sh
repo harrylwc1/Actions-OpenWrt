@@ -6,7 +6,7 @@ sudo -E apt-get -y install opencc
 
 sudo apt install libcurl4-openssl-dev libssl-dev
 cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
-cp $GITHUB_WORKSPACE/patches/Makefile.scons $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/scons/Makefile
+#cp $GITHUB_WORKSPACE/patches/Makefile.scons $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/scons/Makefile
 cd $GITHUB_WORKSPACE/x-wrt/
 git clone https://github.com/tvheadend/tvheadend.git
 
