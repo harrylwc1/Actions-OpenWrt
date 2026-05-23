@@ -42,7 +42,7 @@ env:
   KERNEL_CONFIG_DIR: x-wrt/target/linux/ramips/mt7621
   #KERNEL_CONFIG_DIR: target/linux/mvebu
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: false
+  KERNEL_MENUCONFIG: true
   CPU_MULTI_CORE: true
   KERNEL_VERSION: '6.18'
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
@@ -243,8 +243,8 @@ jobs:
           [ -d "bin" ] && sudo mv bin /mnt/ || ( mkdir bin;sudo mv bin /mnt/ )
           ln -s /mnt/bin .
           sudo ln -s  /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt/staging_dir/ /mnt/ 
-          #cp config.ramips.2.x-wrt .config
-          #make -j$(nproc) || make -j1 V=s
+          cp config.newifi-d2.2 .config
+          make -j$(nproc) || make -j1 V=s
           #make kernel_menuconfig
           #sleep 3600
           #cd ../
