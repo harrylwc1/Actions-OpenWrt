@@ -243,63 +243,61 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
-      - name: 1. 在背景非同步啟動 Upterm (不卡住流程)
+      - name: 1. 在背景啟動 Upterm SSH 通道
+        id: upterm_ssh
+        uses: owenthereal/action-upterm@v1
         if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
-        # 用 owenthereal 替代，並透過 nohup 或 tmux 讓它在背景悄悄啟動
-        run: |
-          echo "正在啟動 Upterm 背景服務..."
-          sudo apt-get update && sudo apt-get install -y upterm tmux
-          
-          # 將憑證設定限制為僅限觸發者本人使用
-          mkdir -p ~/.ssh
-          curl -s https://github.com{{ github.actor }}.keys >> ~/.ssh/authorized_keys
-          
-          # 在背景建立 tmux 暫存並啟動 upterm 伺服器
-          tmux new-session -d -s upterm-debug 'upterm session host --log-output ~/.upterm.log'
-        
-      - name: 2. 擷取連線資訊並立刻發送到 Telegram
+        with:
+          # 👈 修正為正確的參數名稱，讓通道在背景非同步啟動
+          detached: true
+
+      - name: 2. 擷取日誌連線資訊並發送 Telegram，然後卡住等待
         if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
         run: |
-          # 緩衝幾秒鐘，等待背景的 Upterm 完成握手與網域配置
+          # 1. 緩衝 8 秒，給背景的 Upterm 足夠的時間完成伺服器握手與日誌寫入
           sleep 8
           
-          # 嘗試取得生成的 SSH 公網連線 URL
-          SSH_CMD=$(upterm session current --format ssh-url 2>/dev/null || echo "")
+          # 2. 自動為觸發者（你本人）授權 GitHub 帳號裡的 SSH Key 登入憑證
+          mkdir -p ~/.ssh
+          curl -s https://github.com{{ github.actor }}.keys >> ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/authorized_keys
+          
+          # 3. 核心：從 Upterm 產生的系統日誌中，用正規表示式抓取唯一的 SSH 連線網址
+          SSH_CMD=$(grep -oE "ssh://[^ ]+" /home/runner/.upterm.log | head -n 1 || echo "")
           
           if [ -z "$SSH_CMD" ]; then
-            # 備用方案：若 CLI 未能即時回應，從日誌抓取連線字串
-            SSH_CMD=$(grep -oE "ssh://[^ ]+" ~/.upterm.log | head -n 1)
+            # 備用抓取嘗試：檢查當前使用者目錄
+            SSH_CMD=$(grep -oE "ssh://[^ ]+" ~/.upterm.log | head -n 1 || echo "")
           fi
           
-          # 如果還是沒拿到，就填入提示
           if [ -z "$SSH_CMD" ]; then
-            SSH_CMD="無法在日誌中找到指令，請前往 GitHub Actions 頁面手動檢查日誌。"
+            SSH_CMD="未能從日誌中即時擷取到網址，請至 GitHub Actions 的 Live Log 內手動查看。"
           fi
           
-          # 組裝發送給 Telegram 的訊息
+          # 4. 組裝推送到 Telegram 的訊息
           MSG="🚀 *GitHub Actions 偵錯連線已啟動* %0A%0A 📋 *連線指令：* %0A \`$SSH_CMD\`"
           
-          # 呼叫 Telegram Bot API 傳送
+          # 5. 秒發送到 Telegram
           curl -s -X POST "https://telegram.org{{ env.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ env.TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=MarkdownV2" \
             -d "text=$MSG"
+            
+          echo "============================================="
+          echo "Telegram 通知已發送！抓取到的指令為: $SSH_CMD"
+          echo "當你偵錯完畢想讓 Workflow 繼續往下跑時，請在連線的終端機執行："
+          echo "touch continue"
+          echo "============================================="
+          
+          # 6. 在這個步驟真正卡住 Runner，開始等你的 SSH 連線
+          while [ ! -f continue ]; do
+            sleep 10
+          done
+          echo "偵錯完成，工作流繼續執行後續步驟。"
         env:
           TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
           TELEGRAM_CHAT_ID: 1373335316
 
-      - name: 3. 將工作流卡住，開始等待你 SSH 進來
-        if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
-        run: |
-          echo "=== 系統已卡住，等待 SSH 登入偵錯 ==="
-          echo "當你偵錯完畢想讓 Workflow 繼續往下跑時，請在連線進去的終端機執行："
-          echo "touch continue"
-          
-          # 這裡會真正卡住 Runner，直到你斷開連線或建立 continue 檔案
-          while [ ! -f continue ]; do
-            sleep 10
-          done
-          echo "偵錯完成，繼續執行接下來的任務。"
    
            
       - name: 开始编译固件
