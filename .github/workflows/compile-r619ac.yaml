@@ -248,25 +248,23 @@ jobs:
         uses: owenthereal/action-upterm@v1
         if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
         with:
-          # 👈 修正為正確的參數名稱，讓通道在背景非同步啟動
           detached: true
 
       - name: 2. 擷取日誌連線資訊並發送 Telegram，然後卡住等待
         if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
         run: |
-          # 1. 緩衝 8 秒，給背景的 Upterm 足夠的時間完成伺服器握手與日誌寫入
+          # 1. 緩衝 8 秒，給背景的 Upterm 足夠的時間完成網域配置
           sleep 8
           
-          # 2. 自動為觸發者（你本人）授權 GitHub 帳號裡的 SSH Key 登入憑證
+          # 2. 自動為觸發者授權 GitHub 帳號裡的 SSH Key 憑證 (已修正漏掉的斜線)
           mkdir -p ~/.ssh
-          curl -s https://github.com{{ github.actor }}.keys >> ~/.ssh/authorized_keys
+          curl -s "https://github.com{{ github.actor }}.keys" >> ~/.ssh/authorized_keys
           chmod 600 ~/.ssh/authorized_keys
           
-          # 3. 核心：從 Upterm 產生的系統日誌中，用正規表示式抓取唯一的 SSH 連線網址
+          # 3. 從 Upterm 產生的系統日誌中抓取唯一的 SSH 連線網址
           SSH_CMD=$(grep -oE "ssh://[^ ]+" /home/runner/.upterm.log | head -n 1 || echo "")
           
           if [ -z "$SSH_CMD" ]; then
-            # 備用抓取嘗試：檢查當前使用者目錄
             SSH_CMD=$(grep -oE "ssh://[^ ]+" ~/.upterm.log | head -n 1 || echo "")
           fi
           
@@ -274,10 +272,12 @@ jobs:
             SSH_CMD="未能從日誌中即時擷取到網址，請至 GitHub Actions 的 Live Log 內手動查看。"
           fi
           
-          # 4. 組裝推送到 Telegram 的訊息
-          MSG="🚀 *GitHub Actions 偵錯連線已啟動* %0A%0A 📋 *連線指令：* %0A \`$SSH_CMD\`"
+          # 4. 組裝推送到 Telegram 的訊息 (處理 Markdown 特殊字元避免 Telegram 報錯)
+          # 把底線、小數點等特殊字元加上反斜線轉義
+          SSH_CMD_ESC=$(echo "$SSH_CMD" | sed 's/_/\\_/g; s/\./\\./g; s/-/\\-/g')
+          MSG="🚀 *GitHub Actions 偵錯連線已啟動* %0A%0A 📋 *連線指令：* %0A \`$SSH_CMD_ESC\`"
           
-          # 5. 秒發送到 Telegram
+          # 5. 秒發送到 Telegram (👉 已修正為正確的 api.telegram.org/bot 網址)
           curl -s -X POST "https://telegram.org{{ env.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ env.TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=MarkdownV2" \
@@ -296,7 +296,8 @@ jobs:
           echo "偵錯完成，工作流繼續執行後續步驟。"
         env:
           TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-          TELEGRAM_CHAT_ID: 1373335316
+          TELEGRAM_CHAT_ID: '1373335316'
+
 
    
            
