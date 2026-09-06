@@ -350,3 +350,16 @@ index 8610688..c7ef3c6 100644
  		set_fs(oldfs);
  		#endif
  
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 93bd708..46bc2bb 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -10281,7 +10281,7 @@ static int rtw_cfg80211_init_wiphy(_adapter *adapter, struct wiphy *wiphy)
+ 	#endif
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0))
+ #ifdef CONFIG_WIFI_MONITOR
+ 	/* Currently only for Monitor debugging */
+ 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_5_10_MHZ;
