@@ -15,7 +15,7 @@ on:
  workflow_dispatch:    
     inputs:
       ssh:
-        description: 'SSH connection to Actions'
+        description: '啟動 SSH 除錯模式？(輸入 true 啟動)'
         required: false
         default: 'false'
   #push:
