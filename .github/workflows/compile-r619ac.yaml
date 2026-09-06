@@ -278,7 +278,7 @@ jobs:
           MSG="🚀 *GitHub Actions 偵錯連線已啟動* %0A%0A 📋 *連線指令：* %0A \`$SSH_CMD_ESC\`"
           
           # 5. 秒發送到 Telegram (👉 已修正為正確的 api.telegram.org/bot 網址)
-          curl -s -X POST "https://telegram.org{{ env.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          curl -s -X POST "https://telegram.org{{ env.TELEGRAM_TOKEN }}/sendMessage" \
             -d "chat_id=${{ env.TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=MarkdownV2" \
             -d "text=$MSG"
@@ -295,10 +295,8 @@ jobs:
           done
           echo "偵錯完成，工作流繼續執行後續步驟。"
         env:
-          TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-          TELEGRAM_CHAT_ID: '1373335316'
-
-
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
    
            
       - name: 开始编译固件
@@ -344,15 +342,16 @@ jobs:
            #uses: lhotari/action-upterm@v1
          uses: P3TERX/ssh2actions@main
          env:
-          TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-          TELEGRAM_CHAT_ID: 1373335316
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+      
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
           # uses: lhotari/action-upterm@v1
         uses: P3TERX/ssh2actions@main
         env:
-         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-         TELEGRAM_CHAT_ID: 1373335316
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
  
       - name: 再次编译固件 after updated kernel_menuconfig 
         if: env.BUILD_KERNEL_MODULES == 'true'
@@ -393,8 +392,8 @@ jobs:
         #uses: lhotari/action-upterm@v1
         uses: P3TERX/ssh2actions@main
         env:
-         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-         TELEGRAM_CHAT_ID: 1373335316 
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
         run: |
           # mkdir -p ./artifact/firmware
@@ -446,8 +445,8 @@ jobs:
         if: ${{ failure() }}
         uses: P3TERX/ssh2actions@main
         env:
-         TELEGRAM_BOT_TOKEN: '5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4'
-         TELEGRAM_CHAT_ID: 1373335316
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
         
       - name: Upload bin directory if failure
         uses: actions/upload-artifact@master
