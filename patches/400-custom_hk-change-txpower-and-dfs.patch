@@ -1,8 +1,6 @@
-diff --git a/db.txt b/db.txt
-index a9a9ba4..2229c7a 100644
 --- a/db.txt
 +++ b/db.txt
-@@ -813,11 +813,8 @@ country GY:
+@@ -887,11 +887,8 @@ country GY:
  # https://www.ofca.gov.hk/filemanager/ofca/en/content_401/hkca1081.pdf (6 GHz)
  country HK: DFS-ETSI
  	(2400 - 2483.5 @ 40), (36)
@@ -10,9 +8,9 @@ index a9a9ba4..2229c7a 100644
 -	(5250 - 5350 @ 80), (23), DFS, AUTO-BW, NO-OUTDOOR
 -	(5470 - 5730 @ 160), (27), DFS
 -	(5730 - 5850 @ 80), (36)
--	(5925 - 6425 @ 160), (14)
-+	(5140 - 5860 @ 160), (30)
-+	(5925 - 6425 @ 160), (20)
+-	(5945 - 6425 @ 160), (24), NO-OUTDOOR
++        (5140 - 5860 @ 160), (30)
++        (5925 - 6425 @ 160), (20)
  
  # Source:
  # https://www.conatel.gob.hn/doc/Regulacion/resoluciones/2023/NR05-23.pdf
