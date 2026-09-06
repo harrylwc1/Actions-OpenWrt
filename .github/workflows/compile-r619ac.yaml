@@ -87,7 +87,6 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/$DIY_P2_SH
           $GITHUB_WORKSPACE/$DIY_P2_SH
           sudo timedatectl set-timezone "$TZ"
-          ls -alt $GITHUB_WORKSPACE/x-wrt/build_dir/target*/wireless-*/db.txt 
       - name: Generate cache mixkey
         id: gen_cache_mixkey
         working-directory: ${{ env.WORKING_DIR }}
@@ -243,7 +242,6 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
-          ls -alt $GITHUB_WORKSPACE/x-wrt/build_dir/target*/wireless-*/db.txt
       - name: 1. 在背景啟動 Upterm SSH 通道
         id: upterm_ssh
         uses: owenthereal/action-upterm@v1
