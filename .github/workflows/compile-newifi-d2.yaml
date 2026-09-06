@@ -217,8 +217,11 @@ jobs:
           df -h
 
 
-      - name: SSH链接管理
-        uses: P3TERX/ssh2actions@v1.0.0
+      - name: 1. 在背景啟動 Upterm SSH 通道
+        id: upterm_ssh
+        #uses: owenthereal/action-upterm@v1
+        uses: lhotari/action-upterm@v1
+        #uses: P3TERX/ssh2actions@main
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
