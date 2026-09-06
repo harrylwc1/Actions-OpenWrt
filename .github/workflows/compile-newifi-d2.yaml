@@ -273,8 +273,8 @@ jobs:
          uses: lhotari/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
          env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
 
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
