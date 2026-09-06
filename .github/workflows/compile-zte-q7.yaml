@@ -130,7 +130,8 @@ jobs:
         #docker rmi $(docker image ls -aq)
     
     - name: SSH链接管理
-      uses: P3TERX/ssh2actions@main
+      uses: owenthereal/action-upterm@v1
+      #uses: P3TERX/ssh2actions@main
 
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:                                    
@@ -216,7 +217,8 @@ jobs:
           #echo "======================="
     -  name: SSH connection for failure Debug
        if: ${{ failure() }}
-       uses: P3TERX/ssh2actions@main
+       uses: owenthereal/action-upterm@v1
+        #uses: P3TERX/ssh2actions@main
          #uses: lhotari/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
        env:                                    
@@ -259,8 +261,8 @@ jobs:
     - name: SSH connection for failure Debug
       if: ${{ failure() }}
       #uses: lhotari/action-upterm@v1
-      uses: P3TERX/ssh2actions@main
-
+      #uses: P3TERX/ssh2actions@main
+      uses: owenthereal/action-upterm@v1
     - name: 查看磁盘使用情况
 
       if: (!cancelled())
@@ -316,8 +318,8 @@ jobs:
 
     - name: SSH connection for failure Debug
       if: ${{ failure() }}
-      uses: P3TERX/ssh2actions@main
-
+      #uses: P3TERX/ssh2actions@main
+      uses: owenthereal/action-upterm@v1
 
         #with:
         #name: OpenWrt_firmware
