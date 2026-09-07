@@ -40,10 +40,10 @@ env:
   DRIVERS_DIR: x-wrt/bin/targets/mvebu/drivers
   KMOD_DIR: x-wrt/bin/targets/mvebu/kmod 
   KERNEL_CONFIG: 'myconfig/kernel_config.jdc'
-  #KERNEL_CONFIG_DIR: x-wrt/target/linux/ipq4x00
+  KERNEL_CONFIG_DIR: x-wrt/target/linux/ipq4x00
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7620
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7621
-  KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
+  #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
   #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu  
   MAKEMENU_CONFIG: false
   KERNEL_MENUCONFIG: false
@@ -53,7 +53,7 @@ env:
   #KERNEL_VERSION: '5.15'                                                                            
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
-  KERNEL_MODULE: myconfig/kernel_jdc4
+  KERNEL_MODULE: myconfig/kernel_jdc3
   FEEDS_CONF: feeds.conf.default
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part22.sh
@@ -107,8 +107,8 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
         run: |
           #target_device_arch_1="mvebu_ipq40xx_ramips"
-          #target_device_arch_1="mvebu_openwrt"
           target_device_arch_1="jdc_openwrt"
+          #target_device_arch_1="jdc_openwrt"
           gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')
           #gcc_hash='37dab1b7'       
           ldd_hash=$(ldd --version | sha256sum | awk '{print substr($1,1,8)}')
@@ -339,7 +339,7 @@ jobs:
           find x-wrt/bin/targets |grep kmod|tail -1|cut -d _ -f2|cut -d - -f1 > KERNEL_VER
           #strings $DRIVERS_DIR/rtl8821cu.ko |grep linux-|tail -1|tail -c15|cut -d - -f2 > KERNEL_VER
           [ -s KERNEL_VER ] && echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
-          wget http://be6500.ddnsfree.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
+          wget http://r619ac.ubddns.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
           upload=`cat ${{ env.ROUTER_MODEL }}`
           echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
           echo "UPLOAD ROUTER=$upload"
