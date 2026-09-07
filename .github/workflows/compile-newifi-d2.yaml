@@ -220,7 +220,7 @@ jobs:
       - name: 1. 在背景啟動 Upterm SSH 通道
         id: upterm_ssh
         #uses: owenthereal/action-upterm@v1
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         #uses: P3TERX/ssh2actions@main
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
@@ -229,7 +229,7 @@ jobs:
             
       - name: SSH connection for make menuconfig    
         if: env.MAKEMENU_CONFIG == 'true'
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
@@ -273,7 +273,7 @@ jobs:
       
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
-         uses: lhotari/action-upterm@v1
+         uses: owenthereal/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
          env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -281,7 +281,7 @@ jobs:
 
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         #uses: P3TERX/ssh2actions@main
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -324,7 +324,7 @@ jobs:
            cp -f bin/targets/ramips/mt7621/openwrt-ramips-mt7621-d-team_newifi-d2-squashfs-sysupgrade.bin bin/targets/ramips/drivers/ 
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         #uses: P3TERX/ssh2actions@main
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -374,7 +374,7 @@ jobs:
           path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         #uses: P3TERX/ssh2actions@main
         env:
        
