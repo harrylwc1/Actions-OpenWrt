@@ -317,8 +317,7 @@ jobs:
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: lhotari/action-upterm@v1
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+       
       - name: Prepare artifact
         run: |
           # mkdir -p ./artifact/firmware
