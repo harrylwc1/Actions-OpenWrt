@@ -266,14 +266,14 @@ jobs:
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
            #uses: lhotari/action-upterm@v1
-         uses: P3TERX/ssh2actions@main
+         uses: lhotari/action-upterm@v1
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}          
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
           # uses: lhotari/action-upterm@v1
-        uses: P3TERX/ssh2actions@v1.0.0
+        uses: lhotari/action-upterm@v1
         #P3TERX/ssh2actions@main
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -316,8 +316,7 @@ jobs:
            df -kh
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: P3TERX/ssh2actions@main
-        env:
+        uses: lhotari/action-upterm@v1
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
@@ -368,7 +367,7 @@ jobs:
           path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: P3TERX/ssh2actions@main
+        uses: lhotari/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
