@@ -227,7 +227,7 @@ jobs:
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
       - name: SSH链接管理
-        uses: P3TERX/ssh2actions@v1.0.0
+        uses: owenthereal/action-upterm@v1 
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
         
@@ -269,15 +269,15 @@ jobs:
       
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
-           #uses: lhotari/action-upterm@v1
-         uses: P3TERX/ssh2actions@main
+         uses: lhotari/action-upterm@v1
+         
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
           # uses: lhotari/action-upterm@v1
-        uses: P3TERX/ssh2actions@main
+        uses: lhotari/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
@@ -306,7 +306,7 @@ jobs:
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         #uses: lhotari/action-upterm@v1
-        uses: P3TERX/ssh2actions@main
+        uses: lhotari/action-upterm@v1
         env:
       
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -364,7 +364,7 @@ jobs:
           path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: P3TERX/ssh2actions@main
+        uses: lhotari/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
