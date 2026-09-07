@@ -269,15 +269,15 @@ jobs:
       
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
-         uses: lhotari/action-upterm@v1
+         uses: owenthereal/action-upterm@v1
          
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
-          # uses: lhotari/action-upterm@v1
-        uses: lhotari/action-upterm@v1
+          # uses: owenthereal/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
@@ -305,8 +305,8 @@ jobs:
            df -kh
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        #uses: lhotari/action-upterm@v1
-        uses: lhotari/action-upterm@v1
+        #uses: owenthereal/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         env:
       
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -364,7 +364,7 @@ jobs:
           path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
