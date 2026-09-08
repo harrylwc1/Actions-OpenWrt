@@ -360,7 +360,7 @@ jobs:
           zip -r OpenWrt_${{env.bin}}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router
         id: trf_to_router
-        if: env.UPLOAD_ROUTER== 'true' && !cancelled()
+        #if: env.UPLOAD_ROUTER== 'true' && !cancelled()
         run: | 
           cd x-wrt
           #zip -r OpenWrt_${{env.bin}}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
