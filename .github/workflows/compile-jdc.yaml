@@ -339,10 +339,10 @@ jobs:
           find x-wrt/bin/targets |grep kmod|tail -1|cut -d _ -f2|cut -d - -f1 > KERNEL_VER
           #strings $DRIVERS_DIR/rtl8821cu.ko |grep linux-|tail -1|tail -c15|cut -d - -f2 > KERNEL_VER
           [ -s KERNEL_VER ] && echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
-          wget http://r619ac.ubddns.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
-          upload=`cat ${{ env.ROUTER_MODEL }}`
-          echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
-          echo "UPLOAD ROUTER=$upload"
+          #wget http://r619ac.ubddns.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }}
+          #upload=`cat ${{ env.ROUTER_MODEL }}`
+          #echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
+          #echo "UPLOAD ROUTER=$upload"
  
       - name: zip bin directory
         run: |
@@ -350,7 +350,7 @@ jobs:
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router
         id: trf_to_router
-        if: env.UPLOAD_ROUTER== 'true' && !cancelled()
+         #if: env.UPLOAD_ROUTER== 'true' && !cancelled()
         run: |
           cd x-wrt
           #zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
