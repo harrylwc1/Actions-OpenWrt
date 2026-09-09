@@ -1,8 +1,6 @@
 git clone https://github.com/openwrt/openwrt x-wrt
 cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
-sudo cp patches/copy_file1.sh /usr/bin/
-cp patches/copy_file1.sh x-wrt/
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
 #kernel 250
