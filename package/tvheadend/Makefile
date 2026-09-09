@@ -131,7 +131,9 @@ CONFIGURE_ARGS += \
 	--disable-libx265 \
 	--disable-hdhomerun \
 	--enable-libx265_static \
-	--disable-execinfo
+	--disable-vue_build \
+	--enable-vue_bundle \
+        --disable-execinfo
 
 #TARGET_CFLAGS += -Wno-error=pointer-compare -ggdb3 -O0
 TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address 
