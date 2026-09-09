@@ -24,7 +24,7 @@ git clone https://github.com/tvheadend/tvheadend.git
 cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
 rm -r feeds/packages/multimedia/tvheadend
 cp $GITHUB_WORKSPACE/patches/kernel-5.4 $GITHUB_WORKSPACE/x-wrt/include/
-cp $GITHUB_WORKSPACE/patches/Makefile.rtl8821cu.5.4 $GITHUB_WORKSPACE/x-wrt/package/rtl8821cu/Makefile
+#cp $GITHUB_WORKSPACE/patches/Makefile.rtl8821cu.5.4 $GITHUB_WORKSPACE/x-wrt/package/rtl8821cu/Makefile
 
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/libs/openssl/
 cp -r $GITHUB_WORKSPACE/patches/openssl $GITHUB_WORKSPACE/x-wrt/package/libs/
