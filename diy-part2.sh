@@ -86,48 +86,90 @@ fi
 if [ $TVH == true ]; then CONFIG_FILE=$CONFIG_FILE0; cp $CONFIG_FILE $myconfig; cat myconfig/config.tvh.ffmpeg >> $myconfig; else CONFIG_FILE=$CONFIG_FILE2 && cp $CONFIG_FILE $myconfig; fi
 echo `ls -alt $myconfig`;echo `ls -alt myconfig/config.$ROUTER_MODEL.?`
 #rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/luci/applications/luci-app-filebrowser
-/usr/bin/opencc -i $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-fileassistant/luasrc/view/fileassistant.htm -o $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-fileassistant/luasrc/view/fileassistant.htm
 
-for i in `find $GITHUB_WORKSPACE/x-wrt/feeds/ -name po`
-do
-        if [ ! -d "$i/zh_Hant" ] || [ ! -d "$i/zh-tw" ] 
-        then
-        mkdir $i/zh_Hant
-        for x in `find $i|grep -E "zh-cn|zh_Hans"|grep "\.po"`
-              do
-                y=`echo $x|sed -e 's/zh-cn/zh_Hant/g' -e 's/zh_Hans/zh_Hant/g'`
-                /usr/bin/opencc -i $x -o $y
-        #echo $y
-               
+
+# 1. 檢查並安裝 OpenCC
+if ! command -v opencc >/dev/null 2>&1; then
+    echo "找不到 OpenCC。正在安裝..."
+    sudo apt-get update && sudo apt-get install -y opencc
+fi
+
+# 2. 定義要掃描的目錄
+TARGET_PATHS="$GITHUB_WORKSPACE/x-wrt/package $GITHUB_WORKSPACE/x-wrt/feeds"
+
+# 3. 初始化計數器
+count_hans=0
+count_cn=0
+count_skipped=0
+
+echo "=== 開始進行簡轉繁程序 ==="
+
+for p in $TARGET_PATHS; do
+    if [ -d "$p" ]; then
+        echo "正在掃描目錄: $p"
+
+        # 尋找所有 .po 檔案，並過濾路徑中包含 zh_Hans 或 zh-cn 的檔案
+        find "$p" -type f -name "*.po" | grep -E "(/zh_Hans/|/zh-cn/)" | while read -r s; do
+            d=""
+            type=""
+
+            # 依據資料夾名稱決定輸出的繁體資料夾
+            case "$s" in
+                *"/zh_Hans/"*)
+                    d=$(echo "$s" | sed 's/\/zh_Hans\//\/zh_Hant\//g')
+                    type="hans"
+                    ;;
+                *"/zh-cn/"*)
+                    d=$(echo "$s" | sed 's/\/zh-cn\//\/zh_TW\//g')
+                    type="cn"
+                    ;;
+            esac
+
+            # 如果路徑匹配成功
+            if [ -n "$d" ]; then
+                # 【新增檢查】：如果目標繁體檔案已經存在，則跳過不處理
+                if [ -f "$d" ]; then
+                    count_skipped=$((count_skipped + 1))
+                else
+                    # 建立新資料夾並執行轉換
+                    mkdir -p "$(dirname "$d")"
+                    echo "轉換中: $s -> $d"
+                    opencc -i "$s" -o "$d" -c s2twp.json
+
+                    # 記錄成功轉換次數
+                    if [ "$type" = "hans" ]; then
+                        count_hans=$((count_hans + 1))
+                    elif [ "$type" = "cn" ]; then
+                        count_cn=$((count_cn + 1))
+                    fi
+                fi
+
+                # 將最新計數寫入暫存檔
+                echo "$count_hans $count_cn $count_skipped" > /tmp/opencc_counts.tmp
+            fi
         done
-        fi
-done
-ttl=`find $GITHUB_WORKSPACE/x-wrt/feeds/ -name *.po|grep zh_Hant|wc -l`
-echo "Total zh_Hant in feeds directory = $ttl"
-
-for i in `find $GITHUB_WORKSPACE/x-wrt/package/ -name po`
-do
-        if [ ! -d "$i/zh_Hant" ] || [ ! -d "$i/zh-tw" ] 
-        then
-        mkdir $i/zh_Hant
-        for x in `find $i|grep -E "zh-cn|zh_Hans"|grep "\.po"`
-              do
-                y=`echo $x| -e 's/zh-cn/zh_Hant/g' -e 's/zh_Hans/zh_Hant/g'`
-                /usr/bin/opencc -i $x -o $y
-        #echo $y
-             
-        done
-        fi
+    fi
 done
 
-ttl=`find $GITHUB_WORKSPACE/x-wrt/package/ -name *.po|grep zh_Hant|wc -l`
-echo "Total zh_Hant in package directory = $ttl"
+# 讀取最終統計數量
+if [ -f /tmp/opencc_counts.tmp ]; then
+    read -r final_hans final_cn final_skipped < /tmp/opencc_counts.tmp
+    rm -f /tmp/opencc_counts.tmp
+else
+    final_hans=0
+    final_cn=0
+    final_skipped=0
+fi
 
-for i in `find $GITHUB_WORKSPACE/x-wrt/feeds/x/ -name *.po|grep cn`    
-do 
-       # echo $i
-        /usr/bin/opencc -i $i -o $i                                                                                                                                                                        
-done
+total=$((final_hans + final_cn))
+
+echo "================================="
+echo "=== 繁體語系檔案建置完成 ==="
+echo "新轉換 zh_Hans -> zh_Hant 數量: $final_hans"
+echo "新轉換 zh-cn   -> zh_TW   數量: $final_cn"
+echo "已存在而跳過 (Skipped) 的檔案數: $final_skipped"
+echo "本次成功新建立的檔案總數     : $total"
+echo "================================="
 
 cd /tmp/                                                                                                                                            
 wget https://raw.githubusercontent.com/x-wrt/x-wrt/refs/heads/master/package/firmware/wireless-regdb/patches/600-custom-change-txpower-and-dfs.patch
