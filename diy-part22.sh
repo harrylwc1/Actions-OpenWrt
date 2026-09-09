@@ -9,8 +9,8 @@ cd x-wrt
 #git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 #kernel 213
 git checkout 8444302a92e601a1e05cb8468aaffa140d5a5b80
-
-
+#kernel 5.4.154 
+git checkout 2f04012b20515eec74563de74d0528e603aa6f89
 
 cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
 
