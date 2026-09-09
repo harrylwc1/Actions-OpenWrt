@@ -290,7 +290,7 @@ jobs:
            #sed -i 's/CONFIG_PREEMPT_NONE_BUILD=y/CONFIG_PREEMPT=y/g' $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
            #[ -e $KERNEL_MODULE ] && cat $KERNEL_MODULE >> $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION 
            cd x-wrt 
-           
+           sudo rm -rf package/feeds/packages/python-py
            sudo rm -rf "$AGENT_TOOLSDIRECTORY"
            echo cpu core=$(nproc)
            make -j$(nproc)
