@@ -32,4 +32,5 @@ sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/libs/openssl/
 cp -r $GITHUB_WORKSPACE/patches/openssl $GITHUB_WORKSPACE/x-wrt/package/libs/
 ##kernel 5.4.213 need to delete following patches
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/013-net-mvneta-rely-on-page_pool_recycle_direct-in-mvnet.patch
-rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/009-net-mvneta-add-XDP_TX-support.patch 
+rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/009-net-mvneta-add-XDP_TX-support.patch
+sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include -Wno-array-bounds|g' package/network/services/umdns/Makefile
