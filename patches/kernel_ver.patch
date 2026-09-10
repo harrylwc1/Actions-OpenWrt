@@ -1,25 +1,25 @@
 diff --git a/include/kernel-defaults.mk b/include/kernel-defaults.mk
-index eb852a04ca..05c86986d0 100644
+index 3aa1baa761..4aa61a972a 100644
 --- a/include/kernel-defaults.mk
 +++ b/include/kernel-defaults.mk
-@@ -126,7 +126,7 @@ define Kernel/Configure/Default
+@@ -106,7 +106,7 @@ define Kernel/Configure/Default
  		cp $(LINUX_DIR)/.config.set $(LINUX_DIR)/.config.prev; \
  	}
- 	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) $(if $(findstring uml,$(BOARD)),ARCH=$(ARCH)) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
--	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | $(MKHASH) md5 > $(LINUX_DIR)/.vermagic
+ 	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
+-	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | mkhash md5 > $(LINUX_DIR)/.vermagic
 +	cp $(TOPDIR)/vermagic $(LINUX_DIR)/.vermagic
  endef
  
  define Kernel/Configure/Initramfs
 diff --git a/package/kernel/linux/Makefile b/package/kernel/linux/Makefile
-index f59610218b..ebfe194371 100644
+index 39b9e82c27..38944f30cb 100644
 --- a/package/kernel/linux/Makefile
 +++ b/package/kernel/linux/Makefile
-@@ -27,7 +27,7 @@ export SHELL:=/bin/sh
+@@ -24,7 +24,7 @@ export SHELL:=/bin/sh
  include $(INCLUDE_DIR)/package.mk
  
  ifeq ($(DUMP),)
--  STAMP_BUILT:=$(STAMP_BUILT)_$(shell $(SCRIPT_DIR)/kconfig.pl $(LINUX_DIR)/.config | $(MKHASH) md5)
+-  STAMP_BUILT:=$(STAMP_BUILT)_$(shell $(SCRIPT_DIR)/kconfig.pl $(LINUX_DIR)/.config | mkhash md5)
 +  STAMP_BUILT:=$(STAMP_BUILT)_$(shell cat $(LINUX_DIR)/.vermagic)
    -include $(LINUX_DIR)/.config
  endif
