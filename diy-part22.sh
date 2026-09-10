@@ -3,7 +3,6 @@ cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
-cp $GITHUB_WORKSPACE/patches/Makefile.ccache tools/ccache/Makefile
 #kernel 250
 #git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 #kernel 213
@@ -32,4 +31,5 @@ cp -r $GITHUB_WORKSPACE/patches/openssl $GITHUB_WORKSPACE/x-wrt/package/libs/
 ##kernel 5.4.213 need to delete following patches
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/013-net-mvneta-rely-on-page_pool_recycle_direct-in-mvnet.patch
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/009-net-mvneta-add-XDP_TX-support.patch
+cp $GITHUB_WORKSPACE/patches/Makefile.ccache tools/ccache/Makefile
 sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include -Wno-array-bounds|g' package/network/services/umdns/Makefile
