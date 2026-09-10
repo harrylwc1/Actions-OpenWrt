@@ -434,9 +434,7 @@ jobs:
             echo "UPLOAD_ROUTER=false" >> $GITHUB_ENV
             echo "UPLOAD ROUTER=false"
           fi
-          upload=`cat ${{ env.ROUTER_MODEL }}`
-          echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
-          echo "UPLOAD ROUTER=$upload" 
+          
           #cd x-wrt
           #zip -r OpenWrt_${{env.bin}}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
 
