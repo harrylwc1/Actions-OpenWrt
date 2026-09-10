@@ -269,6 +269,8 @@ jobs:
 
       run: df -hT
     - name: Prepare artifact
+      env:
+        PASS: ${{ secrets.FILEUPLOAD }}
       run: |
           # mkdir -p ./artifact/firmware
           #mkdir -p ./artifact/package
@@ -296,20 +298,21 @@ jobs:
           upload=`cat ${{ env.ROUTER_MODEL }}`
           echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
           echo "UPLOAD ROUTER=$upload"
-         # cd x-wrt
-         # zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
+          # cd x-wrt
+          # zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
     - name: zip bin directory
       run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
     - name: 上传固件到Router
+      env:
+        PASS: ${{ secrets.FILEUPLOAD }}
       id: trf_to_router
       if: env.UPLOAD_ROUTER== 'true' && !cancelled()
       run: |
           cd x-wrt
           #zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
           copy_file.sh OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-
     - name: 上传固件到github
       uses: actions/upload-artifact@master
       with:

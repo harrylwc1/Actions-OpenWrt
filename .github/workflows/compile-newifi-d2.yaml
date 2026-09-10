@@ -289,6 +289,8 @@ jobs:
 
  
       - name: 再次编译固件 after updated kernel_menuconfig
+        env:
+          PASS: ${{ secrets.FILEUPLOAD }}
         if: env.BUILD_KERNEL_MODULES == 'true'
         run: |
            
@@ -330,6 +332,8 @@ jobs:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
+        env:
+          PASS: ${{ secrets.FILEUPLOAD }}
         run: |
           sudo rm -r lede
           # mkdir -p ./artifact/firmware
@@ -364,6 +368,8 @@ jobs:
           cd x-wrt
           zip -r OpenWrt_${{env.bin}}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router
+        env:
+           PASS: ${{ secrets.FILEUPLOAD }}
         id: trf_to_router
         #if: env.UPLOAD_ROUTER== 'true' && !cancelled()
         run: | 
