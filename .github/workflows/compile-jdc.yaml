@@ -228,7 +228,7 @@ jobs:
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
       - name: Install SSH Key for Router
         run: |
-          mkdir -P $GITHUB_WORKSPACE/x-wrt/tmp_upload
+          mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
           mkdir -p ~/.ssh
           # 從 GitHub Secrets 讀入私鑰並寫入檔案
           echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
