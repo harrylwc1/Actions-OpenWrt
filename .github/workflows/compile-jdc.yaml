@@ -282,6 +282,31 @@ jobs:
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+
+      - name: Install SSH Key for Router
+        run: |
+          mkdir -p ~/.ssh
+          # 從 GitHub Secrets 讀入私鑰並寫入檔案
+          echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
+          chmod 600 ~/.ssh/router_key
+          
+          # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
+          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.ROUTER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Sync files to Router via rsync
+        run: |
+          # 針對 Dropbear 優化：加上 -o StrictHostKeyChecking=no 與舊演算法相容設定
+          rsync -avz -e "ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa" \
+            ./bin/ \
+            root@${{ secrets.ROUTER_HOST }}:/tmp/
+
+      # 【備用方案】如果你的路由器沒有安裝 rsync，請刪除上面 rsync 的步驟，改用下方這個 scp 步驟
+      - name: Sync files to Router via scp
+        run: |
+          scp -P ${{ secrets.ROUTER_PORT }} -i ~/.ssh/router_key -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -r \
+            ./bin/* \
+            root@${{ secrets.ROUTER_HOST }}:/tmp/
+
  
       - name: Compile again after .config updated or add kernel modules
         env:
@@ -303,7 +328,8 @@ jobs:
            cp -f x-wrt/build_dir/target-*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR
            chmod 755 $DRIVERS_DIR/busybox
            cp -f x-wrt/build_dir/target-*/busybox-*/busybox-*/ipkg-install/bin/busybox busybox.$ROUTER_MODEL
-           copy_file.sh busybox.$ROUTER_MODEL 
+           
+           cp busybox.$ROUTER_MODEL tmp_upload/ 
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
       - name: SSH connection for failure Debug
@@ -344,10 +370,6 @@ jobs:
           find x-wrt/bin/targets |grep kmod|tail -1|cut -d _ -f2|cut -d - -f1 > KERNEL_VER
           #strings $DRIVERS_DIR/rtl8821cu.ko |grep linux-|tail -1|tail -c15|cut -d - -f2 > KERNEL_VER
           [ -s KERNEL_VER ] && echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
-          wget http://$PASS@be6500.ddnsfree.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }} || wget http://$PASS@be6500.ubddns.org:8080/upload_firmware_config/${{ env.ROUTER_MODEL }} || true
-          upload=`cat ${{ env.ROUTER_MODEL }}`
-          echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
-          echo "UPLOAD ROUTER=$upload"
  
       - name: zip bin directory
         run: |
