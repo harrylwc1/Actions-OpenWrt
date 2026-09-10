@@ -158,7 +158,7 @@ jobs:
           #ls -alt ${{ github.workspace }}/x-wrt/staging_dir/*
           #docker rmi `docker images -q`
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
+          sudo -E apt-get -y purge rsync azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
           sudo -E apt-get update
           sudo -E apt-get -y install opencc ccache build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libfuse-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig libtinfo5
           #sudo -E apt-get update
@@ -285,29 +285,15 @@ jobs:
 
       - name: Install SSH Key for Router
         run: |
+          mkdir -P $GITHUB_WORKSPACE/x-wrt/tmp_upload
           mkdir -p ~/.ssh
           # 從 GitHub Secrets 讀入私鑰並寫入檔案
           echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
           chmod 600 ~/.ssh/router_key
           
           # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
-          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.ROUTER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
-
-      - name: Sync files to Router via rsync
-        run: |
-          # 針對 Dropbear 優化：加上 -o StrictHostKeyChecking=no 與舊演算法相容設定
-          rsync -avz -e "ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa" \
-            ./bin/ \
-            root@${{ secrets.ROUTER_HOST }}:/tmp/
-
-      # 【備用方案】如果你的路由器沒有安裝 rsync，請刪除上面 rsync 的步驟，改用下方這個 scp 步驟
-      - name: Sync files to Router via scp
-        run: |
-          scp -P ${{ secrets.ROUTER_PORT }} -i ~/.ssh/router_key -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -r \
-            ./bin/* \
-            root@${{ secrets.ROUTER_HOST }}:/tmp/
-
- 
+          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
+           
       - name: Compile again after .config updated or add kernel modules
         env:
            PASS: ${{ secrets.FILEUPLOAD }}
@@ -329,7 +315,7 @@ jobs:
            chmod 755 $DRIVERS_DIR/busybox
            cp -f x-wrt/build_dir/target-*/busybox-*/busybox-*/ipkg-install/bin/busybox busybox.$ROUTER_MODEL
            
-           cp busybox.$ROUTER_MODEL tmp_upload/ 
+           cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
       - name: SSH connection for failure Debug
@@ -375,16 +361,30 @@ jobs:
         run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-      - name: 上传固件到Router
-        env:
-          PASS: ${{ secrets.FILEUPLOAD }}
-        id: trf_to_router
-         #if: env.UPLOAD_ROUTER== 'true' && !cancelled()
+      - name: 上传固件到Router using rsync
         run: |
-          cd x-wrt
-          #zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-          copy_file.sh OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-
+          cp OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+          cat << 'EOF' > upload_to_router.sh
+          #!/bin/sh
+          echo "====== 開始將 tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
+          
+          # 定義 SSH 連線參數 (配合舊版 Dropbear 最佳化)
+          SSH_OPTS="ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa"
+          
+          # 執行 rsync 同步 (將本機 ./tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
+          # 加上 --blocking-io 強迫透過純 SSH 管道傳輸，避免遠端路由器未裝 rsync 協議的錯誤
+          rsync -avz --blocking-io -e "${SSH_OPTS}" ./tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
+          
+          if [ $? -eq 0 ]; then
+            echo "====== 檔案上傳成功！ ======"
+          else
+            echo "====== [錯誤] 檔案上傳失敗，請檢查網路或密鑰設定 ======"
+            exit 1
+          fi
+          EOF
+          
+          chmod +x upload_to_router.sh
+          ./upload_to_router.sh
       - name: Upload bin directory
         uses: actions/upload-artifact@master
         with:
