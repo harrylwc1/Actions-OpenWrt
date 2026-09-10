@@ -283,6 +283,8 @@ jobs:
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
  
       - name: Compile again after .config updated or add kernel modules
+        env:
+          PASS: ${{ secrets.FILEUPLOAD }}
         if: env.BUILD_KERNEL_MODULES == 'true'
         run: |
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
@@ -312,6 +314,8 @@ jobs:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
+        env:
+          PASS: ${{ secrets.FILEUPLOAD }}
         run: |
           # mkdir -p ./artifact/firmware
           #mkdir -p ./artifact/package
@@ -343,19 +347,19 @@ jobs:
           upload=`cat ${{ env.ROUTER_MODEL }}`
           echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
           echo "UPLOAD ROUTER=$upload"
- 
       - name: zip bin directory
         run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router
+        env:                                                                                                                                                                                        
+           PASS: ${{ secrets.FILEUPLOAD }} 
         id: trf_to_router
         if: env.UPLOAD_ROUTER== 'true' && !cancelled()
         run: |
           cd x-wrt
           #zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
           copy_file.sh OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-
       - name: Upload bin directory
         uses: actions/upload-artifact@master
         with:
