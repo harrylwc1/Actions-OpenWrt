@@ -3,7 +3,7 @@ cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
-cp ../patches/Makefile.ccache tools/ccache/
+cp $GITHUB_WORKSPACE/patches/Makefile.ccache tools/ccache/Makefile
 #kernel 250
 #git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 #kernel 213
