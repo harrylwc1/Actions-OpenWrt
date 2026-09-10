@@ -364,7 +364,7 @@ jobs:
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router using rsync
         run: |
-          cp OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+          cp x-wrt/OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
           cat << 'EOF' > upload_to_router.sh
           #!/bin/sh
           echo "====== 開始將 tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
