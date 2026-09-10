@@ -344,9 +344,18 @@ jobs:
           #strings $DRIVERS_DIR/rtl8821cu.ko |grep linux-|tail -1|tail -c15|cut -d - -f2 > KERNEL_VER
           [ -s KERNEL_VER ] && echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
           wget http://$PASS@be6500.ddnsfree.com:8080/upload_firmware_config/${{ env.ROUTER_MODEL }} || wget http://$PASS@be6500.ubddns.org:8080/upload_firmware_config/${{ env.ROUTER_MODEL }} || true
-          upload=`cat ${{ env.ROUTER_MODEL }}`
-          echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
-          echo "UPLOAD ROUTER=$upload"
+          # 2. 檢查檔案是否存在
+          if [ -f "${{ env.ROUTER_MODEL }}" ]; then
+            # 檔案存在，正常讀取
+            upload=$(cat ${{ env.ROUTER_MODEL }})
+            echo "UPLOAD_ROUTER=$upload" >> $GITHUB_ENV
+            echo "UPLOAD ROUTER=$upload"
+          else
+            # 檔案不存在，設定安全預設值（例如 false 或空值），避免後續步驟出錯
+            echo "警告：找不到檔案 ${{ env.ROUTER_MODEL }}，伺服器可能斷線。"
+            echo "UPLOAD_ROUTER=false" >> $GITHUB_ENV
+            echo "UPLOAD ROUTER=false"
+          fid"
       - name: zip bin directory
         run: |
           cd x-wrt
