@@ -226,6 +226,17 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
+      - name: Install SSH Key for Router
+        run: |
+          mkdir -P $GITHUB_WORKSPACE/x-wrt/tmp_upload
+          mkdir -p ~/.ssh
+          # 從 GitHub Secrets 讀入私鑰並寫入檔案
+          echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
+          chmod 600 ~/.ssh/router_key
+          
+          # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
+          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
+           
       - name: SSH链接管理
         uses: owenthereal/action-upterm@v1 
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -283,17 +294,7 @@ jobs:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
 
-      - name: Install SSH Key for Router
-        run: |
-          mkdir -P $GITHUB_WORKSPACE/x-wrt/tmp_upload
-          mkdir -p ~/.ssh
-          # 從 GitHub Secrets 讀入私鑰並寫入檔案
-          echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
-          chmod 600 ~/.ssh/router_key
-          
-          # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
-          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
-           
+
       - name: Compile again after .config updated or add kernel modules
         env:
            PASS: ${{ secrets.FILEUPLOAD }}
