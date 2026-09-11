@@ -375,9 +375,6 @@ jobs:
         
         copy_file.sh OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
 
-        # 2. 開始多線程傳輸
-        # :sftp: 是 rclone 的動態 SFTP 模式，不需事先寫設定檔
-        rclone copy $GITHUB_WORKSPACE/x-wrt/tmp_upload/ :sftp:/mnt/data/tmp_upload/ 
 
     - name: 上传固件到github
       uses: actions/upload-artifact@master
