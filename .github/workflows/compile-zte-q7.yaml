@@ -367,31 +367,24 @@ jobs:
       run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-    - name: 上传固件到Router using rsync
+    - name: Run Rclone Upload (Fastest Multi-thread)
       run: |
-          sudo apt-get install rsync -y 
-          cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
-          cat << 'EOF' > upload_to_router.sh
-          #!/bin/sh
-          echo "====== 開始將 tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
-          
-          # 定義 SSH 連線參數 (配合舊版 Dropbear 最佳化)
-          SSH_OPTS="ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa"
-          
-          # 執行 rsync 同步 (將本機 x-eert/tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
-          # 加上 --blocking-io 強迫透過純 SSH 管道傳輸，避免遠端路由器未裝 rsync 協議的錯誤
-          rsync -avz --blocking-io -e "${SSH_OPTS}" x-wrt/tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
-          
-          if [ $? -eq 0 ]; then
-            echo "====== 檔案上傳成功！ ======"
-          else
-            echo "====== [錯誤] 檔案上傳失敗，請檢查網路或密鑰設定 ======"
-            exit 1
-          fi
-          EOF
-          
-          chmod +x upload_to_router.sh
-          ./upload_to_router.sh 
+        # 1. 安裝 rclone
+        sudo apt-get install -y rclone
+        
+        # 2. 開始多線程傳輸
+        # :sftp: 是 rclone 的動態 SFTP 模式，不需事先寫設定檔
+        rclone copy $GITHUB_WORKSPACE/x-wrt/tmp_upload/ :sftp:/mnt/data/tmp_upload/ \
+          --sftp-host="${{ secrets.SERVER1 }}" \
+          --sftp-user="root" \
+          --sftp-port="${{ secrets.ROUTER_PORT }}" \
+          --sftp-key-file="$HOME/.ssh/router_key" \
+          --sftp-concurrency=64 \
+          --multi-thread-streams=8 \
+          --multi-thread-cutoff=50M \
+          --vfs-cache-mode off \
+          --progress
+
     - name: 上传固件到github
       uses: actions/upload-artifact@master
       with:
