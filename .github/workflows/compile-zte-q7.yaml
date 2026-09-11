@@ -351,10 +351,12 @@ jobs:
             RCLEP_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
       run: |
             # 複製檔案至臨時目錄
+            
             cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
             # 1. 在 GitHub Actions 虛擬主機中安裝 rclone
             echo "====== 正在安裝 rclone ======"
-            sudo apt-get update && sudo apt-get install rclone -y         
+            curl https://rclone.org/install.sh | sudo bash
+            #sudo apt-get update && sudo apt-get install rclone -y         
             # 建立上傳腳本
             cat << 'EOF' > upload_to_router.sh
             #!/bin/sh
