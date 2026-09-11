@@ -355,24 +355,24 @@ jobs:
             cat << 'EOF' > upload_to_router.sh
             #!/bin/sh
             echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
-            
             # 使用 rclone copy 並加上多線程優化參數
             # --transfers 4 : 同時平行上傳 4 個檔案，完整利用 GitHub 雙核處理器與網路頻寬
-            # --checkers 8    : 同時進行 8 個檔案的結構比對，加速同步前置作業
+            # --checkers 8 : 同時進行 8 個檔案的結構比對，加速同步前置作業
             # --sftp-disable-hashcheck : 避免路由器輕量環境因不支援 md5sum 檢查而卡頓或報錯
             rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
-              --transfers 4 \
-              --checkers 8 \
-              --sftp-disable-hashcheck \
-              -v
-            
-            if [ $? -eq  ]; then
-              echo "====== 檔案上傳成功！ ======"
+                --transfers 4 \
+                --checkers 8 \
+                --sftp-disable-hashcheck \
+                -v
+            if [ $? -eq 0 ]; then
+                echo "====== 檔案上傳成功！ ======"
             else
-              echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
-              exit 1
+                echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
+                exit 1
             fi
             EOF
+
+
             
             chmod +x upload_to_router.sh
             ./upload_to_router.sh
