@@ -210,7 +210,8 @@ jobs:
           
           # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
           ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
-           
+          ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} root@${{ secrets.SERVER1 }} "echo '連線測試成功！'"
+ 
     - name: 开始编译固件
       run: |
           #cp myconfig/config.newifi-d2.0 x-wrt/.config
@@ -339,49 +340,36 @@ jobs:
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
     - name: Upload firmware via rclone (Multi-threaded)
-      env:
-            # 透過環境變數直接注入 rclone SFTP 設定
-            RCLONE_CONFIG_MYROUTER_TYPE: sftp
-            RCLONE_CONFIG_MYROUTER_HOST: ${{ secrets.SERVER1 }}
-            RCLONE_CONFIG_MYROUTER_PORT: ${{ secrets.ROUTER_PORT }}
-            RCLONE_CONFIG_MYROUTER_USER: root
-            RCLONE_CONFIG_MYROUTER_KEY_FILE: ~/.ssh/router_key
-            # 針對舊版 Dropbear 的 SSH 參數優化
-            RCLEP_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
       run: |
-            # 複製檔案至臨時目錄
-            cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
-            # 1. 在 GitHub Actions 虛擬主機中安裝 rclone
-            echo "====== 正在安裝 rclone ======"
-            sudo apt-get update && sudo apt-get install rclone -y         
-            # 建立上傳腳本
-            cat << 'EOF' > upload_to_router.sh
-            #!/bin/sh
-            echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
-            
-            # 使用 rclone copy 並加上多線程優化參數
-            # --transfers 4 : 同時平行上傳 4 個檔案，完整利用 GitHub 雙核處理器與網路頻寬
-            # --checkers 8    : 同時進行 8 個檔案的結構比對，加速同步前置作業
-            # --sftp-disable-hashcheck : 避免路由器輕量環境因不支援 md5sum 檢查而卡頓或報錯
-            rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
-              --transfers 4 \
-              --checkers 8 \
-              --sftp-disable-hashcheck \
-              -v
-            
-            if [ $? -eq 0 ]; then
-              echo "====== 檔案上傳成功！ ======"
-            else
-              echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
-              exit 1
-            fi
-            EOF
-            
-            chmod +x upload_to_router.sh
-            ./upload_to_router.sh
+        # 複製檔案至臨時目錄
+        cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+        
+        # 1. 安裝官方最新版 rclone，從根本解決舊版相容性 Bug
+        echo "====== 正在安裝最新官方版 rclone ======"
+        sudo curl https://rclone.org | sudo bash
+        
+        # 2. 建立實體的 rclone 臨時設定檔目錄
+        mkdir -p ~/.config/rclone/
+        
+        # 3. 使用實體 conf 寫入，直接繞過環境變數解析漏洞
+        cat << 'EOF' > ~/.config/rclone/rclone.conf
+        [myrouter]
+        type = sftp
+        host = ${{ secrets.SERVER1 }}
+        port = ${{ secrets.ROUTER_PORT }}
+        user = root
+        key_file = /home/runner/.ssh/router_key
+        ssh_option = StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa
+        EOF
+        
+        # 4. 直接執行傳輸
+        echo "====== 開始將臨時目錄傳輸至 OpenWrt 路由器 ====="
+        rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
+            --transfers 4 \
+            --checkers 8 \
+            --sftp-disable-hashcheck \
+            -v
 
-            
-           
 
     - name: 上传固件到github
       uses: actions/upload-artifact@master
