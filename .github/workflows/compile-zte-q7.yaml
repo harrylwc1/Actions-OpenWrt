@@ -347,7 +347,7 @@ jobs:
             RCLONE_CONFIG_MYROUTER_KEY_FILE: ~/.ssh/router_key
             # 針對舊版 Dropbear 的 SSH 參數優化
             RCLONE_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
-          run: |
+      run: |
             # 複製檔案至臨時目錄
             cp x-wrt/OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
             
