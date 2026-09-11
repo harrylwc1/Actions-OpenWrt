@@ -347,14 +347,37 @@ jobs:
           mkdir -p "$DRIVERS_DIR"
         
           # 2. 安全地尋找並複製驅動程式
-          echo "=== 正在尋找 .ko 檔案 ==="
-          KO_FILES=$(find x-wrt/build_dir/target* -name "*.ko" | grep -v oot || true)
-          if [ -n "$KO_FILES" ]; then
-            cp $KO_FILES "$DRIVERS_DIR/"
-            echo "成功複製驅動程式。"
-          else
-            echo "警告：找不到任何 .ko 驅動程式檔案。"
-          fi
+            mkdir -p $DRIVERS_DIR
+
+            cat << 'EOF' > copy_drivers.sh
+            #!/bin/sh
+            echo "=== 正在尋找特定平台的 .ko 檔案 ==="
+            
+            # 精確比對你原廠路徑下的 .ko 檔案並排除 oot
+            KO_FILES=$(find x-wrt/build_dir/target*/linux*7621*/linux-*/ -name "*.ko" | grep -v oot || true)
+            
+            if [ -n "$KO_FILES" ]; then
+                echo "$KO_FILES" | while read -r src_file; do
+                    if [ -f "$src_file" ]; then
+                        filename=$(basename "$src_file")
+                        dest_file="$DRIVERS_DIR/$filename"
+                        
+                        # 採用你原本 -f (force) 的精神：如果同名檔案已存在，先刪除舊的再複製，完美避開 cp 覆寫保護錯誤
+                        if [ -f "$dest_file" ]; then
+                            rm -f "$dest_file"
+                        fi
+                        
+                        cp "$src_file" "$dest_file"
+                    fi
+                done
+                echo "成功複製所有平台驅動程式。"
+            else
+                echo "警告：在此路徑下找不到任何 .ko 驅動程式檔案。"
+            fi
+            EOF
+            chmod +x copy_drivers.sh
+            ./copy_drivers.sh
+
           # 3. 獲取韌體編譯版本號
           echo "=== 正在獲取 BUILD_VERSION ==="
           VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -1 || true)
