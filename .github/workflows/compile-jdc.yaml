@@ -296,8 +296,6 @@ jobs:
 
 
       - name: Compile again after .config updated or add kernel modules
-        env:
-           PASS: ${{ secrets.FILEUPLOAD }}
         if: env.BUILD_KERNEL_MODULES == 'true'
         run: |
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
@@ -328,8 +326,6 @@ jobs:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
-        env:
-          PASS: ${{ secrets.FILEUPLOAD }}
         run: |
           # mkdir -p ./artifact/firmware
           #mkdir -p ./artifact/package
@@ -367,14 +363,14 @@ jobs:
           cp x-wrt/OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
           cat << 'EOF' > upload_to_router.sh
           #!/bin/sh
-          echo "====== 開始將 tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
+          echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
           
           # 定義 SSH 連線參數 (配合舊版 Dropbear 最佳化)
           SSH_OPTS="ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa"
           
-          # 執行 rsync 同步 (將本機 ./tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
+          # 執行 rsync 同步 (將本機 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
           # 加上 --blocking-io 強迫透過純 SSH 管道傳輸，避免遠端路由器未裝 rsync 協議的錯誤
-          rsync -avz --blocking-io -e "${SSH_OPTS}" ./tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
+          rsync -avz --blocking-io -e "${SSH_OPTS}" $GITHUB_WORKSPACE/x-wrt/tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
           
           if [ $? -eq 0 ]; then
             echo "====== 檔案上傳成功！ ======"
