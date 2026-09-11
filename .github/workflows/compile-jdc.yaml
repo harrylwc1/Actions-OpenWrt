@@ -37,7 +37,7 @@ env:
   TVH: true
   CONFIG_FILENAME_FOR_2ND_COMPILE: config.jdc.3
   BUILD_KERNEL_MODULES: true
-  DRIVERS_DIR: x-wrt/bin/targets/mvebu/drivers
+  DRIVERS_DIR: x-wrt/bin/targets/ipq40xx/drivers
   KMOD_DIR: x-wrt/bin/targets/ipq40xx/kmod 
   KERNEL_CONFIG: 'myconfig/kernel_config.jdc'
   KERNEL_CONFIG_DIR: x-wrt/target/linux/ipq40xx
