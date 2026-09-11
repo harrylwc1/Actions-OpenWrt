@@ -259,7 +259,6 @@ jobs:
            ls -alt $GITHUB_WORKSPACE/x-wrt/.config
            echo cpu core=$(nproc)
            make -j$(nproc) #| tee makelog.txt
-           #curl -i -X POST http://r619ac.ddnsfree.com:8080/store.json --data-binary "@makelog.txt"
            #|| make -j1 V=s
            [ $? != 0 ] && make V=s || echo "build success"
            #cp $GITHUB_WORKSPACE/myconfig/config.ramips.3 $GITHUB_WORKSPACE/x-wrt/.config
@@ -341,6 +340,7 @@ jobs:
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
     - name: 上传固件到Router using rsync
       run: |
+          sudo apt-get install rsync -y 
           cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
           cat << 'EOF' > upload_to_router.sh
           #!/bin/sh
