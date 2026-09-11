@@ -364,24 +364,23 @@ jobs:
           cat << 'EOF' > upload_to_router.sh
           #!/bin/sh
           echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
-          
+ 
           # 定義 SSH 連線參數 (配合舊版 Dropbear 最佳化)
           SSH_OPTS="ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa"
-          
-          # 執行 rsync 同步 (將本機 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
-          # 加上 --blocking-io 強迫透過純 SSH 管道傳輸，避免遠端路由器未裝 rsync 協議的錯誤
-          rsync -avz --blocking-io -e "${SSH_OPTS}" $GITHUB_WORKSPACE/x-wrt/tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
-          
+
+          # 執行 rsync 同步 (移除 --blocking-io)
+          rsync -avz -e "${SSH_OPTS}" "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
+
           if [ $? -eq 0 ]; then
-            echo "====== 檔案上傳成功！ ======"
+             echo "====== 檔案上傳成功！ ======"
           else
-            echo "====== [錯誤] 檔案上傳失敗，請檢查網路或密鑰設定 ======"
-            exit 1
+             echo "====== [錯誤] 檔案上傳失敗，請檢查網路或密鑰設定 ======"
+          exit 1
           fi
           EOF
-          
           chmod +x upload_to_router.sh
           ./upload_to_router.sh
+
       - name: Upload bin directory
         uses: actions/upload-artifact@master
         with:
