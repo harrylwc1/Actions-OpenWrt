@@ -38,7 +38,7 @@ env:
   CONFIG_FILENAME_FOR_2ND_COMPILE: config.jdc.3
   BUILD_KERNEL_MODULES: true
   DRIVERS_DIR: x-wrt/bin/targets/mvebu/drivers
-  KMOD_DIR: x-wrt/bin/targets/mvebu/kmod 
+  KMOD_DIR: x-wrt/bin/targets/ipq40xx/kmod 
   KERNEL_CONFIG: 'myconfig/kernel_config.jdc'
   KERNEL_CONFIG_DIR: x-wrt/target/linux/ipq40xx
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7620
@@ -333,7 +333,7 @@ jobs:
         
           # 2. 安全地尋找並複製驅動程式
           echo "=== 正在尋找 .ko 檔案 ==="
-          KO_FILES=$(find x-wrt/build_dir/target*mipsel*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
+          KO_FILES=$(find x-wrt/build_dir/target* -name "*.ko" | grep -v oot || true)
           if [ -n "$KO_FILES" ]; then
             cp $KO_FILES "$DRIVERS_DIR/"
             echo "成功複製驅動程式。"
