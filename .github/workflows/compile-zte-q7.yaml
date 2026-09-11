@@ -339,54 +339,30 @@ jobs:
       run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-    - name: Upload firmware via rclone (Multi-threaded)
-      env:
-        # 透過環境變數直接注入 rclone SFTP 設定
-        RCLONE_CONFIG_MYROUTER_TYPE: sftp
-        RCLONE_CONFIG_MYROUTER_HOST: ${{ secrets.SERVER1 }}
-        RCLONE_CONFIG_MYROUTER_PORT: ${{ secrets.ROUTER_PORT }}
-        RCLONE_CONFIG_MYROUTER_USER: root
-        RCLONE_CONFIG_MYROUTER_KEY_FILE: ~/.ssh/router_key
-        
-        # 💥 核心修正 1：修正拼字錯誤，並將舊版 Dropbear 所需的 SSH 參數注入 rclone
-        RCLONE_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
-        
-        # 💥 核心修正 2：核心關鍵！劫持 SFTP 子系統，強制讓 rclone 透過純 SSH 調用路由器的 scp 服務
-        RCLONE_CONFIG_MYROUTER_SERVER_COMMAND: "scp -t /"
+    - name: 上传固件到Router using rsync
       run: |
-        # 建立臨時目錄並複製檔案
-        mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload/
-        cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
-        
-        # 1. 在 GitHub Actions 虛擬主機中安裝 rclone
-        echo "====== 正在安裝 rclone ======"
-        curl https://rclone.org/install.sh | sudo bash
-        
-        # 2. 建立並執行上傳腳本
-        cat << 'EOF' > upload_to_router.sh
-        #!/bin/sh
-        echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
-        
-        # 使用 rclone copy 並加上多線程與相容性優化參數
-        # --sftp-disable-hashcheck : 必須保留，純 SSH/SCP 環境不支援遠端雜湊比對
-        rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
-          --transfers 4 \
-          --checkers 8 \
-          --sftp-disable-hashcheck \
-          -v
-        
-        if [ $? -eq 0 ]; then
-          echo "====== 檔案上傳成功！ ======"
-        else
-          echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
-          exit 1
-        fi
-        EOF
-        
-        chmod +x upload_to_router.sh
-        ./upload_to_router.sh
-
-
+          cp x-wrt/OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+          cat << 'EOF' > upload_to_router.sh
+          #!/bin/sh
+          echo "====== 開始將 tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
+          
+          # 定義 SSH 連線參數 (配合舊版 Dropbear 最佳化)
+          SSH_OPTS="ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa"
+          
+          # 執行 rsync 同步 (將本機 ./tmp_upload/ 傳到路由器的 /mnt/data/tmp_upload/)
+          # 加上 --blocking-io 強迫透過純 SSH 管道傳輸，避免遠端路由器未裝 rsync 協議的錯誤
+          rsync -avz --blocking-io -e "${SSH_OPTS}" ./tmp_upload/ root@${{ secrets.SERVER1 }}:/mnt/data/tmp_upload/
+          
+          if [ $? -eq 0 ]; then
+            echo "====== 檔案上傳成功！ ======"
+          else
+            echo "====== [錯誤] 檔案上傳失敗，請檢查網路或密鑰設定 ======"
+            exit 1
+          fi
+          EOF
+          
+          chmod +x upload_to_router.sh
+          ./upload_to_router.sh 
     - name: 上传固件到github
       uses: actions/upload-artifact@master
       with:
