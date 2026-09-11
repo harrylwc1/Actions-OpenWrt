@@ -339,40 +339,37 @@ jobs:
       run: |
           cd x-wrt
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-            - name: Upload firmware via rclone (Multi-threaded)
-              run: |
-                # 複製檔案至臨時目錄
-                cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
-                
-                # 1. 安裝官方最新版 rclone，從根本解決相容性 Bug
-                echo "====== 正在安裝最新官方版 rclone ======"
-                sudo curl https://rclone.org | sudo bash
-                
-                # 2. 建立實體的 rclone 臨時設定檔目錄
-                mkdir -p ~/.config/rclone/
-                
-                # 3. 使用實體 conf 寫入，直接繞過環境變數解析漏洞
-                cat << 'EOF' > ~/.config/rclone/rclone.conf
-                [myrouter]
-                type = sftp
-                host = ${{ secrets.SERVER1 }}
-                port = ${{ secrets.ROUTER_PORT }}
-                user = root
-                key_file = /home/runner/.ssh/router_key
-                ssh_option = StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa
-                EOF
-                
-                # 4. 直接執行傳輸
-                echo "====== 開始將臨時目錄傳輸至 OpenWrt 路由器 ====="
-                rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
-                  --transfers 4 \
-                  --checkers 8 \
-                  --sftp-disable-hashcheck \
-                  -v
+    - name: Upload firmware via rclone (Multi-threaded)
+      run: |
+        # 複製檔案至臨時目錄
+        cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+        
+        # 1. 安裝官方最新版 rclone，從根本解決舊版相容性 Bug
+        echo "====== 正在安裝最新官方版 rclone ======"
+        sudo curl https://rclone.org | sudo bash
+        
+        # 2. 建立實體的 rclone 臨時設定檔目錄
+        mkdir -p ~/.config/rclone/
+        
+        # 3. 使用實體 conf 寫入，直接繞過環境變數解析漏洞
+        cat << 'EOF' > ~/.config/rclone/rclone.conf
+        [myrouter]
+        type = sftp
+        host = ${{ secrets.SERVER1 }}
+        port = ${{ secrets.ROUTER_PORT }}
+        user = root
+        key_file = /home/runner/.ssh/router_key
+        ssh_option = StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa
+        EOF
+        
+        # 4. 直接執行傳輸
+        echo "====== 開始將臨時目錄傳輸至 OpenWrt 路由器 ====="
+        rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
+            --transfers 4 \
+            --checkers 8 \
+            --sftp-disable-hashcheck \
+            -v
 
-
-            
-           
 
     - name: 上传固件到github
       uses: actions/upload-artifact@master
