@@ -1,4 +1,4 @@
-#
+#e
 # This is free software, lisence use MIT.
 # 
 # Copyright (C) 2019 P3TERX <https://p3terx.com>
@@ -324,7 +324,6 @@ jobs:
            cd ../ 
            cp -f x-wrt/build_dir/target-*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR/busybox.$ROUTER_MODEL
            chmod 755 $DRIVERS_DIR/busybox.$ROUTER_MODEL
-           copy_file.sh $DRIVERS_DIR/busybox.$ROUTER_MODEL
            
            sed -i 's/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU=y/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU is not set/g' x-wrt/.config
            sed -i 's/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS=y/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS is not set/g' x-wrt/.config
@@ -396,6 +395,7 @@ jobs:
           zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
       - name: 上传固件到Router using rsync
         run: |
+          sudo apt-get install rsync -y
           cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
           cat << 'EOF' > upload_to_router.sh
           #!/bin/sh
