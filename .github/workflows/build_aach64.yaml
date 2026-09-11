@@ -402,6 +402,7 @@ jobs:
           
           chmod +x upload_to_router.sh
           ./upload_to_router.sh      - name: Upload bin directory
+      - name: Upload bin directory        
         uses: actions/upload-artifact@master
         with:
           name: OpenWrt_snapshots_bin${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
