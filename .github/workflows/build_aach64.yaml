@@ -362,7 +362,11 @@ jobs:
             EOF
             chmod +x copy_all_drivers.sh
             ./copy_all_drivers.sh
-
+          cp -f `find x-wrt/bin/ -name kmod*.ipk` $KMOD_DIR 
+          cp -f `find x-wrt/bin/ -name tvheadend*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *libdvbcsa*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *curl*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *ffmpeg*.ipk` $DRIVERS_DIR
           # 3. 獲取韌體編譯版本號
           echo "=== 正在獲取 BUILD_VERSION ==="
           VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -1 || true)
