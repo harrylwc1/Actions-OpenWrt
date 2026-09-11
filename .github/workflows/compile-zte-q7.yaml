@@ -219,6 +219,7 @@ jobs:
           echo cpu core=$(nproc)
           #make -j$(nproc)
           #[ $? != 0 ] && make V=s || echo "build success"
+          
 
           #     echo "======================="
           #echo "Space usage:"
@@ -346,37 +347,39 @@ jobs:
             RCLONE_CONFIG_MYROUTER_USER: root
             RCLONE_CONFIG_MYROUTER_KEY_FILE: ~/.ssh/router_key
             # 針對舊版 Dropbear 的 SSH 參數優化
-            RCLONE_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
+            RCLEP_SFTP_SSH_OPTION: "StrictHostKeyChecking=no,PubkeyAcceptedKeyTypes=+ssh-rsa,HostKeyAlgorithms=+ssh-rsa"
       run: |
             # 複製檔案至臨時目錄
-            cp x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
+            cp x-wrt/OpenWrt_${{ env.bin }}_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip $GITHUB_WORKSPACE/x-wrt/tmp_upload/
             
             # 建立上傳腳本
             cat << 'EOF' > upload_to_router.sh
             #!/bin/sh
             echo "====== 開始將 $GITHUB_WORKSPACE/x-wrt/tmp_upload/ 傳輸至 OpenWrt 路由器 ====="
+            
             # 使用 rclone copy 並加上多線程優化參數
             # --transfers 4 : 同時平行上傳 4 個檔案，完整利用 GitHub 雙核處理器與網路頻寬
-            # --checkers 8 : 同時進行 8 個檔案的結構比對，加速同步前置作業
+            # --checkers 8    : 同時進行 8 個檔案的結構比對，加速同步前置作業
             # --sftp-disable-hashcheck : 避免路由器輕量環境因不支援 md5sum 檢查而卡頓或報錯
             rclone copy "$GITHUB_WORKSPACE/x-wrt/tmp_upload/" "myrouter:/mnt/data/tmp_upload/" \
-                --transfers 4 \
-                --checkers 8 \
-                --sftp-disable-hashcheck \
-                -v
+              --transfers 4 \
+              --checkers 8 \
+              --sftp-disable-hashcheck \
+              -v
+            
             if [ $? -eq 0 ]; then
-                echo "====== 檔案上傳成功！ ======"
+              echo "====== 檔案上傳成功！ ======"
             else
-                echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
-                exit 1
+              echo "====== [錯誤] 檔案上傳失敗，請檢查網路、rclone 設定或密鑰權限 ======"
+              exit 1
             fi
             EOF
-
-
             
             chmod +x upload_to_router.sh
             ./upload_to_router.sh
 
+            
+           
 
     - name: 上传固件到github
       uses: actions/upload-artifact@master
