@@ -394,12 +394,12 @@ jobs:
 
       - name: Zip and upload firmware to router
         # 只有當快取恢復時才執行此步驟
-        if: env.CACHE_RESTORED == 'TRUE'
+        #if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.PASS }}
-          SERVER1: ${{ vars.SERVER1 }}  # 確保與你 GitHub 上的變數類型一致 (vars 或 secrets)
-          SERVER2: ${{ vars.SERVER2 }}
-          PORT: ${{ vars.ROUTER_PORT }}
+          SERVER1: ${{ secrets.SERVER1 }}  # 確保與你 GitHub 上的變數類型一致 (vars 或 secrets)
+          SERVER2: ${{ secrets.SERVER2 }}
+          PORT: ${{ secrets.ROUTER_PORT }}
         run: |
           # 壓縮編譯輸出的二進位資料夾
           zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip x-wrt/bin
