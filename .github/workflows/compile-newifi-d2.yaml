@@ -420,15 +420,19 @@ jobs:
           fi
         
           echo "=== 準備程序結束 ==="
-      - name: zip bin directory upload firmware to router/github
+      - name: zip bin directory upload firmware to router
+        if: env.CACHE_RESTORED == 'true'
+        env:
+          PASS: ${{ secrets.PASS }}
+          SERVER1: ${{ vars.SERVER1 }}
+          SERVER2: ${{ vars.SERVER2 }}
+          PORT: ${{ vars.ROUTER_PORT }}
         run: |
-          if: env.CACHE_RESTORED = 'TRUE'
-          zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip x-wrt/bin
-          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-          uses: actions/upload-artifact@master
-          with:
-            name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-            path: x-wrt/bin
+          set -euo pipefail
+          ZIP_NAME="x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}_${{ env.BUILD_VERSION }}_${{ env.FILE_DATE }}_${{ env.KERNEL_VER }}.zip"
+          rm -f "$ZIP_NAME"
+          zip -r "$ZIP_NAME" x-wrt/bin
+          bash x-wrt/copy_file.sh "$ZIP_NAME"
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: owenthereal/action-upterm@v1
