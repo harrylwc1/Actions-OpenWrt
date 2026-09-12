@@ -406,15 +406,26 @@ jobs:
           fi
           echo "=== 準備程序結束 ==="
 
-      - name: zip bin directory upload firmware to router/github
+      - name: zip bin directory upload firmware to router         
+        if: env.CACHE_RESTORED == 'TRUE'
+        env:
+          PASS: ${{ secrets.PASS }}
+          SERVER1: ${{ vars.SERVER1 }}
+          SERVER2: ${{ vars.SERVER2 }}
+          PORT: ${{ vars.ROUTER_PORT }}
         run: |
-          if: env.CACHE_RESTORED = 'TRUE'
+          # 壓縮編譯輸出的二進位資料夾
           zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip x-wrt/bin
-          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-          uses: actions/upload-artifact@master
-          with:
-            name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-            path: x-wrt/bin
+          
+          # 執行上傳腳本，並將剛剛壓縮的 zip 檔案當作參數傳進去
+          bash x-wrt/copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
+
+      - name:  Upload file to github artifacts
+        if: env.CACHE_RESTORED == 'TRUE'
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
+          path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: owenthereal/action-upterm@v1
