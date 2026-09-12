@@ -366,21 +366,15 @@ jobs:
 
 
       
-    - name: zip bin directory
+    - name: zip bin directory upload firmware to router/github
       run: |
-          cd x-wrt
-          zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-    - name: 上传固件到router using uploadserver
-      run: |
-        
-        copy_file.sh OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-
-
-    - name: 上传固件到github
-      uses: actions/upload-artifact@master
-      with:
-          name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-          path: x-wrt/bin
+          
+          zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
+          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
+          uses: actions/upload-artifact@master
+          with:
+            name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
+            path: x-wrt/bin
 
     - name: SSH connection for failure Debug
       if: ${{ failure() }}
