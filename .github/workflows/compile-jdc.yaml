@@ -381,7 +381,7 @@ jobs:
           echo "=== 準備程序結束 ==="
 
       - name: zip bin directory and upload firmware to router & github
-        if: env.CACHE_RESTORED == 'TRUE'
+        #if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.PASS }}
           SERVER1: ${{ secrets.SERVER1 }}
@@ -416,7 +416,7 @@ jobs:
           fi
 
       - name: upload file to github artifact
-        if: env.CACHE_RESTORED == 'TRUE'
+        #if: env.CACHE_RESTORED == 'TRUE'
         uses: actions/upload-artifact@master
         with:
           name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}
