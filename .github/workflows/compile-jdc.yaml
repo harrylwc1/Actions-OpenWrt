@@ -308,80 +308,92 @@ jobs:
            cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
+          
+
+
+
       - name: Prepare artifact
         run: |
           # 1. 確保資料夾存在（如果變數沒設定，預設建立在當前目錄的 drivers）
           : "${DRIVERS_DIR:=./drivers}"
-          : "${KMOD_DIR:=./kmods}"
           mkdir -p "$DRIVERS_DIR"
-          mkdir -p "$KMOD_DIR"
-          # 2. 安全地尋找並複製驅動程式（直接在環境中執行，不再產生 .sh 檔案）
-          echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
-          
-          # 使用你廣義的核心路徑，並排除 oot 驅動
-          KO_FILES=$(find x-wrt/build_dir/target*a7*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
-          if [ -n "$KO_FILES" ]; then
-              echo "$KO_FILES" | while read -r src_file; do
-                  if [ -f "$src_file" ]; then
-                      filename=$(basename "$src_file")
-                      dest_file="$DRIVERS_DIR/$filename"
-                      # 保留 -f 精神：若有同名檔案，先刪除再重新複製
-                      if [ -f "$dest_file" ]; then
-                          rm -f "$dest_file"
-                      fi
-                      cp "$src_file" "$dest_file"
-                  fi
-              done
-              echo "成功複製所有核心驅動程式。"
-          else
-              echo "警告：在此廣義路徑下找不到任何 .ko 驅動程式檔案。"
-          fi
-          # 3. 安全地複製 .ipk 檔案（防止 find 找不到檔案時導致 cp 語法報錯）
-          find x-wrt/bin/ -name "kmod*.ipk" -exec cp -f {} "$KMOD_DIR" \; 2>/dev/null || true
-          find x-wrt/bin/ -name "tvheadend*.ipk" -exec cp -f {} "$DRIVERS_DIR" \; 2>/dev/null || true
-          find x-wrt/bin/ -name "*libdvbcsa*.ipk" -exec cp -f {} "$DRIVERS_DIR" \; 2>/dev/null || true
-          find x-wrt/bin/ -name "*curl*.ipk" -exec cp -f {} "$DRIVERS_DIR" \; 2>/dev/null || true
-          find x-wrt/bin/ -name "*ffmpeg*.ipk" -exec cp -f {} "$DRIVERS_DIR" \; 2>/dev/null || true
-          # 4. 獲取韌體編譯版本號
+
+          # 2. 安全地尋找並複製驅動程式
+          echo "=== 正在尋找 .ko 檔案 ==="
+            mkdir -p $DRIVERS_DIR
+
+            cat << 'EOF' > copy_all_drivers.sh
+            #!/bin/sh
+            echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
+
+            # 使用你廣義的核心路徑，並排除 oot 驅動
+            KO_FILES=$(find x-wrt/build_dir/target*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
+
+            if [ -n "$KO_FILES" ]; then
+                echo "$KO_FILES" | while read -r src_file; do
+                    if [ -f "$src_file" ]; then
+                        filename=$(basename "$src_file")
+                        dest_file="$DRIVERS_DIR/$filename"
+
+                        # 保留 -f 精神：若有同名檔案（即使是剛產生的），先刪除再重新複製
+                        # 這樣既能達到強制覆蓋最新驅動的效果，又絕不會引發 cp 衝突報錯
+                        if [ -f "$dest_file" ]; then
+                            rm -f "$dest_file"
+                        fi
+
+                        cp "$src_file" "$dest_file"
+                    fi
+                done
+                echo "成功複製所有核心驅動程式。"
+            else
+                echo "警告：在此廣義路徑下找不到任何 .ko 驅動程式檔案。"
+            fi
+            EOF
+            chmod +x copy_all_drivers.sh
+            ./copy_all_drivers.sh
+          cp -f `find x-wrt/bin/ -name kmod*.ipk` $KMOD_DIR
+          cp -f `find x-wrt/bin/ -name tvheadend*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *libdvbcsa*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *curl*.ipk` $DRIVERS_DIR
+          cp -f `find x-wrt/bin/ -name *ffmpeg*.ipk` $DRIVERS_DIR
+
+          # 3. 獲取韌體編譯版本號
           echo "=== 正在獲取 BUILD_VERSION ==="
           VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -1 || true)
           if [ -n "$VERSION_FILE" ] && [ -f "$VERSION_FILE" ]; then
             head -1 "$VERSION_FILE" > BUILD_VERSION
-            echo "成功儲存版本號：$(cat BUILD_VERSION)"
+            echo "BUILD_VERSION=_$(cat BUILD_VERSION)" >> $GITHUB_ENV
           else
-            echo "未知版本" > BUILD_VERSION
-            echo "警告：找不到 version.buildinfo，已預設為未知版本。"
+            echo "找不到 version.buildinfo，跳過設定。"
           fi
-          # 5. 獲取裝置型號名稱
+          # 4. 獲取裝置型號名稱
           echo "=== 正在獲取 DEVICE_NAME ==="
           if [ -f x-wrt/.config ]; then
             grep '^CONFIG_TARGET.*DEVICE.*=y' x-wrt/.config | head -1 | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
             if [ -s DEVICE_NAME ]; then
-              LOW_DEVICE=$(cat DEVICE_NAME | tr 'A-Z' 'a-z' | tr '_' '-')
-              echo "DEVICE_NAME=_$LOW_DEVICE" >> $GITHUB_ENV
-              echo "成功設定 DEVICE_NAME: _$LOW_DEVICE"
+              echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
             fi
           else
             echo "找不到 .config 檔案，跳過設定。"
           fi
-          # 6. 記錄編譯時間
+          # 5. 記錄編譯時間
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-          # 7. 獲取 Linux 核心版本號（已修正 KERNEL_VER 拼字錯誤）
+          #  6. 獲取 Linux 核心版本號
           echo "=== 正在獲取 KERNEL_VER ==="
           KMOD_FILE=$(find x-wrt/bin/targets -name "*kmod*" | tail -1 || true)
           if [ -n "$KMOD_FILE" ]; then
-            echo "$KMOD_FILE" | cut -d _ -f2 | cut -d - -f1 > KERNEL_VER
-            if [ -s KERNEL_VER ]; then
-              echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
-              echo "成功設定 KERNEL_VER: _$(cat KERNEL_VER)"
+            echo "$KMOD_FILE" | cut -d _ -f2 | cut -d - -f1 > KRNEL_VER
+            if [ -s KRNEL_VER ]; then
+              echo "KERNEL_VER=_$(cat KRNEL_VER)" >> $GITHUB_ENV
             fi
           else
             echo "找不到包含 kmod 的檔案，跳過設定。"
           fi
-          echo "=== 準備程序結束 ==="
+
+          echo "=== 準備程序結束 ==="      - name: zip and upload firmware to router
 
       - name: zip bin directory and upload firmware to router & github
-        #if: env.CACHE_RESTORED == 'TRUE'
+        ##if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.FILEUPLOAD }}
           SERVER1: ${{ secrets.SERVER1 }}
@@ -416,7 +428,7 @@ jobs:
           fi
 
       - name: upload file to github artifact
-        #if: env.CACHE_RESTORED == 'TRUE'
+        ##if: env.CACHE_RESTORED == 'TRUE'
         uses: actions/upload-artifact@master
         with:
           name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}
