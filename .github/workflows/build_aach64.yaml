@@ -227,17 +227,7 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
-      - name: Install SSH Key for Router
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
-          mkdir -p ~/.ssh
-          # 從 GitHub Secrets 讀入私鑰並寫入檔案
-          echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
-          chmod 600 ~/.ssh/router_key
-          
-          # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
-          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
-           
+  
       - name: SSH链接管理
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -404,26 +394,48 @@ jobs:
           echo "=== 準備程序結束 ==="
           echo "=== 準備程序結束 ==="
 
-      - name: zip bin directory upload firmware to router
-        if: env.CACHE_RESTORED == 'true'
+      - name: zip bin directory and upload firmware to router & github
+        #if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.PASS }}
-          SERVER1: ${{ vars.SERVER1 }}
-          SERVER2: ${{ vars.SERVER2 }}
-          PORT: ${{ vars.ROUTER_PORT }}
+          SERVER1: ${{ secrets.SERVER1 }}
+          SERVER2: ${{ secrets.SERVER2 }}
+          PORT: ${{ secrets.ROUTER_PORT }}
         run: |
-          set -euo pipefail
-          ZIP_NAME="x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}_${{ env.BUILD_VERSION }}_${{ env.FILE_DATE }}_${{ env.KERNEL_VER }}.zip"
-          rm -f "$ZIP_NAME"
-          zip -r "$ZIP_NAME" x-wrt/bin
-          bash x-wrt/copy_file.sh "$ZIP_NAME"
+          # 1. 使用 export 將環境變數導出至子進程，根治 copy_file.sh 讀取空值 URL 的問題
+          export PASS="${{ secrets.PASS }}"
+          export SERVER1="${{ secrets.SERVER1 }}"
+          export SERVER2="${{ secrets.SERVER2 }}"
+          export PORT="${{ secrets.ROUTER_PORT }}"
+          
+          # 2. 建立壓縮檔名變數
+          ZIP_NAME="OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip"
+          echo "====== 開始打包韌體檔案: ${ZIP_NAME} ======"
+          
+          # 3. 執行壓縮
+          zip -r "x-wrt/${ZIP_NAME}" x-wrt/bin
+          
+          # 4. 給予腳本執行權限，並精確帶入路徑執行上傳
+          if [ -f "x-wrt/copy_file.sh" ]; then
+              chmod +x x-wrt/copy_file.sh
+              echo "====== 正在透過 copy_file.sh 直傳至遠端路由器 ======"
+              ./x-wrt/copy_file.sh "x-wrt/${ZIP_NAME}"
+          else
+              echo "====== [錯誤] 找不到 x-wrt/copy_file.sh，啟用安全內建直傳方案 ======"
+              URL1="${SERVER1}" && [[ $URL1 != http* ]] && URL1="http://${SERVER1}"
+              URL1="${URL1%:8088*}:8088/upload"
+              
+              curl --limit-rate 2M --no-buffer --connect-timeout 10 --max-time 600 \
+                --progress-bar -u "${PASS}" -F "files=@x-wrt/${ZIP_NAME}" "${URL1}"
+          fi
 
-      - name: upload file to github
-        uses: actions/upload-artifact@v4
+      - name: upload file to github artifact
+        #if: env.CACHE_RESTORED == 'TRUE'
+        uses: actions/upload-artifact@master
         with:
-          name: OpenWrt_bin_${{ env.DEVICE_NAME }}_${{ env.BUILD_VERSION }}_${{ env.FILE_DATE }}_${{ env.KERNEL_VER }}
+          name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}
           path: x-wrt/bin
-          if-no-files-found: warn
+
 
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
