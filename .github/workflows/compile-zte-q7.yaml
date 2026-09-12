@@ -201,17 +201,17 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
 
         find dl -size -1024c -exec rm -f {} \;
-    - name: Install SSH Key for Router
-      run: |
-          mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
-          mkdir -p ~/.ssh
+    #- name: Install SSH Key for Router
+       #run: |
+        #  mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
+         # mkdir -p ~/.ssh
           # 從 GitHub Secrets 讀入私鑰並寫入檔案
-          echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
-          chmod 600 ~/.ssh/router_key
+          #echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
+          #chmod 600 ~/.ssh/router_key
           
           # 掃描並信任遠端路由器的主機指紋 ，防止 SSH 互動式確認卡死
-          ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
-          ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} root@${{ secrets.SERVER1 }} "echo '連線測試成功！'"
+          #ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
+          #ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} root@${{ secrets.SERVER1 }} "echo '連線測試成功！'"
  
     - name: 开始编译固件
       run: |
