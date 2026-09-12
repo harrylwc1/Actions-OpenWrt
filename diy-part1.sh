@@ -4,6 +4,10 @@ git clone https://github.com/coolsnowwolf/lede lede
 lede/scripts/feeds update -a
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
+
+sudo cp patches/copy_file1.sh /usr/bin
+cp patches/copy_file1.sh x-wrt/
+
 cd x-wrt
 #####
 
