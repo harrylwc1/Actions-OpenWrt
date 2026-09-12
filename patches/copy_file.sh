@@ -9,7 +9,7 @@ done
 
 # 2. 設定共用的安全與速度（5M）優化參數
 common_opts=(
-  --limit-rate 5M
+  --limit-rate 2M
   --no-buffer
   --connect-timeout 10
   --max-time 600
