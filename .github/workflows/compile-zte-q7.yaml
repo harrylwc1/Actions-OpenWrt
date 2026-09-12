@@ -364,20 +364,48 @@ jobs:
 
 
       
-    - name: zip bin directory upload firmware to router
+    - name: zip bin directory and upload firmware to router & github
+      #if: env.CACHE_RESTORED == 'TRUE'
       env:
-       PASS: ${{ secrets.PASS }}           # 讀取你的認證密碼 (例如 admin:password)
-       SERVER1: ${{ secrets.SERVER1 }}     # 讀取主要伺服器名稱
-       SERVER2: ${{ secrets.SERVER2 }}     # 讀取備用伺服器名稱
-       PORT: ${{ secrets.ROUTER_PORT }}
+        PASS: ${{ secrets.PASS }}
+        SERVER1: ${{ secrets.SERVER1 }}
+        SERVER2: ${{ secrets.SERVER2 }}
+        PORT: ${{ secrets.ROUTER_PORT }}
       run: |
-        zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip x-wrt/bin
-        copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip
-    - name: upload file to github
+        # 1. 核心修正：使用 export 將變數強行灌入子外殼環境，徹底根治 http://:8088 空值問題
+        export PASS="${{ secrets.PASS }}"
+        export SERVER1="${{ secrets.SERVER1 }}"
+        export SERVER2="${{ secrets.SERVER2 }}"
+        export PORT="${{ secrets.ROUTER_PORT }}"
+        
+        # 2. 定義統一的壓縮檔名變數
+        ZIP_NAME="OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip"
+        echo "====== 開始打包韌體檔案: ${ZIP_NAME} ======"
+        
+        # 3. 執行壓縮打包
+        zip -r "x-wrt/${ZIP_NAME}" x-wrt/bin
+        
+        # 4. 給予您的 copy_file.sh 執行權限，並精確帶入路徑執行上傳
+        if [ -f "x-wrt/copy_file.sh" ]; then
+            chmod +x x-wrt/copy_file.sh
+            echo "====== 正在透過 copy_file.sh 直傳至遠端路由器 ======"
+            ./x-wrt/copy_file.sh "x-wrt/${ZIP_NAME}"
+        else
+            echo "====== [錯誤] 找不到 x-wrt/copy_file.sh，啟用安全內建直傳 ======"
+            URL1="${SERVER1}" && [[ $URL1 != http* ]] && URL1="http://${SERVER1}"
+            URL1="${URL1%:8088*}:8088/upload"
+            
+            curl --limit-rate 2M --no-buffer --connect-timeout 10 --max-time 600 \
+              --progress-bar -u "${PASS}" -F "files=@x-wrt/${ZIP_NAME}" "${URL1}"
+        fi
+
+    - name: upload file to github artifact
+      #if: env.CACHE_RESTORED == 'TRUE'
       uses: actions/upload-artifact@master
       with:
-          name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-          path: x-wrt/bin
+        name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}
+        path: x-wrt/bin
+
 
     - name: SSH connection for failure Debug
       if: ${{ failure() }}
