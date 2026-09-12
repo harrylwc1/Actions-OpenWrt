@@ -61,6 +61,9 @@ env:
   #UPLOAD_ROUTER: true
   TZ: Asia/Shanghai
   CLEARCACHE: true
+  PASS: ${{ secrets.PASS }}           # 讀取你的認證密碼 (例如 admin:password)
+  SERVER1: ${{ vars.SERVER1 }}        # 讀取主要伺服器名稱
+  SERVER2: ${{ vars.SERVER2 }}        # 讀取備用伺服器名稱
   
 jobs:
 
@@ -403,33 +406,15 @@ jobs:
           fi
           echo "=== 準備程序結束 ==="
 
-      - name: zip bin directory
+      - name: zip bin directory upload firmware to router/github
         run: |
-          cd x-wrt
-          zip -r OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
-      - name: Run Rclone Upload (Fastest Multi-thread)
-        run: |
-          # 1. 安裝 rclone
-          sudo apt-get install -y rclone
-          
-          # 2. 開始多線程傳輸
-          rclone copy $GITHUB_WORKSPACE/x-wrt/tmp_upload/ :sftp:/mnt/data/tmp_upload/ \
-            --sftp-host="${{ secrets.SERVER1 }}" \
-            --sftp-user="root" \
-            --sftp-port="${{ secrets.ROUTER_PORT }}" \
-            --sftp-key-file="$HOME/.ssh/router_key" \
-            --sftp-concurrency=64 \
-            --multi-thread-streams=8 \
-            --multi-thread-cutoff=50M \
-            --vfs-cache-mode off \
-            --progress
-
-      - name: 上传固件到github
-        uses: actions/upload-artifact@master
-        with:
-          name: OpenWrt_${{env.bin}}${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-           #OpenWrt_${{env.bin}}_${{ env.ROUTER_MODEL }}
-          path: x-wrt/bin
+          if: env.CACHE_RESTORED = 'TRUE'
+          zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip bin
+          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
+          uses: actions/upload-artifact@master
+          with:
+            name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
+            path: x-wrt/bin
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: owenthereal/action-upterm@v1
