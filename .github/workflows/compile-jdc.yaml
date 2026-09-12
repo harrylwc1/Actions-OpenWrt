@@ -392,15 +392,29 @@ jobs:
           fi
           echo "=== 準備程序結束 ==="
 
-      - name: zip bin directory upload firmware to router/github
+      - name: [1/2] Zip and upload firmware to router
+        # 只有當快取恢復時才執行此步驟
+        if: env.CACHE_RESTORED == 'TRUE'
+        env:
+          PASS: ${{ secrets.PASS }}
+          SERVER1: ${{ vars.SERVER1 }}  # 確保與你 GitHub 上的變數類型一致 (vars 或 secrets)
+          SERVER2: ${{ vars.SERVER2 }}
+          PORT: ${{ vars.ROUTER_PORT }}
         run: |
-          #if: env.CACHE_RESTORED = 'TRUE'
+          # 壓縮編譯輸出的二進位資料夾
           zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip x-wrt/bin
-          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-          uses: actions/upload-artifact@master
-          with:
-            name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
-            path: x-wrt/bin
+          
+          # 執行上傳腳本，並將剛剛壓縮的 zip 檔案當作參數傳進去
+          bash x-wrt/copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
+
+      - name: [2/2] Upload file to github artifacts
+        # 共享同一個判斷條件，確保兩個步驟同步執行或同步跳過
+        if: env.CACHE_RESTORED == 'TRUE'
+        uses: actions/upload-artifact@v4  # 建議使用最新的 v4 版本，master 舊版可能會有相容性警告
+        with:
+          name: OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}
+          path: x-wrt/bin
+
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
         uses: owenthereal/action-upterm@v1
