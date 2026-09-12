@@ -1,0 +1,47 @@
+name: Debug Router Upload 401 Error
+
+on:
+  workflow_dispatch: # Allows you to run this test manually from the GitHub UI
+
+jobs:
+  test-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Fake Test File
+        run: |
+          echo "This is a test file for upload debugging." > test_firmware.zip
+
+      - name: Debug Credentials and Run Test Upload
+        env:
+          PASS: ${{ secrets.PASS }}
+          SERVER1: ${{ secrets.SERVER1 }}
+        run: |
+          echo "=== 1. Checking Secret Lengths (Security Safe) ==="
+          # Check if secrets actually exist. If length is 0, they are missing in GitHub.
+          echo "Length of PASS: ${#PASS}"
+          echo "Length of SERVER1: ${#SERVER1}"
+          
+          echo "=== 2. Formatting Target URL ==="
+          URL1="${SERVER1}"
+          [[ $URL1 != http* ]] && URL1="http://${SERVER1}"
+          # Remove existing port/paths and force :8088/upload
+          URL1="${URL1%:8088*}:8088/upload"
+          echo "Target URL is: ${URL1}"
+
+          echo "=== 3. Simulating Main Copy Script Behavior ==="
+          # Using -v (verbose) to see the exact HTTP request and response headers (hides actual passwords)
+          curl -v --limit-rate 2M \
+            --connect-timeout 10 \
+            --max-time 600 \
+            -u "${PASS}" \
+            -F "files=@test_firmware.zip" \
+            "${URL1}"
+
+          echo "=== 4. Alternative Attempt (If PASS format is 'user:pass') ==="
+          # Sometimes curl needs explicit user:pass. If your secret only contains the password, 
+          # try replacing 'root' below with your router's actual username.
+          # curl -v -u "root:${PASS}" -F "files=@test_firmware.zip" "${URL1}"
+
