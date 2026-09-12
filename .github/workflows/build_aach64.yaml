@@ -62,9 +62,7 @@ env:
   UPLOAD_WETRANSFER: false
   TZ: Asia/Shanghai
   CLEARCACHE: true
-  PASS: ${{ secrets.PASS }}           # 讀取你的認證密碼 (例如 admin:password)
-  SERVER1: ${{ vars.SERVER1 }}        # 讀取主要伺服器名稱
-  SERVER2: ${{ vars.SERVER2 }}        # 讀取備用伺服器名稱
+
   
 jobs:
 
