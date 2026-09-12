@@ -485,6 +485,7 @@ jobs:
           fi
         
           echo "=== 準備程序結束 ==="      - name: zip and upload firmware to router
+      - name: zip bin directory upload firmware to router         
         if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.PASS }}
