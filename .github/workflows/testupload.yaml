@@ -16,7 +16,7 @@ jobs:
 
       - name: Debug Credentials and Run Test Upload
         env:
-          PASS: ${{ secrets.PASS }}
+          PASS: ${{ secrets.FILEUPLOAD }}
           SERVER1: ${{ secrets.SERVER1 }}
         run: |
           echo "=== 1. Checking Secret Lengths (Security Safe) ==="
