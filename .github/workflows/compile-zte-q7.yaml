@@ -365,15 +365,14 @@ jobs:
 
       
     - name: zip bin directory upload firmware to router
+      env:
+       PASS: ${{ secrets.PASS }}           # 讀取你的認證密碼 (例如 admin:password)
+       SERVER1: ${{ secrets.SERVER1 }}     # 讀取主要伺服器名稱
+       SERVER2: ${{ secrets.SERVER2 }}     # 讀取備用伺服器名稱
+       PORT: ${{ secrets.ROUTER_PORT }}
       run: |
-          zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip x-wrt/bin
-          copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER}}.zip
-          env:
-            PASS: ${{ secrets.PASS }}           # 讀取你的認證密碼 (例如 admin:password)
-            SERVER1: ${{ secrets.SERVER1 }}        # 讀取主要伺服器名稱
-            SERVER2: ${{ secrets.SERVER2 }}        # 讀取備用伺服器名稱
-            PORT: ${{ secrets.ROUTER_PORT }}  
-  
+        zip -r x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip x-wrt/bin
+        copy_file.sh x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip
     - name: upload file to github
       uses: actions/upload-artifact@master
       with:
