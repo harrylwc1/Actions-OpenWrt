@@ -397,13 +397,13 @@ jobs:
       - name: zip bin directory and upload firmware to router & github
         #if: env.CACHE_RESTORED == 'TRUE'
         env:
-          PASS: ${{ secrets.PASS }}
+          PASS: ${{ secrets.FILEUPLOAD }}
           SERVER1: ${{ secrets.SERVER1 }}
           SERVER2: ${{ secrets.SERVER2 }}
           PORT: ${{ secrets.ROUTER_PORT }}
         run: |
           # 1. 使用 export 將環境變數導出至子進程，根治 copy_file.sh 讀取空值 URL 的問題
-          export PASS="${{ secrets.PASS }}"
+          export PASS="${{ secrets.FILEUPLOAD }}"
           export SERVER1="${{ secrets.SERVER1 }}"
           export SERVER2="${{ secrets.SERVER2 }}"
           export PORT="${{ secrets.ROUTER_PORT }}"
