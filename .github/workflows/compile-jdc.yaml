@@ -310,83 +310,47 @@ jobs:
            df -kh
       - name: Prepare artifact
         run: |
-          # 1. 確保資料夾存在（如果變數沒設定，預設建立在當前目錄的 drivers）
+          # 1. 確保目標資料夾存在（設定預設值）
           : "${DRIVERS_DIR:=./drivers}"
-          mkdir -p "$DRIVERS_DIR"
+          : "${KMOD_DIR:=./kmods}"
+          mkdir -p "$DRIVERS_DIR" "$KMOD_DIR"
         
-          # 2. 安全地尋找並複製驅動程式
-          echo "=== 正在尋找 .ko 檔案 ==="
-            mkdir -p $DRIVERS_DIR
+          # 2. 安全地尋找並複製核心驅動程式 (.ko)
+          echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
+          find x-wrt/build_dir/target*a7*/linux*/linux-*/ -name "*.ko" | grep -v oot | while read -r src_file; do
+              if [ -f "$src_file" ]; then
+                  filename=$(basename "$src_file")
+                  dest_file="$DRIVERS_DIR/$filename"
+                  
+                  # 強制覆蓋：先刪除舊檔避免 cp 衝突
+                  rm -f "$dest_file"
+                  cp "$src_file" "$dest_file"
+              fi
+          done
+          echo "核心驅動程式複製程序完成。"
 
-            cat << 'EOF' > copy_all_drivers.sh
-            #!/bin/sh
-            echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
-            
-            # 使用你廣義的核心路徑，並排除 oot 驅動
-            KO_FILES=$(find x-wrt/build_dir/target*a7*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
-            
-            if [ -n "$KO_FILES" ]; then
-                echo "$KO_FILES" | while read -r src_file; do
-                    if [ -f "$src_file" ]; then
-                        filename=$(basename "$src_file")
-                        dest_file="$DRIVERS_DIR/$filename"
-                        
-                        # 保留 -f 精神：若有同名檔案（即使是剛產生的），先刪除再重新複製
-                        # 這樣既能達到強制覆蓋最新驅動的效果，又絕不會引發 cp 衝突報錯
-                        if [ -f "$dest_file" ]; then
-                            rm -f "$dest_file"
-                        fi
-                        
-                        cp "$src_file" "$dest_file"
-                    fi
-                done
-                echo "成功複製所有核心驅動程式。"
-            else
-                echo "警告：在此廣義路徑下找不到任何 .ko 驅動程式檔案。"
-            fi
-            EOF
-            chmod +x copy_all_drivers.sh
-            ./copy_all_drivers.sh
-          cp -f `find x-wrt/bin/ -name kmod*.ipk` $KMOD_DIR 
-          cp -f `find x-wrt/bin/ -name tvheadend*.ipk` $DRIVERS_DIR
-          cp -f `find x-wrt/bin/ -name *libdvbcsa*.ipk` $DRIVERS_DIR
-          cp -f `find x-wrt/bin/ -name *curl*.ipk` $DRIVERS_DIR
-          cp -f `find x-wrt/bin/ -name *ffmpeg*.ipk` $DRIVERS_DIR
+          # 3. 安全地複製指定的 .ipk 檔案（防止 find 為空時報錯）
+          echo "=== 正在複製指定的 .ipk 套件 ==="
+          
+          # 複製 kmod*.ipk 到 KMOD_DIR
+          find x-wrt/bin/ -name "kmod*.ipk" -exec cp -f {} "$KMOD_DIR/" \; 2>/dev/null || true
+          
+          # 複製其他套件到 DRIVERS_DIR
+          find x-wrt/bin/ -name "tvheadend*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
+          find x-wrt/bin/ -name "*libdvbcsa*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
+          find x-wrt/bin/ -name "*curl*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
+          find x-wrt/bin/ -name "*ffmpeg*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
 
-          # 3. 獲取韌體編譯版本號
+          # 4. 獲取韌體編譯版本號
           echo "=== 正在獲取 BUILD_VERSION ==="
-          VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -1 || true)
+          VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -n 1)
           if [ -n "$VERSION_FILE" ] && [ -f "$VERSION_FILE" ]; then
-            head -1 "$VERSION_FILE" > BUILD_VERSION
-            echo "BUILD_VERSION=_$(cat BUILD_VERSION)" >> $GITHUB_ENV
+              head -n 1 "$VERSION_FILE" > BUILD_VERSION
+              echo "成功寫入版本號：$(cat BUILD_VERSION)"
           else
-            echo "找不到 version.buildinfo，跳過設定。"
+              echo "警告：找不到 version.buildinfo 檔案"
           fi
-          # 4. 獲取裝置型號名稱
-          echo "=== 正在獲取 DEVICE_NAME ==="
-          if [ -f x-wrt/.config ]; then
-            grep '^CONFIG_TARGET.*DEVICE.*=y' x-wrt/.config | head -1 | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-            if [ -s DEVICE_NAME ]; then
-              echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-            fi
-          else
-            echo "找不到 .config 檔案，跳過設定。"
-          fi
-          # 5. 記錄編譯時間
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-          #  6. 獲取 Linux 核心版本號
-          echo "=== 正在獲取 KERNEL_VER ==="
-          KMOD_FILE=$(find x-wrt/bin/targets -name "*kmod*" | tail -1 || true)
-          if [ -n "$KMOD_FILE" ]; then
-            echo "$KMOD_FILE" | cut -d _ -f2 | cut -d - -f1 > KRNEL_VER
-            if [ -s KRNEL_VER ]; then
-              echo "KERNEL_VER=_$(cat KRNEL_VER)" >> $GITHUB_ENV
-            fi
-          else
-            echo "找不到包含 kmod 的檔案，跳過設定。"
-          fi
-        
-          echo "=== 準備程序結束 ==="      - name: zip and upload firmware to router
+
       - name: zip bin directory upload firmware to router
         #if: env.CACHE_RESTORED == 'true'
         env:
