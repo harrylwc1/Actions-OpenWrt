@@ -351,6 +351,33 @@ jobs:
               echo "警告：找不到 version.buildinfo 檔案"
           fi
 
+          # 5. 獲取裝置型號名稱
+          echo "=== 正在獲取 DEVICE_NAME ==="
+          if [ -f x-wrt/.config ]; then
+            grep '^CONFIG_TARGET.*DEVICE.*=y' x-wrt/.config | head -1 | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+            if [ -s DEVICE_NAME ]; then
+              LOW_DEVICE=$(cat DEVICE_NAME | tr 'A-Z' 'a-z' | tr '_' '-')
+              echo "DEVICE_NAME=_$LOW_DEVICE" >> $GITHUB_ENV
+              echo "成功設定 DEVICE_NAME: _$LOW_DEVICE"
+            fi
+          else
+            echo "找不到 .config 檔案，跳過設定。"
+          fi
+          # 6. 記錄編譯時間
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          # 7. 獲取 Linux 核心版本號（已修正 KERNEL_VER 拼字錯誤）
+          echo "=== 正在獲取 KERNEL_VER ==="
+          KMOD_FILE=$(find x-wrt/bin/targets -name "*kmod*" | tail -1 || true)
+          if [ -n "$KMOD_FILE" ]; then
+            echo "$KMOD_FILE" | cut -d _ -f2 | cut -d - -f1 > KERNEL_VER
+            if [ -s KERNEL_VER ]; then
+              echo "KERNEL_VER=_$(cat KERNEL_VER)" >> $GITHUB_ENV
+              echo "成功設定 KERNEL_VER: _$(cat KERNEL_VER)"
+            fi
+          else
+            echo "找不到包含 kmod 的檔案，跳過設定。"
+          fi
+          echo "=== 準備程序結束 ==="
       - name: zip bin directory upload firmware to router
         #if: env.CACHE_RESTORED == 'true'
         env:
