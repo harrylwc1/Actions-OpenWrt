@@ -72,7 +72,7 @@ jobs:
     #runs-on: ubuntu-latest
     #continue-on-error: true 
     #runs-on: ubuntu-22.10
-    #if: github.event.repository.owner.id == github.event.sender.id
+    #if: github.event.repository.owner.id == github.event.sender.idzip
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -378,19 +378,7 @@ jobs:
             echo "找不到包含 kmod 的檔案，跳過設定。"
           fi
           echo "=== 準備程序結束 ==="
-      - name: zip bin directory upload firmware to router
-        #if: env.CACHE_RESTORED == 'true'
-        env:
-          PASS: ${{ secrets.FILEUPLOAD }}
-          SERVER1: ${{ secrets.SERVER1 }}
-          SERVER2: ${{ secrets.SERVER2 }}
-          PORT: ${{ secrets.ROUTER_PORT }}
-        run: |
-          set -euo pipefail
-          ZIP_NAME="x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}_${{ env.BUILD_VERSION }}_${{ env.FILE_DATE }}_${{ env.KERNEL_VER }}.zip"
-          rm -f "$ZIP_NAME"
-          zip -r "$ZIP_NAME" x-wrt/bin
-          bash x-wrt/copy_file.sh "$ZIP_NAME"
+
 
       - name: zip bin directory and upload firmware to router & github
         #if: env.CACHE_RESTORED == 'TRUE'
