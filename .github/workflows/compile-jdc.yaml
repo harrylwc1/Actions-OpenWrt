@@ -308,16 +308,12 @@ jobs:
            cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
-          
-
-
-
       - name: Prepare artifact
         run: |
           # 1. 確保資料夾存在（如果變數沒設定，預設建立在當前目錄的 drivers）
           : "${DRIVERS_DIR:=./drivers}"
           mkdir -p "$DRIVERS_DIR"
-
+        
           # 2. 安全地尋找並複製驅動程式
           echo "=== 正在尋找 .ko 檔案 ==="
             mkdir -p $DRIVERS_DIR
@@ -325,22 +321,22 @@ jobs:
             cat << 'EOF' > copy_all_drivers.sh
             #!/bin/sh
             echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
-
+            
             # 使用你廣義的核心路徑，並排除 oot 驅動
             KO_FILES=$(find x-wrt/build_dir/target*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
-
+            
             if [ -n "$KO_FILES" ]; then
                 echo "$KO_FILES" | while read -r src_file; do
                     if [ -f "$src_file" ]; then
                         filename=$(basename "$src_file")
                         dest_file="$DRIVERS_DIR/$filename"
-
+                        
                         # 保留 -f 精神：若有同名檔案（即使是剛產生的），先刪除再重新複製
                         # 這樣既能達到強制覆蓋最新驅動的效果，又絕不會引發 cp 衝突報錯
                         if [ -f "$dest_file" ]; then
                             rm -f "$dest_file"
                         fi
-
+                        
                         cp "$src_file" "$dest_file"
                     fi
                 done
@@ -351,7 +347,7 @@ jobs:
             EOF
             chmod +x copy_all_drivers.sh
             ./copy_all_drivers.sh
-          cp -f `find x-wrt/bin/ -name kmod*.ipk` $KMOD_DIR
+          cp -f `find x-wrt/bin/ -name kmod*.ipk` $KMOD_DIR 
           cp -f `find x-wrt/bin/ -name tvheadend*.ipk` $DRIVERS_DIR
           cp -f `find x-wrt/bin/ -name *libdvbcsa*.ipk` $DRIVERS_DIR
           cp -f `find x-wrt/bin/ -name *curl*.ipk` $DRIVERS_DIR
@@ -389,11 +385,24 @@ jobs:
           else
             echo "找不到包含 kmod 的檔案，跳過設定。"
           fi
-
+        
           echo "=== 準備程序結束 ==="      - name: zip and upload firmware to router
+      - name: zip bin directory upload firmware to router
+        #if: env.CACHE_RESTORED == 'true'
+        env:
+          PASS: ${{ secrets.FILEUPLOAD }}
+          SERVER1: ${{ secrets.SERVER1 }}
+          SERVER2: ${{ secrets.SERVER2 }}
+          PORT: ${{ secrets.ROUTER_PORT }}
+        run: |
+          set -euo pipefail
+          ZIP_NAME="x-wrt/OpenWrt_bin_${{ env.DEVICE_NAME }}_${{ env.BUILD_VERSION }}_${{ env.FILE_DATE }}_${{ env.KERNEL_VER }}.zip"
+          rm -f "$ZIP_NAME"
+          zip -r "$ZIP_NAME" x-wrt/bin
+          bash x-wrt/copy_file.sh "$ZIP_NAME"
 
       - name: zip bin directory and upload firmware to router & github
-        ##if: env.CACHE_RESTORED == 'TRUE'
+        #if: env.CACHE_RESTORED == 'TRUE'
         env:
           PASS: ${{ secrets.FILEUPLOAD }}
           SERVER1: ${{ secrets.SERVER1 }}
