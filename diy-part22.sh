@@ -15,6 +15,9 @@ sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' targe
 #git checkout 2f04012b20515eec74563de74d0528e603aa6f89
 
 cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
+cd  $GITHUB_WORKSPACE/x-wrt/package/                                                    
+tar xvf kmod-dvb-combo.5.4.213.tar  
+cd $GITHUB_WORKSPACE/x-wrt/
 
 ./scripts/feeds update -a               
 ./scripts/feeds install -a -f
