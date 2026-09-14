@@ -405,7 +405,8 @@ jobs:
         #uses: owenthereal/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}          - name: Prepare artifact
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}     
+      - name: Prepare artifact
         run: |
           # 1. 確保目標資料夾存在（設定預設值）
           : "${DRIVERS_DIR:=./drivers}"
