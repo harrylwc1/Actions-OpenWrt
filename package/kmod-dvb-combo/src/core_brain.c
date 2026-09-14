@@ -54,5 +54,7 @@ void dvb_frontend_detach(void *fe) {}
 EXPORT_SYMBOL(dvb_frontend_detach);
 int dvb_register_frontend(struct dvb_adapter *adap, void *fe) { return 0; }
 EXPORT_SYMBOL(dvb_register_frontend);
+int dvb_register_frontend_inst(struct dvb_adapter *adap, void *fe) { return 0; }
 int dvb_unregister_frontend(void *fe) { return 0; }
 EXPORT_SYMBOL(dvb_unregister_frontend);
+
