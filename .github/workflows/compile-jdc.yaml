@@ -236,27 +236,8 @@ jobs:
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}     
 
 
-      - name: Patch DVB-USB via sed
-        run: |
-          cd x-wrt
-          # 1. 確保核心原始碼已經被解壓釋放
-          make target/linux/prepare V=s || true
-          
-          # 2. 自動尋找當前的 Linux 原始碼目錄
-          SRC_DIR=$(find build_dir/ -name "linux-5.4.*" -type d | head -n 1)
-          
-          if [ -d "$SRC_DIR" ]; then
-            echo "Found Linux source at: $SRC_DIR"
-            
-            # 3. 移除遙控器初始化與退出函數的依賴 (強行注入 return 0;)
-            sed -i '/int dvb_usb_remote_init/!b;n;a\\treturn 0;' $SRC_DIR/drivers/media/usb/dvb-usb/dvb-usb-remote.c
-            sed -i '/int dvb_usb_remote_exit/!b;n;a\\treturn 0;' $SRC_DIR/drivers/media/usb/dvb-usb/dvb-usb-remote.c
-            
-            echo "DVB-USB sed patch applied successfully!"
-          else
-            echo "Error: Linux source directory not found!"
-            exit 1
-          fi
+
+      
 
            
       - name: Compile firmware
