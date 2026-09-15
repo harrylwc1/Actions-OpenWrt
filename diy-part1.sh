@@ -97,4 +97,4 @@ sudo timedatectl set-timezone "$TZ"
 sudo chown $USER:$GROUPS /workdir
 mkdir -p ../$DRIVERS_DIR 
 ln -sf /workdir/x-wrt $GITHUB_WORKSPACE/x-wrt
-
+cp $GITHUB_WORKSPACE/patches/Makefile.ocserv   $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/ocserv/Makefile
