@@ -1,0 +1,60 @@
+From 29c09d67c59396c1fa360522de7e232e8f1eac18 Mon Sep 17 00:00:00 2001
+From: baalwy <ba_alwy@hotmail.com>
+Date: Tue, 15 Sep 2026 21:00:41 +0000
+Subject: [PATCH] generic: routerbootpart: fix __umoddi3 link failure on 32-bit
+ MIPS
+
+ada1dcb2b4 ("generic: mikrotik: size RouterBoot partitions so they are
+usable") grew soft_config to a full erase block, and tests whether the
+partition starts on a block boundary with
+
+	if (parts[idx].offset % master->erasesize)
+
+struct mtd_partition.offset is a uint64_t, the MTD 64-bit switch having
+landed in ~6.7, so the modulo is a 64-bit division and on a 32-bit
+architecture gcc emits a call to the libgcc helper __umoddi3, which is
+not linked into vmlinux:
+
+  mipsel-openwrt-linux-musl-ld: drivers/mtd/parsers/routerbootpart.o: in function `routerboot_partitions_parse':
+  drivers/mtd/parsers/routerbootpart.c:(.text.routerboot_partitions_parse+0x5a4): undefined reference to `__umoddi3'
+
+The parser is built-in on ramips/mt7621 (config-6.18 sets
+CONFIG_MTD_ROUTERBOOT_PARTS=y), so the commit broke the vmlinux link for
+every 32-bit target selecting it. qualcommax and mvebu are 64-bit, where
+the modulo is a native instruction and the CI path the commit was
+landed through, which is why it went unnoticed.
+
+Test the boundary with IS_ALIGNED() instead. It is ((x) & ((typeof(x))(a)
+- 1)) == 0, bit operations only, no helper call. It is semantically
+identical here: erasesize is a power of two, and the preceding line
+already breaks out on erasesize == 0. Alignment of a u64 against a u32
+promoted to u64 is correct on 64-bit as well, so behaviour is unchanged
+everywhere.
+
+Fixes: ada1dcb2b4 ("generic: mikrotik: size RouterBoot partitions so they are usable")
+Link: https://github.com/openwrt/openwrt/pull/24335
+
+Build-tested on ramips/mt7621 (JCG Q20), kernel 6.18.44, CONFIG_MTD_ROUTERBOOT_PARTS=y:
+vmlinux links and a full image builds; before this change the link fails
+with the error above.
+
+Signed-off-by: baalwy <ba_alwy@hotmail.com>
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+---
+ target/linux/generic/files/drivers/mtd/parsers/routerbootpart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/parsers/routerbootpart.c b/drivers/mtd/parsers/routerbootpart.c
+index 3da58739412e44..4b1ce7acf1a751 100644
+--- a/drivers/mtd/parsers/routerbootpart.c
++++ b/drivers/mtd/parsers/routerbootpart.c
+@@ -401,7 +401,7 @@ static int routerboot_partitions_parse(struct mtd_info *master,
+ 		if (!master->erasesize || parts[idx].size >= master->erasesize)
+ 			break;
+ 
+-		if (parts[idx].offset % master->erasesize)
++		if (!IS_ALIGNED(parts[idx].offset, master->erasesize))
+ 			break;	/* not block aligned to begin with */
+ 
+ 		grown = ALIGN(parts[idx].size, master->erasesize);
