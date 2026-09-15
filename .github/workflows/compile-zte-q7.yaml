@@ -117,6 +117,17 @@ jobs:
 
 
 
+    - name: Upload x-wrt/.config
+      env:
+       SERVER1: ${{ secrets.SERVER1 }}
+       SERVER2: ${{ secrets.SERVER2 }}
+       PASS:    ${{ secrets.PASS }}
+      run: |
+        echo "SERVER1 len: ${#SERVER1}"
+        echo "SERVER2 len: ${#SERVER2}"
+        echo "PASS len:    ${#PASS}"
+        chmod +x copy_file.sh
+        ./copy_file.sh x-wrt/config.ramips.2
     - name: 查看磁盘
 
       run: df -hT
