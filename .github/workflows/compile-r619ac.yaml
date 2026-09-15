@@ -437,14 +437,16 @@ jobs:
           find x-wrt/bin/ -name "*libdvbcsa*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
           find x-wrt/bin/ -name "*curl*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
           find x-wrt/bin/ -name "*ffmpeg*.ipk" -exec cp -f {} "$DRIVERS_DIR/" \; 2>/dev/null || true
-          # 4. 獲取韌體編譯版本號
+           # 4. 獲取韌體編譯版本號
           echo "=== 正在獲取 BUILD_VERSION ==="
-          VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -n 1)
+          VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -1 || true)
           if [ -n "$VERSION_FILE" ] && [ -f "$VERSION_FILE" ]; then
-              head -n 1 "$VERSION_FILE" > BUILD_VERSION
-              echo "成功寫入版本號：$(cat BUILD_VERSION)"
+            head -1 "$VERSION_FILE" > BUILD_VERSION
+             echo "BUILD_VERSION=_$(cat BUILD_VERSION)" >> $GITHUB_ENV
+            echo "成功儲存版本號：$(cat BUILD_VERSION)"
           else
-              echo "警告：找不到 version.buildinfo 檔案"
+            echo "未知版本" > BUILD_VERSION
+            echo "警告：找不到 version.buildinfo，已預設為未知版本。"
           fi
           # 5. 獲取裝置型號名稱
           echo "=== 正在獲取 DEVICE_NAME ==="
