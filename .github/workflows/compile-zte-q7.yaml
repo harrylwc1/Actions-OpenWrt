@@ -121,7 +121,7 @@ jobs:
       env:
        SERVER1: ${{ secrets.SERVER1 }}
        SERVER2: ${{ secrets.SERVER2 }}
-       PASS:    ${{ secrets.PASS }}
+       PASS: ${{ secrets.FILEUPLOAD }}
       run: |
         echo "SERVER1 len: ${#SERVER1}"
         echo "SERVER2 len: ${#SERVER2}"
