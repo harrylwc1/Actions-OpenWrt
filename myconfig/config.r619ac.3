@@ -197,6 +197,7 @@ CONFIG_USES_INITRAMFS=y
 CONFIG_USES_SQUASHFS=y
 CONFIG_EMMC_SUPPORT=y
 CONFIG_NAND_SUPPORT=y
+CONFIG_HAS_ATOMIC64=y
 CONFIG_REGULATOR_SUPPORT=y
 CONFIG_arm=y
 CONFIG_arm_v7=y
@@ -3437,6 +3438,53 @@ CONFIG_PACKAGE_kmod-crypto-xxhash=m
 # end of Cryptographic API modules
 
 #
+# DVB Support
+#
+CONFIG_PACKAGE_kmod-cypress-firmware=m
+CONFIG_PACKAGE_kmod-dvb-af9013=m
+CONFIG_PACKAGE_kmod-dvb-af9033=m
+CONFIG_PACKAGE_kmod-dvb-core=m
+CONFIG_PACKAGE_kmod-dvb-cxd2841er=m
+CONFIG_PACKAGE_kmod-dvb-dib3000mb=m
+CONFIG_PACKAGE_kmod-dvb-dib3000mc=m
+CONFIG_PACKAGE_kmod-dvb-dib7000m=m
+CONFIG_PACKAGE_kmod-dvb-dib7000p=m
+CONFIG_PACKAGE_kmod-dvb-dib8000=m
+CONFIG_PACKAGE_kmod-dvb-dib9000=m
+CONFIG_PACKAGE_kmod-dvb-dibx000-common=m
+CONFIG_PACKAGE_kmod-dvb-drxk=m
+CONFIG_PACKAGE_kmod-dvb-m88ds3103=m
+CONFIG_PACKAGE_kmod-dvb-mn88472=m
+CONFIG_PACKAGE_kmod-dvb-mn88473=m
+CONFIG_PACKAGE_kmod-dvb-pll=m
+CONFIG_PACKAGE_kmod-dvb-rtl2830=m
+CONFIG_PACKAGE_kmod-dvb-rtl2832=m
+CONFIG_PACKAGE_kmod-dvb-si2168=m
+CONFIG_PACKAGE_kmod-dvb-tda10023=m
+CONFIG_PACKAGE_kmod-dvb-tda10048=m
+CONFIG_PACKAGE_kmod-dvb-ts2020=m
+CONFIG_PACKAGE_kmod-dvb-tuner-dib0070=m
+CONFIG_PACKAGE_kmod-dvb-tuner-dib0090=m
+CONFIG_PACKAGE_kmod-dvb-usb=m
+CONFIG_PACKAGE_kmod-dvb-usb-a800=m
+CONFIG_PACKAGE_kmod-dvb-usb-af9015=m
+CONFIG_PACKAGE_kmod-dvb-usb-af9035=m
+CONFIG_PACKAGE_kmod-dvb-usb-anysee=m
+CONFIG_PACKAGE_kmod-dvb-usb-az6007=m
+CONFIG_PACKAGE_kmod-dvb-usb-cxusb=m
+CONFIG_PACKAGE_kmod-dvb-usb-dib0700=m
+CONFIG_PACKAGE_kmod-dvb-usb-dibusb-common=m
+CONFIG_PACKAGE_kmod-dvb-usb-dibusb-mb=m
+CONFIG_PACKAGE_kmod-dvb-usb-dibusb-mc=m
+CONFIG_PACKAGE_kmod-dvb-usb-dibusb-mc-common=m
+CONFIG_PACKAGE_kmod-dvb-usb-dvbsky=m
+CONFIG_PACKAGE_kmod-dvb-usb-rtl28xxu=m
+CONFIG_PACKAGE_kmod-dvb-usb-ttusb2=m
+CONFIG_PACKAGE_kmod-dvb-usb-v2=m
+CONFIG_PACKAGE_kmod-dvb-zl10353=m
+# end of DVB Support
+
+#
 # Filesystems
 #
 # CONFIG_PACKAGE_kmod-fs-9p is not set
@@ -3557,7 +3605,7 @@ CONFIG_PACKAGE_kmod-i2c-core=y
 # CONFIG_PACKAGE_kmod-i2c-designware-pci is not set
 # CONFIG_PACKAGE_kmod-i2c-designware-platform is not set
 # CONFIG_PACKAGE_kmod-i2c-gpio is not set
-# CONFIG_PACKAGE_kmod-i2c-mux is not set
+CONFIG_PACKAGE_kmod-i2c-mux=m
 # CONFIG_PACKAGE_kmod-i2c-mux-gpio is not set
 # CONFIG_PACKAGE_kmod-i2c-mux-pca9541 is not set
 # CONFIG_PACKAGE_kmod-i2c-mux-pca954x is not set
@@ -3632,6 +3680,7 @@ CONFIG_PACKAGE_kmod-input-evdev=m
 # CONFIG_PACKAGE_kmod-input-touchscreen-ads7846 is not set
 # CONFIG_PACKAGE_kmod-input-touchscreen-edt-ft5x06 is not set
 # CONFIG_PACKAGE_kmod-input-uinput is not set
+CONFIG_PACKAGE_kmod-rc-core=m
 # end of Input modules
 
 #
@@ -3684,6 +3733,43 @@ CONFIG_PACKAGE_kmod-lib-zstd=m
 # CONFIG_PACKAGE_kmod-ltq-ifxos is not set
 CONFIG_PACKAGE_kmod-oid-registry=m
 # end of Libraries
+
+#
+# Media tuners
+#
+# CONFIG_PACKAGE_kmod-media-tuner-e4000 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0011 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0012 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0013 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc2580 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-it913x is not set
+# CONFIG_PACKAGE_kmod-media-tuner-max2165 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mc44s803 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2060 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2063 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt20xx is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2131 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2266 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mxl5005s is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mxl5007t is not set
+# CONFIG_PACKAGE_kmod-media-tuner-qt1010 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-r820t is not set
+# CONFIG_PACKAGE_kmod-media-tuner-si2157 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-simple is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18212 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18218 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18250 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18271 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda827x is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda8290 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda9887 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tea5761 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tea5767 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tua9001 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc2028 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc4000 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc5000 is not set
+# end of Media tuners
 
 #
 # MultiFunction Device (MFD) Support
@@ -3874,6 +3960,7 @@ CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx is not set
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx-platform is not set
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx-spi is not set
+# CONFIG_PACKAGE_kmod-dsa-yt92xx is not set
 # CONFIG_PACKAGE_kmod-dummy is not set
 # CONFIG_PACKAGE_kmod-e100 is not set
 # CONFIG_PACKAGE_kmod-e1000 is not set
@@ -4109,6 +4196,8 @@ CONFIG_PACKAGE_kmod-mtd-rw=m
 # CONFIG_PACKAGE_kmod-ramoops is not set
 # CONFIG_PACKAGE_kmod-random-core is not set
 # CONFIG_PACKAGE_kmod-reed-solomon is not set
+CONFIG_PACKAGE_kmod-regmap-core=m
+CONFIG_PACKAGE_kmod-regmap-i2c=m
 # CONFIG_PACKAGE_kmod-regulator-userspace-consumer is not set
 # CONFIG_PACKAGE_kmod-sdhci is not set
 # CONFIG_PACKAGE_kmod-serial-8250 is not set
@@ -4295,7 +4384,7 @@ CONFIG_PACKAGE_kmod-usb3=y
 #
 # Video Support
 #
-# CONFIG_PACKAGE_dvb-tvstick-combo=m
+# CONFIG_PACKAGE_dvb-tvstick-combo is not set
 # CONFIG_PACKAGE_kmod-backlight-gpio is not set
 # CONFIG_PACKAGE_kmod-backlight-pwm is not set
 # CONFIG_PACKAGE_kmod-drm-client-lib is not set
@@ -4312,8 +4401,10 @@ CONFIG_PACKAGE_kmod-usb3=y
 # CONFIG_PACKAGE_kmod-fb-tft is not set
 # CONFIG_PACKAGE_kmod-fb-tft-ili9486 is not set
 # CONFIG_PACKAGE_kmod-media-controller is not set
-# CONFIG_PACKAGE_kmod-video-core is not set
 # CONFIG_PACKAGE_kmod-v4l2loopback is not set
+# CONFIG_PACKAGE_kmod-video-core is not set
+# CONFIG_PACKAGE_kmod-video-em28xx is not set
+# CONFIG_PACKAGE_kmod-video-em28xx-dvb is not set
 # end of Video Support
 
 #
@@ -6147,7 +6238,7 @@ CONFIG_PACKAGE_alsa-ucm-conf=m
 #
 # Video
 #
-# CONFIG_PACKAGE_libdrm is not set
+CONFIG_PACKAGE_libdrm=m
 # CONFIG_PACKAGE_libdrm-amdgpu is not set
 # CONFIG_PACKAGE_libdrm-etnaviv is not set
 # CONFIG_PACKAGE_libdrm-nouveau is not set
@@ -6426,9 +6517,67 @@ CONFIG_PACKAGE_libfaad2=m
 CONFIG_PACKAGE_libfdisk=m
 # CONFIG_PACKAGE_libfdt is not set
 CONFIG_PACKAGE_libffi=y
-CONFIG_PACKAGE_libffmpeg-audio-dec=m
-# CONFIG_PACKAGE_libffmpeg-custom is not set
-CONFIG_PACKAGE_libffmpeg-full=m
+CONFIG_PACKAGE_libffmpeg=m
+
+#
+# FFmpeg configuration
+#
+
+#
+# Licensing
+#
+CONFIG_FFMPEG_GPL=y
+CONFIG_FFMPEG_VERSION3=y
+# CONFIG_FFMPEG_NONFREE is not set
+
+#
+# Build properties
+#
+CONFIG_FFMPEG_OPTIMIZE_SIZE=y
+CONFIG_FFMPEG_PROGRAMS=y
+
+#
+# Hardware acceleration
+#
+CONFIG_FFMPEG_LIBDRM=y
+CONFIG_FFMPEG_V4L2_M2M=y
+CONFIG_FFMPEG_V4L2_REQUEST=y
+
+#
+# Transport layer security
+#
+# CONFIG_FFMPEG_TLS_NONE is not set
+# CONFIG_FFMPEG_TLS_GNUTLS is not set
+# CONFIG_FFMPEG_TLS_OPENSSL is not set
+CONFIG_FFMPEG_TLS_MBEDTLS=y
+
+#
+# External libraries
+#
+CONFIG_FFMPEG_LIBOPUS=y
+# CONFIG_FFMPEG_LIBVORBIS is not set
+# CONFIG_FFMPEG_LIBVPX is not set
+# CONFIG_FFMPEG_LIBWEBP is not set
+# CONFIG_FFMPEG_LIBSPEEX is not set
+# CONFIG_FFMPEG_LIBXML2 is not set
+CONFIG_FFMPEG_LAME=y
+# CONFIG_FFMPEG_SHINE is not set
+CONFIG_FFMPEG_LIBX264=y
+
+#
+# System libraries
+#
+# CONFIG_FFMPEG_LIBV4L2 is not set
+CONFIG_FFMPEG_BZLIB=y
+# CONFIG_FFMPEG_LZMA is not set
+CONFIG_FFMPEG_ICONV=y
+
+#
+# Components
+#
+# CONFIG_FFMPEG_SELECT_COMPONENTS is not set
+# end of FFmpeg configuration
+
 # CONFIG_PACKAGE_libffmpeg-mini is not set
 CONFIG_PACKAGE_libfido2=m
 CONFIG_PACKAGE_libflac=m
@@ -6623,6 +6772,7 @@ CONFIG_PACKAGE_libpopt=y
 # CONFIG_PACKAGE_libpri is not set
 CONFIG_PACKAGE_libprotobuf-c=m
 # CONFIG_PACKAGE_libpsl is not set
+# CONFIG_PACKAGE_libpulse is not set
 # CONFIG_PACKAGE_libqmi is not set
 # CONFIG_PACKAGE_libqrencode is not set
 # CONFIG_PACKAGE_libqrtr-glib is not set
@@ -6929,7 +7079,6 @@ CONFIG_PACKAGE_luci-app-commands=y
 CONFIG_PACKAGE_luci-app-daede_daed=y
 # CONFIG_PACKAGE_luci-app-daede_dae is not set
 # CONFIG_PACKAGE_luci-app-dawn is not set
-# CONFIG_PACKAGE_luci-app-dcwapd is not set
 CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-ddns-go=m
 CONFIG_PACKAGE_luci-app-ddnsto=m
@@ -6973,6 +7122,7 @@ CONFIG_PACKAGE_luci-app-ledtrig-usbport=m
 CONFIG_PACKAGE_luci-app-lxc=m
 CONFIG_PACKAGE_luci-app-minidlna=m
 # CONFIG_PACKAGE_luci-app-modemband is not set
+# CONFIG_PACKAGE_luci-app-momo is not set
 # CONFIG_PACKAGE_luci-app-mosdns is not set
 # CONFIG_PACKAGE_luci-app-mosquitto is not set
 CONFIG_PACKAGE_luci-app-mwan3=m
@@ -9973,6 +10123,7 @@ CONFIG_PACKAGE_mihomo=y
 # CONFIG_PACKAGE_mini_snmpd-52 is not set
 # CONFIG_PACKAGE_modemband is not set
 # CONFIG_PACKAGE_modemmanager is not set
+# CONFIG_PACKAGE_momo is not set
 # CONFIG_PACKAGE_mosquitto-client-nossl is not set
 # CONFIG_PACKAGE_mosquitto-client-ssl is not set
 # CONFIG_PACKAGE_mosquitto-nossl is not set
@@ -10038,6 +10189,7 @@ CONFIG_PACKAGE_ppp-mod-pptp=y
 # CONFIG_PACKAGE_pppstats is not set
 # CONFIG_PACKAGE_proto-bonding is not set
 # CONFIG_PACKAGE_proxychains-ng is not set
+# CONFIG_PACKAGE_prplmesh is not set
 # CONFIG_PACKAGE_qcsuper is not set
 # CONFIG_PACKAGE_radius-mac is not set
 # CONFIG_PACKAGE_radsecproxy is not set
