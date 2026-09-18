@@ -57,7 +57,7 @@ do_upload() {
         --limit-rate 3M \
         --no-buffer \
         --connect-timeout 10 \
-        --max-time 600 \
+        --max-time 6000 \
         --progress-bar \
         -u "$PASS" \
         -o /dev/null \
