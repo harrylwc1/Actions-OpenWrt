@@ -54,7 +54,7 @@ do_upload() {
     local http_code
 
     http_code=$(curl \
-        --limit-rate 5M \
+        --limit-rate 3M \
         --no-buffer \
         --connect-timeout 10 \
         --max-time 600 \
