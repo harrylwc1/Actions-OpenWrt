@@ -61,7 +61,7 @@ do_upload() {
         --progress-bar \
         -u "$PASS" \
         -o /dev/null \
-        -w "%{http_code}" \
+        -w "\n\n======== 傳輸完成統計 ========\n目標伺服器: %{url_effective}\n總共花費時間: %{time_total} 秒\n平均上傳速度: %{speed_upload} 字節/秒\nHTTP 狀態碼: %{http_code}\n" \
         "${curl_args[@]}" \
         "$url")
 
