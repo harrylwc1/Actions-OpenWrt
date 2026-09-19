@@ -57,18 +57,13 @@ do_upload() {
         --limit-rate 3M \
         --no-buffer \
         --connect-timeout 10 \
-        --max-time 600 \
+        --max-time 6000 \
         --progress-bar \
         -u "$PASS" \
         -o /dev/null \
-        -w "%{http_code}" \
+        -w "%{stderr}\n\n======== 傳輸完成統計 ========\n目標伺服器: %{url_effective}\n總共花費時間: %{time_total} 秒\n平均上傳速度: %{speed_upload} 字節/秒\nHTTP 狀態碼: %{http_code}\n%{stdout}%{http_code}" \
         "${curl_args[@]}" \
         "$url")
-
-    echo ""
-    echo "======== 傳輸完成統計 ========"
-    echo "目標伺服器: $url"
-    echo "HTTP 狀態碼: $http_code"
 
     case "$http_code" in
         204)     echo "結果: 成功 (204)"; return 0 ;;
@@ -76,7 +71,6 @@ do_upload() {
         *)       echo "結果: 失敗 (預期 204，實際 $http_code)"; return 1 ;;
     esac
 }
-
 # 6. 執行上傳
 echo "正在嘗試上傳至主要伺服器: $URL1"
 do_upload "$URL1"
