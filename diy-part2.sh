@@ -211,8 +211,8 @@ sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/feeds/small/tcping
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/small/tcping
 cp $GITHUB_WORKSPACE/patches/Makefile.eqos $GITHUB_WORKSPACE/x-wrt/feeds/kenzo/luci-app-eqos/Makefile
 sed -i 's|TARGET_LDFLAGS:=-L\$(STAGING_DIR)/usr/lib/libxcrypt \$(TARGET_LDFLAGS)|& -lintl|' $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/shadow/Makefile
-sed -i '/define KernelPackage\/dvb-usb-cxusb/,/endef/ { s/\($(call AddDepends\/dvb-usb,.*\))/\1 +kmod-video-videobuf2 +kmod-video-videobuf2-vmalloc)/ }'  $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/dvb.mk
-sed -i '/define KernelPackage\/dvb-core/,/endef/ { s/\(DEPENDS:=.*\)/\1 +kmod-video-core/ }' $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/dvb.mk
+#sed -i '/define KernelPackage\/dvb-usb-cxusb/,/endef/ { s/\($(call AddDepends\/dvb-usb,.*\))/\1 +kmod-video-videobuf2 +kmod-video-videobuf2-vmalloc)/ }'  $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/dvb.mk
+#sed -i '/define KernelPackage\/dvb-core/,/endef/ { s/\(DEPENDS:=.*\)/\1 +kmod-video-core/ }' $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/dvb.mk
 
 #if [ -e $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch ]; then
 #cp $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch $GITHUB_WORKSPACE/x-wrt/target/linux/generic/hack-6.12/
