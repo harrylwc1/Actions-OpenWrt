@@ -3,11 +3,12 @@ git clone https://github.com/x-wrt/x-wrt
 git clone https://github.com/coolsnowwolf/lede lede
 lede/scripts/feeds update -a
 sudo cp patches/copy_file.sh /usr/bin
-cp patches/copy_file.sh x-wrt/
+sudo chmod 755 /usr/bin/copy_file.sh
 
+cp patches/copy_file.sh x-wrt/
 sudo cp patches/copy_file1.sh /usr/bin
 cp patches/copy_file1.sh x-wrt/
-
+sudo chmod 755 x-wrt/copy_file.sh
 cd x-wrt
 #####
 
