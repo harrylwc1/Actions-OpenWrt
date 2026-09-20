@@ -109,16 +109,35 @@ jobs:
           mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
           #prefix: ${{ env.WORKING_DIR }}
           prefix: ${{ github.workspace }}/x-wrt
-          #skip_saving: 'true'
-      - name: Clear Cache
+          #skip_saving: 'true'      - name: Clear Cache
         if: env.CLEARCACHE == 'true'
         run: |
+          # ---------- 1. 先根据 staging_dir 大小决定 config ----------
+          if [ -d x-wrt/staging_dir ]; then
+            size=$(du -sk x-wrt/staging_dir/ | tail -1 | awk '{print $1}')
+          else
+            size=0
+          fi
+
+          if [ "${size:-0}" -ge 100000 ]; then
+            config_file="x-wrt/config.$ROUTER_MODEL.2"
+            echo "caches restored using config file $config_file"
+            echo "CACHE_RESTORED=TRUE" >> $GITHUB_ENV
+            echo "bin=bin2" >> $GITHUB_ENV
+          else
+            config_file="x-wrt/config.$ROUTER_MODEL.0"
+            echo "caches not found, using config file $config_file"
+            echo "CACHE_RESTORED=FALSE" >> $GITHUB_ENV
+            echo "bin=bin1" >> $GITHUB_ENV
+          fi
+
+          cp "$config_file" "myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE"
+
+          # ---------- 2. 再检查/删除旧缓存 ----------
           gh extension install actions/gh-actions-cache || true
           REPO=${{ github.repository }}
           BRANCH="master"
 
-          # 取得快取清單（依建立時間排序，最新排在最上面）
-          # 格式通常為：[Cache Key] \t [Status] \t [Size] \t [Created At]
           cache_list=$(gh actions-cache list --sort created-at -R $REPO -B $BRANCH -L 100)
 
           if [ -z "$cache_list" ]; then
@@ -130,22 +149,18 @@ jobs:
           echo "$cache_list"
           echo "========================="
 
-          # 使用 awk 分析，只保留每個關鍵字最新的一個（第一筆），其餘列入刪除名單
           old_caches=$(echo "$cache_list" | awk '
             BEGIN { FS="\t" }
             {
               cache_key = $1
-              # 取出第一個 "-" 前面的關鍵字
               split(cache_key, parts, "-")
               keyword = parts[1]
 
               if (keyword != "") {
                 if (!(keyword in seen)) {
-                  # 第一次遇到該關鍵字，視為最新，予以保留
                   seen[keyword] = cache_key
                   print "Keeping latest cache for [" keyword "]: " cache_key > "/dev/stderr"
                 } else {
-                  # 之後再遇到相同關鍵字，皆為較舊的快取，輸出準備刪除
                   print cache_key
                 }
               }
@@ -157,7 +172,6 @@ jobs:
             exit 0
           fi
 
-          # 執行刪除舊快取
           set +e
           echo "Deleting expired caches..."
           for cacheKey in $old_caches; do
@@ -165,21 +179,6 @@ jobs:
             gh actions-cache delete "$cacheKey" -R $REPO -B $BRANCH --confirm
           done
           echo "Done"
-
-          size=`du x-wrt/staging_dir/|tail -1|awk '{print $1}'`
-          if [ $size -ge 100000 ] 
-          then 
-            config_file="x-wrt/config.$ROUTER_MODEL.3"
-            echo caches restored using config file $config_file
-            echo "CACHE_RESTORED=TRUE" >> $GITHUB_ENV            
-            echo "bin=bin2" >> $GITHUB_ENV
-          else
-            config_file="x-wrt/config.$ROUTER_MODEL.0"
-            echo caches not found,using config file $config_file
-            echo "CACHE_RESTORED=FALSE" >> $GITHUB_ENV   
-            echo "bin=bin1" >> $GITHUB_ENV
-          fi
-          cp $config_file myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE                
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
