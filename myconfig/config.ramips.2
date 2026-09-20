@@ -5114,7 +5114,8 @@ CONFIG_PACKAGE_ucode-mod-uloop=y
 # CONFIG_PACKAGE_libzip-mbedtls is not set
 # CONFIG_PACKAGE_libzip-nossl is not set
 # CONFIG_PACKAGE_libzip-openssl is not set
-# CONFIG_PACKAGE_libzstd is not set
+CONFIG_PACKAGE_libzstd=m
+CONFIG_ZSTD_OPTIMIZE_O3=y
 # end of Compression
 
 #
@@ -5974,11 +5975,11 @@ CONFIG_LIBCURL_PROXY=y
 # CONFIG_LIBCURL_LIBIDN2 is not set
 # CONFIG_LIBCURL_THREADED_RESOLVER is not set
 CONFIG_LIBCURL_ZLIB=y
-# CONFIG_LIBCURL_ZSTD is not set
+CONFIG_LIBCURL_ZSTD=y
 CONFIG_LIBCURL_UNIX_SOCKETS=y
 # CONFIG_LIBCURL_LIBCURL_OPTION is not set
 # CONFIG_LIBCURL_VERBOSE is not set
-# CONFIG_LIBCURL_HTTP_AUTH is not set
+CONFIG_LIBCURL_HTTP_AUTH=y
 # CONFIG_PACKAGE_libcurl-gnutls is not set
 CONFIG_PACKAGE_libdaemon=m
 # CONFIG_PACKAGE_libdaq3 is not set
@@ -6583,6 +6584,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-lucky is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-modemband is not set
+# CONFIG_PACKAGE_luci-app-momo is not set
 # CONFIG_PACKAGE_luci-app-mosdns is not set
 # CONFIG_PACKAGE_luci-app-mosquitto is not set
 # CONFIG_PACKAGE_luci-app-mtwifi is not set
@@ -8437,6 +8439,7 @@ CONFIG_PACKAGE_libipset=m
 # CONFIG_PACKAGE_mini_snmpd-52 is not set
 # CONFIG_PACKAGE_modemband is not set
 # CONFIG_PACKAGE_modemmanager is not set
+# CONFIG_PACKAGE_momo is not set
 # CONFIG_PACKAGE_mosquitto-client-nossl is not set
 # CONFIG_PACKAGE_mosquitto-client-ssl is not set
 # CONFIG_PACKAGE_mosquitto-nossl is not set
