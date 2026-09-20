@@ -47,6 +47,7 @@ env:
   KERNEL_VERSION: '6.18'
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
+  UPDATE_MULTI_CORE_FILE3: myconfig/sys.uc
   KERNEL_MODULE: myconfig/kernel_newifid2
   FEEDS_CONF: feeds.conf.default
   DIY_P1_SH: diy-part1.sh
