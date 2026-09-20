@@ -161,7 +161,7 @@ jobs:
           mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
           #prefix: ${{ env.WORKING_DIR }}
           prefix: ${{ github.workspace }}/x-wrt
-          skip_saving: ${{ steps.openwrt-cache.outputs.hit == 'true' }
+          skip_saving: ${{ steps.openwrt-cache.outputs.hit == 'true' }}
     - name: Clear Cache
       if: env.CLEARCACHE == 'true'
       run: |
