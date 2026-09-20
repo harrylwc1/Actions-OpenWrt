@@ -127,25 +127,59 @@ jobs:
       - name: Clear Cache
         if: env.CLEARCACHE == 'true'
         run: |
-          gh extension install actions/gh-actions-cache
+          gh extension install actions/gh-actions-cache || true
           REPO=${{ github.repository }}
           BRANCH="master"
-          #target_device_arch_1="ipq40xx"
-          #echo "Fetching list of cache key"
-          list_of_caches=$(gh actions-cache  --sort created-at list -R $REPO -B $BRANCH -L 100| cut -f 1)
-          echo $list_of_caches
-          no_of_cache=$(gh actions-cache list -R $REPO -B $BRANCH -L 100|wc -l)
-          echo no of cache found = $no_of_cache
-          if [ "$no_of_cache" -gt 6 ]
-          then
-          cacheKey=$(gh actions-cache  --sort created-at list -R $REPO -B $BRANCH -L 100| cut -f 1|tail -1 )
-          ## Setting this to not fail the workflow while deleting cache keys.
-          set +e
-          echo "Deleting caches..."
-          gh actions-cache delete $cacheKey -R $REPO -B $BRANCH --confirm
-          echo $cacheKey
-          echo "Done"
+
+          # 取得快取清單（依建立時間排序，最新排在最上面）
+          # 格式通常為：[Cache Key] \t [Status] \t [Size] \t [Created At]
+          cache_list=$(gh actions-cache list --sort created-at -R $REPO -B $BRANCH -L 100)
+
+          if [ -z "$cache_list" ]; then
+            echo "No caches found."
+            exit 0
           fi
+
+          echo "=== Active Cache List ==="
+          echo "$cache_list"
+          echo "========================="
+
+          # 使用 awk 分析，只保留每個關鍵字最新的一個（第一筆），其餘列入刪除名單
+          old_caches=$(echo "$cache_list" | awk '
+            BEGIN { FS="\t" }
+            {
+              cache_key = $1
+              # 取出第一個 "-" 前面的關鍵字
+              split(cache_key, parts, "-")
+              keyword = parts[1]
+
+              if (keyword != "") {
+                if (!(keyword in seen)) {
+                  # 第一次遇到該關鍵字，視為最新，予以保留
+                  seen[keyword] = cache_key
+                  print "Keeping latest cache for [" keyword "]: " cache_key > "/dev/stderr"
+                } else {
+                  # 之後再遇到相同關鍵字，皆為較舊的快取，輸出準備刪除
+                  print cache_key
+                }
+              }
+            }
+          ')
+
+          if [ -z "$old_caches" ]; then
+            echo "All caches are already the latest for their respective keywords. Nothing to delete."
+            exit 0
+          fi
+
+          # 執行刪除舊快取
+          set +e
+          echo "Deleting expired caches..."
+          for cacheKey in $old_caches; do
+            echo "Deleting: $cacheKey"
+            gh actions-cache delete "$cacheKey" -R $REPO -B $BRANCH --confirm
+          done
+          echo "Done"
+
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
