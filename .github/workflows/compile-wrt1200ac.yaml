@@ -60,7 +60,7 @@ env:
   UPLOAD_FIRMWARE: true
   #UPLOAD_ROUTER: true
   TZ: Asia/Shanghai
-  CLEARCACHE: truev
+  CLEARCACHE: true
 
   
 jobs:
