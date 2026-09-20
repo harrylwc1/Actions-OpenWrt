@@ -20,35 +20,35 @@ return view.extend({
 			return callLuciProcessList().then(L.bind(function(processes) {
 				this.updateTable('.table', processes);
 			}, this));
-		}, this)).catch(function(e) { ui.addNotification(null, E('p', e.message)) });
+		}, this)).catch(function(e) {
+			ui.addNotification(null, E('p', e.message));
+		});
 	},
 
 	updateTable: function(table, processes) {
 		var rows = [];
-
-		processes.sort(function(a, b) {
-			return (a.PID - b.PID);
-		});
+		processes.sort(function(a, b) { return (a.PID - b.PID); });
 
 		for (var i = 0; i < processes.length; i++) {
 			var proc = processes[i];
-
 			rows.push([
 				proc.PID,
 				proc.USER,
-				proc.COMMAND,
-				proc['CPU'],	
+				E('span', { 'style': 'word-break: break-word' }, proc.COMMAND),
 				proc['%CPU'],
-				proc['%MEM'],
+				proc['%VSZ'],
+				proc.CPU,
 				E('div', {}, [
 					E('button', {
 						'class': 'btn cbi-button-action',
 						'click': ui.createHandlerFn(this, 'handleSignal', 1, proc.PID)
-					}, _('Hang Up')), ' ',
+					}, _('Hang Up')),
+					' ',
 					E('button', {
 						'class': 'btn cbi-button-negative',
 						'click': ui.createHandlerFn(this, 'handleSignal', 15, proc.PID)
-					}, _('Terminate')), ' ',
+					}, _('Terminate')),
+					' ',
 					E('button', {
 						'class': 'btn cbi-button-negative',
 						'click': ui.createHandlerFn(this, 'handleSignal', 9, proc.PID)
@@ -63,23 +63,22 @@ return view.extend({
 	render: function(processes) {
 		var v = E([], [
 			E('h2', _('Processes')),
-			E('div', { 'class': 'cbi-map-descr' }, _('This list gives an overview over currently running system processes and their status.')),
-
+			E('div', { 'class': 'cbi-map-descr' },
+				_('This list gives an overview over currently running system processes and their status.')),
 			E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('PID')),
 					E('th', { 'class': 'th' }, _('Owner')),
 					E('th', { 'class': 'th' }, _('Command')),
-                                        E('div', { 'class': 'th' }, _('CORE')),
 					E('th', { 'class': 'th' }, _('CPU usage (%)')),
 					E('th', { 'class': 'th' }, _('Memory usage (%)')),
+					E('th', { 'class': 'th' }, _('CPU core')),
 					E('th', { 'class': 'th center nowrap cbi-section-actions' })
 				])
 			])
 		]);
 
 		this.updateTable(v.lastElementChild, processes);
-
 		return v;
 	},
 

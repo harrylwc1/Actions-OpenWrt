@@ -279,17 +279,23 @@ function net.host_hints(callback)
 end
 
 function net.conntrack(callback)
-	local ok, nfct = pcall(io.lines, "/proc/net/nf_conntrack")
+	local ok, nfct = pcall(io.lines, "/tmp/nf_conntrack_link")
 	if not ok or not nfct then
 		return nil
 	end
 
 	local line, connt = nil, (not callback) and { }
 	for line in nfct do
-		local fam, l3, l4, timeout, tuples =
-			line:match("^(ipv[46]) +(%d+) +%S+ +(%d+) +(%d+) +(.+)$")
+		local fam, l3, l4, rest =
+			line:match("^(ipv[46]) +(%d+) +%S+ +(%d+) +(.+)$")
 
-		if fam and l3 and l4 and timeout and not tuples:match("^TIME_WAIT ") then
+		local timeout, tuples = rest:match("^(%d+) +(.+)$")
+
+		if not tuples then
+			tuples = rest
+		end
+
+		if fam and l3 and l4 and not tuples:match("^TIME_WAIT ") then
 			l4 = nixio.getprotobynumber(l4)
 
 			local entry = {
@@ -323,6 +329,7 @@ function net.conntrack(callback)
 				connt[#connt+1] = entry
 			end
 		end
+		if #connt >= 2048 then break end
 	end
 
 	return callback and true or connt
@@ -378,8 +385,10 @@ function process.list()
 	end
 
 	for line in ps do
-		local pid, ppid, user, stat, vsz, mem, core, cpu, cmd = line:match(
-                        "^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][W ][<N ]) +(%d+m?) +(%d+%%) +(%d+) +(%d+%%) +(.+)"
+		-- New busybox top output format:
+		-- PID PPID USER STAT VSZ %VSZ CPU %CPU COMMAND
+		local pid, ppid, user, stat, vsz, vsz_pct, cpu, cpu_pct, cmd = line:match(
+			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][<NW ][<N ]) +(%d+m?) +(%d+%%) +(%d+) +(%d+%%) +(.+)"
 		)
 
 		local idx = tonumber(pid)
@@ -390,9 +399,9 @@ function process.list()
 				['USER']    = user,
 				['STAT']    = stat,
 				['VSZ']     = vsz,
-				['%MEM']    = mem,
-                                ['CPU']     = core,
-				['%CPU']    = cpu,
+				['%VSZ']    = vsz_pct,
+				['CPU']     = cpu,
+				['%CPU']    = cpu_pct,
 				['COMMAND'] = cmd
 			}
 		end
@@ -567,6 +576,7 @@ function init.names()
 end
 
 function init.index(name)
+	name = fs.basename(name)
 	if fs.access(init.dir..name) then
 		return call("env -i sh -c 'source %s%s enabled; exit ${START:-255}' >/dev/null"
 			%{ init.dir, name })
@@ -574,6 +584,7 @@ function init.index(name)
 end
 
 local function init_action(action, name)
+	name = fs.basename(name)
 	if fs.access(init.dir..name) then
 		return call("env -i %s%s %s >/dev/null" %{ init.dir, name, action })
 	end

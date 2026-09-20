@@ -98,5 +98,94 @@ sudo timedatectl set-timezone "$TZ"
 sudo chown $USER:$GROUPS /workdir
 mkdir -p ../$DRIVERS_DIR 
 ln -sf /workdir/x-wrt $GITHUB_WORKSPACE/x-wrt
+
+
+
+
+cat GITHUB_WORKSPACE/myconfig/lang.update >> feeds/luci/modules/luci-mod-status/po/zh_Hant/status.po
+
+# ============================================================
+# 多核 busybox top 适配
+# CPU_MULTI_CORE=true 时：
+#   - 覆盖 sys.lua / processes.js
+#   - 仅当 ucode 目录存在时，才覆盖 sys.uc
+# 源文件位置：$GITHUB_WORKSPACE/myconfig/
+# ============================================================
+if [ "$CPU_MULTI_CORE" = "true" ]; then
+    echo "==> CPU_MULTI_CORE=true，应用多核 top 补丁"
+
+    SRC_DIR="${GITHUB_WORKSPACE}/myconfig"
+    LUCI_DIR="feeds/luci"
+
+    SYS_LUA_SRC="$SRC_DIR/sys.lua"
+    SYS_UC_SRC="$SRC_DIR/sys.uc"
+    PROCESSES_JS_SRC="$SRC_DIR/processes.js"
+
+    # ---- 检查源文件 ----
+    for f in "$SYS_LUA_SRC" "$PROCESSES_JS_SRC"; do
+        if [ ! -f "$f" ]; then
+            echo "ERROR: 源文件不存在: $f"
+            exit 1
+        fi
+    done
+    if [ ! -f "$SYS_UC_SRC" ]; then
+        echo "WARN: 源文件不存在: $SYS_UC_SRC（只有 ucode 目录存在时才会用到）"
+    fi
+
+    # ---------- sys.lua ----------
+    SYS_LUA="$LUCI_DIR/modules/luci-base/luasrc/sys.lua"
+    if [ ! -f "$SYS_LUA" ]; then
+        SYS_LUA=$(find "$LUCI_DIR" -path '*/luasrc/sys.lua' | head -1)
+    fi
+    if [ -n "$SYS_LUA" ] && [ -f "$SYS_LUA" ]; then
+        [ -f "$SYS_LUA.orig" ] || cp -f "$SYS_LUA" "$SYS_LUA.orig"
+        cp -f "$SYS_LUA_SRC" "$SYS_LUA"
+        echo "    已覆盖: $SYS_LUA"
+    else
+        echo "    WARN: 找不到 sys.lua，跳过"
+    fi
+
+    # ---------- processes.js ----------
+    PROCESSES_JS="$LUCI_DIR/modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js"
+    if [ ! -f "$PROCESSES_JS" ]; then
+        PROCESSES_JS=$(find "$LUCI_DIR" -path '*/view/status/processes.js' | head -1)
+    fi
+    if [ -n "$PROCESSES_JS" ] && [ -f "$PROCESSES_JS" ]; then
+        [ -f "$PROCESSES_JS.orig" ] || cp -f "$PROCESSES_JS" "$PROCESSES_JS.orig"
+        cp -f "$PROCESSES_JS_SRC" "$PROCESSES_JS"
+        echo "    已覆盖: $PROCESSES_JS"
+    else
+        echo "    WARN: 找不到 processes.js，跳过"
+    fi
+
+    # ---------- sys.uc（仅当 ucode 目录存在） ----------
+    UCODE_DIR="$LUCI_DIR/modules/luci-base/ucode"
+    if [ -d "$UCODE_DIR" ]; then
+        if [ ! -f "$SYS_UC_SRC" ]; then
+            echo "    WARN: ucode 目录存在，但 $SYS_UC_SRC 不存在，跳过"
+        else
+            SYS_UC="$UCODE_DIR/sys.uc"
+            if [ ! -f "$SYS_UC" ]; then
+                SYS_UC=$(find "$LUCI_DIR" -path '*/ucode/sys.uc' | head -1)
+            fi
+            if [ -n "$SYS_UC" ] && [ -f "$SYS_UC" ]; then
+                [ -f "$SYS_UC.orig" ] || cp -f "$SYS_UC" "$SYS_UC.orig"
+                cp -f "$SYS_UC_SRC" "$SYS_UC"
+                echo "    已覆盖: $SYS_UC"
+            else
+                echo "    WARN: ucode 目录存在但找不到 sys.uc，跳过"
+            fi
+        fi
+    else
+        echo "    未检测到 ucode 目录，跳过 sys.uc"
+    fi
+
+    echo "==> 多核 top 补丁完成"
+
+else
+    echo "==> CPU_MULTI_CORE != true，跳过多核 top 补丁"
+fi
+
+
 rm $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/ffmpeg/patches/180-mips-cabac-no-mips16.patch 
 cp $GITHUB_WORKSPACE/patches/Makefile.ocserv   $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/ocserv/Makefile

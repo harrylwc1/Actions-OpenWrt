@@ -1,6 +1,6 @@
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:73
-msgid "CORE"
-msgstr "核"
+msgid "core"
+msgstr "核心"
 
 msgid "Current Boot Part"
 msgstr "系統分區"
