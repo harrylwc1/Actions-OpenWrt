@@ -264,7 +264,7 @@ jobs:
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
 
       - name: SSH链接管理
-        uses: owenthereal/action-upterm@v1 
+        uses: lhotari/action-upterm@v1 
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
         
@@ -313,15 +313,15 @@ jobs:
       
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
-         uses: owenthereal/action-upterm@v1
+         uses: lhotari/action-upterm@v1
          
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: SSH connection for KERNEL MENU CONFIG
         if: env.KERNEL_MENUCONFIG == 'true'
-          # uses: owenthereal/action-upterm@v1
-        uses: owenthereal/action-upterm@v1
+          # uses: lhotari/action-upterm@v1
+        uses: lhotari/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
@@ -460,7 +460,7 @@ jobs:
 
       - name: SSH connection for failure Debug
         if: ${{ failure() }}
-        uses: owenthereal/action-upterm@v1
+        uses: lhotari/action-upterm@v1
         env:
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
