@@ -132,7 +132,10 @@ jobs:
         #docker rmi $(docker image ls -aq)
     
     - name: SSH链接管理
-      uses: owenthereal/action-upterm@v1
+      #uses: mxschmitt/action-tmate
+      uses: lhotari/action-upterm@v1
+      #uses: owenthereal/action-upterm@v1
+      #uses: mxschmitt/action-tmate
       #uses: P3TERX/ssh2actions@main
 
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
