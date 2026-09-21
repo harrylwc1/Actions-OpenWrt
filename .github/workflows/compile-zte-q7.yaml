@@ -133,8 +133,8 @@ jobs:
     
     - name: SSH链接管理
     
-      uses: lhotari/action-upterm@v1
-      #uses: owenthereal/action-upterm@v1
+      #uses: lhotari/action-upterm@v1
+      uses: owenthereal/action-upterm@v1
       #uses: mxschmitt/action-tmate
       #xxxuses: mxschmitt/action-tmate@v3
 
