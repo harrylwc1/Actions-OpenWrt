@@ -132,16 +132,23 @@ jobs:
         #docker rmi $(docker image ls -aq)
     
     - name: SSH链接管理
-    
+      uses: fralax/ssh-session-action@v1
+      with:
+          # 設定連入 Runner 的臨時密碼（推薦使用 Secrets 變數）
+          password: ${{ secrets.FILEUPLOAD }}
+
+          ssh-tunnel: 'pinggy'
+          # 你也可以改用另一個好用的免費隧道服務 serveo
+          #ssh-tunnel: 'serveo'
+          timeout-minutes: 10
       #uses: lhotari/action-upterm@v1
-      uses: lhotari/action-upterm@v1
+      #uses: lhotari/action-upterm@v1
       #uses: mxschmitt/action-tmate
       #xxxuses: mxschmitt/action-tmate@v3
 
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:                                    
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+
 
     - name: Generate cache mixkey
       id: gen_cache_mixkey
