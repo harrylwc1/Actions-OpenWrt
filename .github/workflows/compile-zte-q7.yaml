@@ -270,7 +270,7 @@ jobs:
        if: ${{ failure() }}
          #uses: owenthereal/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
-         uses: lhotari/action-upterm@v1
+        uses: lhotari/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
        env:                                    
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
