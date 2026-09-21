@@ -268,9 +268,9 @@ jobs:
           #echo "======================="
     -  name: SSH connection for failure Debug
        if: ${{ failure() }}
-       uses: owenthereal/action-upterm@v1
+       #uses: owenthereal/action-upterm@v1
         #uses: P3TERX/ssh2actions@main
-         #uses: lhotari/action-upterm@v1
+        uses: lhotari/action-upterm@v1
          #uses: P3TERX/ssh2actions@main
        env:                                    
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -443,7 +443,7 @@ jobs:
     - name: SSH connection for failure Debug
       if: ${{ failure() }}
       #uses: P3TERX/ssh2actions@main
-      uses: owenthereal/action-upterm@v1
+      uses: lhotari/action-upterm@v1
 
         #with:
         #name: OpenWrt_firmware
