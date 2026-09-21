@@ -199,10 +199,24 @@ git apply --ignore-space-change --ignore-whitespace ramips.patch
 git apply --ignore-space-change --ignore-whitespace common.patch
 #git apply --ignore-space-change --ignore-whitespace revert_set_default_root.patch
 git apply --ignore-space-change --ignore-whitespace r619ac.patch
-cp reset_user_to_root.patch feeds/luci/
-cd feeds/luci
-git apply -R --ignore-space-change --ignore-whitespace reset_user_to_root.patch 
+#cp reset_user_to_root.patch feeds/luci/
+#cd feeds/luci
+#git apply -R --ignore-space-change --ignore-whitespace reset_user_to_root.patch 
+
+cd $GITHUB_WORKSPACE/x-wrt/
+find feeds/luci/ -name header.ut -exec grep -l -e "getspnam('admin')" -e "a admin" {} \; | while read f; do
+    cp "$f" "$f.bak"
+        sed -i \
+                        -e "s/getspnam('admin')/getspnam('root')/g" \
+                                -e "s/a admin/a root/g" \
+                                        "$f"
+            echo "Patched: $f"
+    done
+
+
+
 cd $GITHUB_WORKSPACE/x-wrt/feeds/packages/
+
 cd ../../
 rm -r $GITHUB_WORKSPACE/x-wrt/package/feeds/small/pdnsd-alt
 rm -r $GITHUB_WORKSPACE/x-wrt/package/small/pdnsd-alt
