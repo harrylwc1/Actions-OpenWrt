@@ -185,7 +185,7 @@ cd $GITHUB_WORKSPACE/x-wrt/
 mkdir dl
 cd dl
 #wget https://ftp.gnu.org/gnu/binutils/binutils-2.45.tar.xz
-wget https://fw0.koolcenter.com/binary/ddnsto/ddnsto-binary-3.0.4.tar.gz
+#wget https://fw0.koolcenter.com/binary/ddnsto/ddnsto-binary-3.0.4.tar.gz
 #wget http://weike-iot.com:2211/rockchip/bsp/rk3568_OpenWRT/downloads/ddnsto-binary-3.0.4.tar.gz
 ls -alt ddnsto*
 cd ..
