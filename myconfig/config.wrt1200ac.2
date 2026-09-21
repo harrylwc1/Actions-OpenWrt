@@ -155,8 +155,8 @@ CONFIG_DEFAULT_mtd=y
 CONFIG_DEFAULT_mwlwifi-firmware-88w8864=y
 CONFIG_DEFAULT_netifd=y
 CONFIG_DEFAULT_nftables=y
-CONFIG_DEFAULT_odhcp6c=y
-CONFIG_DEFAULT_odhcpd-ipv6only=y
+# CONFIG_DEFAULT_odhcp6c is not set
+# CONFIG_DEFAULT_odhcpd-ipv6only is not set
 CONFIG_DEFAULT_ppp=y
 CONFIG_DEFAULT_ppp-mod-pppoe=y
 CONFIG_DEFAULT_uboot-envtools=y
@@ -327,20 +327,20 @@ CONFIG_KERNEL_IP_MROUTE=y
 CONFIG_KERNEL_IP_MROUTE_MULTIPLE_TABLES=y
 CONFIG_KERNEL_IP_PIMSM_V1=y
 CONFIG_KERNEL_IP_PIMSM_V2=y
-CONFIG_KERNEL_IPV6=y
-CONFIG_KERNEL_IPV6_MULTIPLE_TABLES=y
-CONFIG_KERNEL_IPV6_SUBTREES=y
-CONFIG_KERNEL_IPV6_MROUTE=y
-CONFIG_KERNEL_IPV6_MROUTE_MULTIPLE_TABLES=y
-CONFIG_KERNEL_IPV6_PIMSM_V2=y
-CONFIG_KERNEL_IPV6_SEG6_LWTUNNEL=y
+# CONFIG_KERNEL_IPV6 is not set
+# CONFIG_KERNEL_IPV6_MULTIPLE_TABLES is not set
+# CONFIG_KERNEL_IPV6_SUBTREES is not set
+# CONFIG_KERNEL_IPV6_MROUTE is not set
+# CONFIG_KERNEL_IPV6_MROUTE_MULTIPLE_TABLES is not set
+# CONFIG_KERNEL_IPV6_PIMSM_V2 is not set
+# CONFIG_KERNEL_IPV6_SEG6_LWTUNNEL is not set
 # CONFIG_KERNEL_LWTUNNEL_BPF is not set
 # CONFIG_KERNEL_NET_L3_MASTER_DEV is not set
 # CONFIG_KERNEL_DCB is not set
 # CONFIG_KERNEL_XDP_SOCKETS is not set
 # CONFIG_KERNEL_PAGE_POOL is not set
 CONFIG_KERNEL_MPTCP=y
-CONFIG_KERNEL_MPTCP_IPV6=y
+# CONFIG_KERNEL_MPTCP_IPV6 is not set
 CONFIG_KERNEL_NF_CONNTRACK_TIMEOUT=y
 # CONFIG_KERNEL_IP_PNP is not set
 # CONFIG_KERNEL_BTRFS_FS is not set
@@ -398,7 +398,7 @@ CONFIG_KERNEL_PREEMPT_NONE=y
 # CONFIG_USE_LTO is not set
 CONFIG_MOLD=y
 # CONFIG_USE_MOLD is not set
-CONFIG_IPV6=y
+# CONFIG_IPV6 is not set
 
 #
 # Stripping options
@@ -1314,7 +1314,7 @@ CONFIG_BUSYBOX_DEFAULT_TIME=y
 # CONFIG_BUSYBOX_DEFAULT_VOLNAME is not set
 # CONFIG_BUSYBOX_DEFAULT_WATCHDOG is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_WATCHDOG_OPEN_TWICE is not set
-CONFIG_BUSYBOX_DEFAULT_FEATURE_IPV6=y
+# CONFIG_BUSYBOX_DEFAULT_FEATURE_IPV6 is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_UNIX_LOCAL is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_PREFER_IPV4_ADDRESS is not set
 CONFIG_BUSYBOX_DEFAULT_VERBOSE_RESOLUTION_ERRORS=y
@@ -2335,7 +2335,7 @@ CONFIG_BUSYBOX_CONFIG_TIME=y
 #
 # Networking Utilities
 #
-CONFIG_BUSYBOX_CONFIG_FEATURE_IPV6=y
+# CONFIG_BUSYBOX_CONFIG_FEATURE_IPV6 is not set
 # CONFIG_BUSYBOX_CONFIG_FEATURE_UNIX_LOCAL is not set
 CONFIG_BUSYBOX_CONFIG_FEATURE_PREFER_IPV4_ADDRESS=y
 CONFIG_BUSYBOX_CONFIG_VERBOSE_RESOLUTION_ERRORS=y
@@ -2584,7 +2584,7 @@ CONFIG_PACKAGE_ca-certificates=m
 # CONFIG_PACKAGE_dnsmasq-dhcpv6 is not set
 CONFIG_PACKAGE_dnsmasq-full=y
 CONFIG_PACKAGE_dnsmasq_full_dhcp=y
-CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
+# CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
 CONFIG_PACKAGE_dnsmasq_full_dnssec=y
 CONFIG_PACKAGE_dnsmasq_full_auth=y
 CONFIG_PACKAGE_dnsmasq_full_ipset=y
@@ -3668,9 +3668,9 @@ CONFIG_PACKAGE_kmod-nls-utf8=y
 CONFIG_PACKAGE_kmod-br-netfilter=y
 CONFIG_PACKAGE_kmod-ebtables=m
 CONFIG_PACKAGE_kmod-ebtables-ipv4=m
-CONFIG_PACKAGE_kmod-ebtables-ipv6=m
+# CONFIG_PACKAGE_kmod-ebtables-ipv6 is not set
 # CONFIG_PACKAGE_kmod-ebtables-watchers is not set
-CONFIG_PACKAGE_kmod-ip6tables=m
+# CONFIG_PACKAGE_kmod-ip6tables is not set
 # CONFIG_PACKAGE_kmod-ip6tables-extra is not set
 # CONFIG_PACKAGE_kmod-ipt-account is not set
 # CONFIG_PACKAGE_kmod-ipt-asn is not set
@@ -3732,14 +3732,14 @@ CONFIG_PACKAGE_kmod-nf-conntrack=y
 CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
 CONFIG_PACKAGE_kmod-nf-flow=y
 CONFIG_PACKAGE_kmod-nf-ipt=y
-CONFIG_PACKAGE_kmod-nf-ipt6=y
+CONFIG_PACKAGE_kmod-nf-ipt6=m
 CONFIG_PACKAGE_kmod-nf-ipvs=m
 # CONFIG_PACKAGE_kmod-nf-ipvs-ftp is not set
 # CONFIG_PACKAGE_kmod-nf-ipvs-sip is not set
 CONFIG_PACKAGE_kmod-nf-log=y
 CONFIG_PACKAGE_kmod-nf-log6=y
 CONFIG_PACKAGE_kmod-nf-nat=y
-CONFIG_PACKAGE_kmod-nf-nat6=y
+CONFIG_PACKAGE_kmod-nf-nat6=m
 CONFIG_PACKAGE_kmod-nf-nathelper=m
 CONFIG_PACKAGE_kmod-nf-nathelper-amanda=m
 CONFIG_PACKAGE_kmod-nf-nathelper-broadcast=m
@@ -4878,7 +4878,7 @@ CONFIG_PERL_NOCOMMENT=y
 #
 # Python
 #
-CONFIG_PACKAGE_libpython3=y
+CONFIG_PACKAGE_libpython3=m
 # CONFIG_PACKAGE_micropython-lib is not set
 # CONFIG_PACKAGE_micropython-lib-src is not set
 # CONFIG_PACKAGE_micropython-lib-unix is not set
@@ -4904,7 +4904,7 @@ CONFIG_PACKAGE_python3-attrs=m
 # CONFIG_PACKAGE_python3-awesomeversion is not set
 # CONFIG_PACKAGE_python3-awscli is not set
 # CONFIG_PACKAGE_python3-babel is not set
-CONFIG_PACKAGE_python3-base=y
+CONFIG_PACKAGE_python3-base=m
 # CONFIG_PACKAGE_python3-base-src is not set
 # CONFIG_PACKAGE_python3-bcrypt is not set
 # CONFIG_PACKAGE_python3-bidict is not set
@@ -4998,7 +4998,7 @@ CONFIG_PACKAGE_python3-itsdangerous=m
 # CONFIG_PACKAGE_python3-libmodbus is not set
 # CONFIG_PACKAGE_python3-libpass is not set
 # CONFIG_PACKAGE_python3-libtorrent is not set
-CONFIG_PACKAGE_python3-light=y
+CONFIG_PACKAGE_python3-light=m
 
 #
 # Configuration
@@ -5063,7 +5063,7 @@ CONFIG_PACKAGE_python3-pip=m
 CONFIG_PACKAGE_python3-pycparser=m
 # CONFIG_PACKAGE_python3-pycparser-src is not set
 # CONFIG_PACKAGE_python3-pycrate is not set
-CONFIG_PACKAGE_python3-pydoc=y
+CONFIG_PACKAGE_python3-pydoc=m
 # CONFIG_PACKAGE_python3-pydoc-src is not set
 # CONFIG_PACKAGE_python3-pyelftools is not set
 # CONFIG_PACKAGE_python3-pyfuse3 is not set
@@ -5413,7 +5413,7 @@ CONFIG_PACKAGE_libsysfs=y
 #
 # CONFIG_PACKAGE_libfko is not set
 CONFIG_PACKAGE_libip4tc=y
-CONFIG_PACKAGE_libip6tc=y
+# CONFIG_PACKAGE_libip6tc is not set
 CONFIG_PACKAGE_libiptext=y
 CONFIG_PACKAGE_libiptext-nft=y
 CONFIG_PACKAGE_libiptext6=y
@@ -6315,7 +6315,7 @@ CONFIG_LIBCURL_HTTP2=y
 CONFIG_LIBCURL_PROXY=y
 CONFIG_LIBCURL_CRYPTO_AUTH=y
 # CONFIG_LIBCURL_TLS_SRP is not set
-CONFIG_LIBCURL_KERBEROS_AUTH=y
+# CONFIG_LIBCURL_KERBEROS_AUTH is not set
 # CONFIG_LIBCURL_LIBIDN2 is not set
 CONFIG_LIBCURL_THREADED_RESOLVER=y
 CONFIG_LIBCURL_ZLIB=y
@@ -7105,7 +7105,7 @@ CONFIG_PACKAGE_luci-theme-openwrt-2020=m
 # CONFIG_PACKAGE_luci-proto-gre is not set
 # CONFIG_PACKAGE_luci-proto-hnet is not set
 # CONFIG_PACKAGE_luci-proto-ipip is not set
-CONFIG_PACKAGE_luci-proto-ipv6=y
+# CONFIG_PACKAGE_luci-proto-ipv6 is not set
 # CONFIG_PACKAGE_luci-proto-mbim is not set
 # CONFIG_PACKAGE_luci-proto-modemmanager is not set
 # CONFIG_PACKAGE_luci-proto-ncm is not set
@@ -8834,7 +8834,7 @@ CONFIG_PACKAGE_sshfs=m
 # CONFIG_PACKAGE_fwknopd is not set
 # CONFIG_PACKAGE_ip6tables-extra is not set
 # CONFIG_PACKAGE_ip6tables-mod-nat is not set
-CONFIG_PACKAGE_ip6tables-nft=m
+# CONFIG_PACKAGE_ip6tables-nft is not set
 # CONFIG_PACKAGE_ip6tables-zz-legacy is not set
 # CONFIG_PACKAGE_iptables-mod-account is not set
 # CONFIG_PACKAGE_iptables-mod-asn is not set
@@ -9729,7 +9729,7 @@ CONFIG_WPA_MBO_SUPPORT=y
 # CONFIG_PACKAGE_wpa-supplicant-wolfssl is not set
 # CONFIG_PACKAGE_wpad is not set
 # CONFIG_PACKAGE_wpad-basic is not set
-# CONFIG_PACKAGE_wpad-basic-mbedtls is not set
+CONFIG_PACKAGE_wpad-basic-mbedtls=y
 # CONFIG_PACKAGE_wpad-basic-openssl is not set
 CONFIG_PACKAGE_wpad-basic-wolfssl=m
 # CONFIG_PACKAGE_wpad-mbedtls is not set
@@ -9737,7 +9737,7 @@ CONFIG_PACKAGE_wpad-basic-wolfssl=m
 CONFIG_PACKAGE_wpad-mesh-openssl=m
 # CONFIG_PACKAGE_wpad-mesh-wolfssl is not set
 # CONFIG_PACKAGE_wpad-mini is not set
-CONFIG_PACKAGE_wpad-openssl=y
+# CONFIG_PACKAGE_wpad-openssl is not set
 # CONFIG_PACKAGE_wpad-wolfssl is not set
 # end of WirelessAPD
 
@@ -9879,7 +9879,7 @@ CONFIG_KEEPALIVED_FWMARK=y
 # CONFIG_KEEPALIVED_SNMP_CHECKER is not set
 CONFIG_KEEPALIVED_VRRP=y
 CONFIG_KEEPALIVED_IPTABLES=y
-CONFIG_KEEPALIVED_IP6TABLES=y
+# CONFIG_KEEPALIVED_IP6TABLES is not set
 CONFIG_KEEPALIVED_NFTABLES=y
 # CONFIG_KEEPALIVED_SNMP_VRRP is not set
 # CONFIG_KEEPALIVED_SNMP_RFC2 is not set
@@ -9895,7 +9895,7 @@ CONFIG_PACKAGE_keepalived-sync=m
 # CONFIG_PACKAGE_knxd is not set
 # CONFIG_PACKAGE_kplex is not set
 # CONFIG_PACKAGE_krb5-client is not set
-CONFIG_PACKAGE_krb5-libs=y
+CONFIG_PACKAGE_krb5-libs=m
 # CONFIG_PACKAGE_krb5-server is not set
 # CONFIG_PACKAGE_krb5-server-extras is not set
 # CONFIG_PACKAGE_libfreeipmi is not set
@@ -9955,9 +9955,9 @@ CONFIG_PACKAGE_nlbwmon=m
 CONFIG_PACKAGE_nqptp=m
 # CONFIG_PACKAGE_nut is not set
 # CONFIG_PACKAGE_obfs4proxy is not set
-CONFIG_PACKAGE_odhcp6c=y
+# CONFIG_PACKAGE_odhcp6c is not set
 # CONFIG_PACKAGE_odhcpd is not set
-CONFIG_PACKAGE_odhcpd-ipv6only=y
+# CONFIG_PACKAGE_odhcpd-ipv6only is not set
 # CONFIG_PACKAGE_ola is not set
 # CONFIG_PACKAGE_omcproxy is not set
 # CONFIG_PACKAGE_open-iscsi is not set
