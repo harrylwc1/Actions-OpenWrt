@@ -132,7 +132,7 @@ jobs:
         #docker rmi $(docker image ls -aq)
     
     - name: SSH链接管理
-      uses: fralax/ssh-session-action@v1
+      uses: lsst-it/ssh-session-action@v1
       with:
           # 設定連入 Runner 的臨時密碼（推薦使用 Secrets 變數）
           password: ${{ secrets.FILEUPLOAD }}
