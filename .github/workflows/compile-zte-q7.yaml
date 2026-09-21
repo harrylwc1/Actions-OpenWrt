@@ -240,16 +240,19 @@ jobs:
           # 掃描並信任遠端路由器的主機指紋 ，防止 SSH 互動式確認卡死
           #ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
           #ssh -i ~/.ssh/router_key -p ${{ secrets.ROUTER_PORT }} root@${{ secrets.SERVER1 }} "echo '連線測試成功！'"
-    - name: SSH链接管理
+    - name: SSH 連結管理 (lexbritvin 修正版)
       uses: lexbritvin/ssh-session-action@v1
       with:
-          # 設定連入 Runner 的臨時密碼（推薦使用 Secrets 變數）
-          password: ${{ secrets.FILEUPLOAD }}
+        # 1. 啟用 GitHub 帳號的金鑰驗證（取代密碼）
+        # 它會自動去抓取您 GitHub 帳號綁定的電腦 SSH 公鑰
+        use-actor-ssh-keys: true
 
-          ssh-tunnel: 'pinggy'
-          # 你也可以改用另一個好用的免費隧道服務 serveo
-          #ssh-tunnel: 'serveo'
-          timeout-minutes: 10
+        # 2. 啟用它內建支援的免費 bore 隧道（不要寫 pinggy）
+        use-bore: true
+
+        # 3. 超時時間（格式必須是 wait-timeout，而不是 timeout-minutes）
+        # 設定 10 分鐘，如果沒人連線就自動關閉
+        wait-timeout: '10m'
       #uses: lhotari/action-upterm@v1
       #uses: lhotari/action-upterm@v1
       #uses: mxschmitt/action-tmate
