@@ -297,7 +297,6 @@ jobs:
           #[ $? != 0 ] && make V=s || echo "build success"
           
           
-      
       -  name: SSH connection for failure Debug
          if: ${{ failure() }}
            #uses: lhotari/action-upterm@v1
@@ -354,10 +353,19 @@ jobs:
            cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/  
            
            df -kh
-      - name: SSH connection for failure Debug
-        if: ${{ failure() }}
-        uses: lhotari/action-upterm@v1
-       
+      - name: SSH 連結管理 (lexbritvin faiure debug)
+        #uses: lhotari/action-upterm@v1
+        uses: lexbritvin/ssh-session-action@v1
+        with:
+          # 1. 啟用 GitHub 帳號的金鑰驗證
+          use-actor-ssh-keys: true
+          # 2. 啟用內建免費 bore 隧道
+          use-bore: true
+
+          # 3. 強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
+          wait-timeout: 3000
+          #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
+
       - name: Prepare artifact
         run: |
           # 1. 確保資料夾存在（如果變數沒設定，預設建立在當前目錄的 drivers）
