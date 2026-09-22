@@ -304,14 +304,7 @@ jobs:
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}          
-      - name: SSH connection for KERNEL MENU CONFIG
-        if: env.KERNEL_MENUCONFIG == 'true'
-          # uses: lhotari/action-upterm@v1
-        uses: lhotari/action-upterm@v1
-        #P3TERX/ssh2actions@main
-        env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+
  
       - name: 再次编译固件 update kernel_menuconfig
         
@@ -350,7 +343,11 @@ jobs:
            [ $? != 0 ] && make V=s || echo "build success"
  
            cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/  
-           
+      - name: SSH connection for KERNEL MENU CONFIG
+        if: env.KERNEL_MENUCONFIG == 'true'
+          # uses: lhotari/action-upterm@v1
+        uses: lhotari/action-upterm@v1
+            
            df -kh
       - name: SSH 連結管理 (lexbritvin faiure debug)
         if: ${{ failure() }}
