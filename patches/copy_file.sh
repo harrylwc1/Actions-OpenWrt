@@ -1,8 +1,16 @@
 #!/bin/sh
 # file upload using python uploadserver https://pypi.org/project/uploadserver/
-# usage ./copy_file.sh remote_server user:password file_name1 file_name2
+# usage:
+#   本機:      ./copy_file.sh file_name1 file_name2
+#   GitHub:    ./copy_file.sh remote_server user:password file_name1 file_name2
 
-# 1. 判斷第一個參數是否為網址（POSIX 寫法，不用 =~）
+# ===== 本機 hard-code（GitHub 使用時把這 2 行註解掉）=====
+
+# ======================================================
+
+# 1. 若第一個參數是網址，覆寫 SERVER1 / PASS，並 shift 2
+#    本機用法：$1 是檔名，不會匹配，所以 shift 不執行
+#    GitHub： $1 是網址，會匹配並覆寫
 case "${1:-}" in
     *.com|*.com:*|*.com/*|*.org|*.org:*|*.org/*)
         SERVER1="$1"
@@ -56,7 +64,7 @@ case "$URL2" in
 esac
 URL2="${URL2%:8088*}:8088/upload"
 
-# 4b. 取出 host 組 fallback URL 與健康檢查 URL（兩台都做）
+# 4b. 取出 host 組 fallback URL 與健康檢查 URL
 HOST1="${SERVER1#http://}"
 HOST1="${HOST1#https://}"
 HOST1="${HOST1%%/*}"
@@ -71,16 +79,12 @@ HOST2="${HOST2%%:*}"
 URL2_FALLBACK="http://${HOST2}:2799/stup.py"
 URL2_HEALTH="http://${HOST2}:8088/"
 
-# 4c. 預算 Basic Auth header
-AUTH_B64=$(printf '%s' "$PASS" | base64 | tr -d '\n')
-AUTH_HEADER="Authorization: Basic ${AUTH_B64}"
-
-# 4d. 健康檢查參數（可透過環境變數覆寫）
-HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-120}"    # 最多等幾秒
-HEALTH_INTERVAL="${HEALTH_INTERVAL:-2}"    # 每次間隔幾秒
+# 4c. 健康檢查參數
+HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-120}"
+HEALTH_INTERVAL="${HEALTH_INTERVAL:-2}"
 MARKER_FILE="${MARKER_FILE:-/tmp/uploadserver_ready.$$}"
 
-# 成功紀錄（供最後總結用）
+# 成功紀錄
 USED_SERVER=""
 USED_STAGE=""
 FALLBACK_LOG_1=""
@@ -91,7 +95,7 @@ ts() {
     date '+%Y-%m-%d %H:%M:%S'
 }
 
-# 5-1. 上傳函式
+# 6. 上傳函式
 #    return 0 = 成功 (204)
 #    return 1 = 可重試失敗
 #    return 2 = 認證失敗 (401/403)
@@ -103,7 +107,7 @@ do_upload() {
         --connect-timeout 10 \
         --max-time 6000 \
         --progress-bar \
-        -H "$AUTH_HEADER" \
+        -u "$PASS" \
         -o /dev/null \
         -w "%{stderr}\n\n======== 傳輸完成統計 ========\n目標伺服器: %{url_effective}\n總共花費時間: %{time_total} 秒\n平均上傳速度: %{speed_upload} 字節/秒\nHTTP 狀態碼: %{http_code}\n%{stdout}%{http_code}" \
         $CURL_ARGS \
@@ -122,11 +126,10 @@ do_upload() {
     esac
 }
 
-# 5-2. 觸發備援（帶時間戳）
-#      會把「呼叫時間 / 回應時間 / HTTP 狀態碼」寫進全域 log 變數
+# 7. 觸發備援（帶時間戳）
 trigger_fallback() {
     fb_url="$1"
-    fb_slot="$2"    # "1" 或 "2"，決定寫入哪個 log 變數
+    fb_slot="$2"
 
     t_start=$(ts)
     echo "[$t_start] 正在呼叫備援觸發器: $fb_url"
@@ -153,15 +156,13 @@ trigger_fallback() {
     return 0
 }
 
-# 5-3. 建立空檔案（marker）
+# 8. 建立空檔案（marker）
 touch_marker() {
     : > "$MARKER_FILE" 2>/dev/null || true
     echo "[$(ts)] 已建立等待標記檔: $MARKER_FILE"
 }
 
-# 5-4. 輪詢健康檢查
-#      return 0 = 連上
-#      return 1 = 逾時
+# 9. 輪詢健康檢查
 wait_for_uploadserver() {
     health_url="$1"
     elapsed=0
@@ -195,20 +196,18 @@ wait_for_uploadserver() {
     return 1
 }
 
-# 5-5. 清理 marker
+# 10. 清理 marker
 cleanup_marker() {
     rm -f "$MARKER_FILE" 2>/dev/null || true
 }
 
-# 5-6. 完整嘗試流程
-#      return 0 = 此伺服器成功
-#      return 1 = 此伺服器最終失敗
+# 11. 完整嘗試流程
 try_server() {
-    label="$1"          # "主要" 或 "備用"
+    label="$1"
     url="$2"
     fb_url="$3"
     health_url="$4"
-    fb_slot="$5"        # "1" 或 "2"
+    fb_slot="$5"
 
     echo "=========================================="
     echo "[$(ts)] 正在嘗試上傳至${label}伺服器: $url"
@@ -225,7 +224,6 @@ try_server() {
         return 1
     fi
 
-    # rc == 1 → 可重試失敗
     trigger_fallback "$fb_url" "$fb_slot"
     touch_marker
 
@@ -253,7 +251,7 @@ try_server() {
     fi
 }
 
-# 6. 執行：先試 SERVER1，失敗再試 SERVER2
+# 12. 執行：先試 SERVER1，失敗再試 SERVER2
 try_server "主要" "$URL1" "$URL1_FALLBACK" "$URL1_HEALTH" "1"
 rc=$?
 
