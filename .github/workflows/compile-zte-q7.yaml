@@ -243,9 +243,14 @@ jobs:
     - name: SSH 連結管理 (lexbritvin 修正版)
       uses: lexbritvin/ssh-session-action@v1
       with:
-          use-bore: 'true'
-          use-actor-ssh-keys: 'true'
-          ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
+        # 1. 啟用 GitHub 帳號的金鑰驗證
+        use-actor-ssh-keys: true
+        # 2. 啟用內建免費 bore 隧道
+        use-bore: true
+
+        # 3. 強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
+        wait-timeout: 600
+        #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
 
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
                              
