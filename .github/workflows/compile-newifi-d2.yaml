@@ -251,23 +251,19 @@ jobs:
           rm -rf $(find ./dl/ -size -1024c)
           df -h
 
+      - name: SSH 連結管理 (lexbritvin 修正版)
+        uses: lexbritvin/ssh-session-action@v1
+        with:
+          # 1. 啟用 GitHub 帳號的金鑰驗證
+          use-actor-ssh-keys: true
+          # 2. 啟用內建免費 bore 隧道
+          use-bore: true
 
-      - name: 1. 在背景啟動 Upterm SSH 通道
-        id: upterm_ssh
-        #uses: lhotari/action-upterm@v1
-        uses: lhotari/action-upterm@v1
-        #uses: P3TERX/ssh2actions@main
+          # 3. 強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
+          wait-timeout: 3000
+          #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
+
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
-            
-      - name: SSH connection for make menuconfig    
-        if: env.MAKEMENU_CONFIG == 'true'
-        uses: lhotari/action-upterm@v1
-        env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
 
          
       - name: 开始编译固件
@@ -335,7 +331,6 @@ jobs:
            sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU=y/g' x-wrt/.config
            sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS=y/g' x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
-           ./disable_ipv6.sh
            cd x-wrt
 
            sudo rm -rf /usr/share/dotnet

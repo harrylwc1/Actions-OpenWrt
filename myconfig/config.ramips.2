@@ -382,8 +382,8 @@ CONFIG_DEFAULT_logd=y
 CONFIG_DEFAULT_mtd=y
 CONFIG_DEFAULT_netifd=y
 CONFIG_DEFAULT_nftables=y
-# CONFIG_DEFAULT_odhcp6c is not set
-# CONFIG_DEFAULT_odhcpd-ipv6only is not set
+CONFIG_DEFAULT_odhcp6c=y
+CONFIG_DEFAULT_odhcpd-ipv6only=y
 CONFIG_DEFAULT_ppp=y
 CONFIG_DEFAULT_ppp-mod-pppoe=y
 CONFIG_DEFAULT_swconfig=y
@@ -572,9 +572,9 @@ CONFIG_KERNEL_IP_MROUTE=y
 CONFIG_KERNEL_IP_MROUTE_MULTIPLE_TABLES=y
 CONFIG_KERNEL_IP_PIMSM_V1=y
 CONFIG_KERNEL_IP_PIMSM_V2=y
-# CONFIG_KERNEL_IPV6 is not set
-# CONFIG_KERNEL_IPV6_MULTIPLE_TABLES is not set
-# CONFIG_KERNEL_IPV6_SUBTREES is not set
+CONFIG_KERNEL_IPV6=y
+CONFIG_KERNEL_IPV6_MULTIPLE_TABLES=y
+CONFIG_KERNEL_IPV6_SUBTREES=y
 # CONFIG_KERNEL_IPV6_MROUTE is not set
 # CONFIG_KERNEL_IPV6_SEG6_LWTUNNEL is not set
 # CONFIG_KERNEL_LWTUNNEL_BPF is not set
@@ -640,7 +640,7 @@ CONFIG_KERNEL_PREEMPT_NONE=y
 # CONFIG_DEBUG is not set
 # CONFIG_USE_GC_SECTIONS is not set
 # CONFIG_USE_LTO is not set
-# CONFIG_IPV6 is not set
+CONFIG_IPV6=y
 
 #
 # Stripping options
@@ -1562,7 +1562,7 @@ CONFIG_BUSYBOX_DEFAULT_TIME=y
 # CONFIG_BUSYBOX_DEFAULT_VOLNAME is not set
 # CONFIG_BUSYBOX_DEFAULT_WATCHDOG is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_WATCHDOG_OPEN_TWICE is not set
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_IPV6 is not set
+CONFIG_BUSYBOX_DEFAULT_FEATURE_IPV6=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_UNIX_LOCAL is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_PREFER_IPV4_ADDRESS is not set
 CONFIG_BUSYBOX_DEFAULT_VERBOSE_RESOLUTION_ERRORS=y
@@ -6579,7 +6579,6 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-lucky is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-modemband is not set
-# CONFIG_PACKAGE_luci-app-momo is not set
 # CONFIG_PACKAGE_luci-app-mosdns is not set
 # CONFIG_PACKAGE_luci-app-mosquitto is not set
 # CONFIG_PACKAGE_luci-app-mtwifi is not set
@@ -6714,7 +6713,7 @@ CONFIG_PACKAGE_luci-theme-bootstrap=y
 # CONFIG_PACKAGE_luci-proto-gre is not set
 # CONFIG_PACKAGE_luci-proto-hnet is not set
 # CONFIG_PACKAGE_luci-proto-ipip is not set
-# CONFIG_PACKAGE_luci-proto-ipv6 is not set
+CONFIG_PACKAGE_luci-proto-ipv6=y
 # CONFIG_PACKAGE_luci-proto-mbim is not set
 # CONFIG_PACKAGE_luci-proto-modemmanager is not set
 # CONFIG_PACKAGE_luci-proto-ncm is not set
@@ -8434,7 +8433,6 @@ CONFIG_PACKAGE_libipset=m
 # CONFIG_PACKAGE_mini_snmpd-52 is not set
 # CONFIG_PACKAGE_modemband is not set
 # CONFIG_PACKAGE_modemmanager is not set
-# CONFIG_PACKAGE_momo is not set
 # CONFIG_PACKAGE_mosquitto-client-nossl is not set
 # CONFIG_PACKAGE_mosquitto-client-ssl is not set
 # CONFIG_PACKAGE_mosquitto-nossl is not set
