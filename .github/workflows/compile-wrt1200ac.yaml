@@ -348,7 +348,7 @@ jobs:
           # uses: lhotari/action-upterm@v1
         uses: lhotari/action-upterm@v1
             
-           df -kh
+        
       - name: SSH 連結管理 (lexbritvin faiure debug)
         if: ${{ failure() }}
         #uses: lhotari/action-upterm@v1
