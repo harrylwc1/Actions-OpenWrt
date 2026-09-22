@@ -248,7 +248,7 @@ jobs:
         # 2. 啟用內建免費 bore 隧道
         use-bore: true
 
-        # 3. 強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
+        #  強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
         wait-timeout: 3000
         #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
 
@@ -284,10 +284,6 @@ jobs:
         # 3. 強制設定等待時間為 600 秒（10分鐘），防止 10 秒內就自動斷開
         wait-timeout: 3000
         #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
-       
-
-
-
 
 
     - name: SSH connection for KERNEL MENU CONFIG
