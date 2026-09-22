@@ -286,9 +286,7 @@ jobs:
         #ssh-server-authorized-keys: ${{ secrets.SSH_PUBLIC_KEYS }}
 
 
-    - name: SSH connection for KERNEL MENU CONFIG
-      if: env.KERNEL_MENUCONFIG == 'true'
-      uses: lhotari/action-upterm@v1
+
       
 
     - name: 再次编译固件 update kernel_menuconfig
@@ -316,11 +314,8 @@ jobs:
 
            cp -f bin/targets/ramips/mt7620/openwrt-ramips-mt7620*sysupgrade.bin bin/targets/ramips/drivers/
 
-
-    - name: SSH connection for failure Debug
-      if: ${{ failure() }}
-      #uses: lhotari/action-upterm@v1
-      #uses: P3TERX/ssh2actions@main
+    - name: SSH connection for KERNEL MENU CONFIG
+      if: ${{ env.KERNEL_MENUCONFIG == 'true' || failure() }}
       uses: lhotari/action-upterm@v1
     - name: 查看磁盘使用情况
 
