@@ -1,5 +1,5 @@
 #e
-# This is free software, lisence use MIT.
+# This is free software, lisence use MIT.kern
 # 
 # Copyright (C) 2019 P3TERX <https://p3terx.com>
 # Copyright (C) 2020 KFERMercer <KFER.Mercer@gmail.com>
@@ -352,13 +352,9 @@ jobs:
            df -kh
            [ $? != 0 ] && make V=s || echo "build success" 
            cp -f bin/targets/ramips/mt7621/openwrt-ramips-mt7621-d-team_newifi-d2-squashfs-sysupgrade.bin bin/targets/ramips/drivers/ 
-      - name: SSH connection for failure Debug
-        if: ${{ failure() }}
+      - name: SSH connection for KERNEL MENU CONFIG
+        if: ${{ env.KERNEL_MENUCONFIG == 'true' || failure() }}
         uses: lhotari/action-upterm@v1
-        #uses: P3TERX/ssh2actions@main
-        env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
         run: |
           # 1. 確保資料夾存在（如果變數沒設定，預設建立在當前目錄的 drivers）
