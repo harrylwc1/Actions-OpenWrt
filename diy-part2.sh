@@ -204,14 +204,14 @@ git apply --ignore-space-change --ignore-whitespace r619ac.patch
 #git apply -R --ignore-space-change --ignore-whitespace reset_user_to_root.patch 
 
 cd $GITHUB_WORKSPACE/x-wrt/
-find feeds/luci/ -name header.ut -exec grep -l -e "getspnam('admin')" -e "a admin" {} \; | while read f; do
-    cp "$f" "$f.bak"
-        sed -i \
-                        -e "s/getspnam('admin')/getspnam('root')/g" \
-                                -e "s/a admin/a root/g" \
-                                        "$f"
-            echo "Patched: $f"
-    done
+#find feeds/luci/ -name header.ut -exec grep -l -e "getspnam('admin')" -e "a admin" {} \; | while read f; do
+ #   cp "$f" "$f.bak"
+  #      sed -i \
+   #                     -e "s/getspnam('admin')/getspnam('root')/g" \
+    #                            -e "s/a admin/a root/g" \
+     #                                   "$f"
+      #      echo "Patched: $f"
+    #done
 
 
 
