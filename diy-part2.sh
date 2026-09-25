@@ -9,7 +9,7 @@ cp -r $GITHUB_WORKSPACE/package/* $GITHUB_WORKSPACE/x-wrt/package/
 
 cd  $GITHUB_WORKSPACE/x-wrt/package/                              
 #tar xvf kmod-dvb-combo.6.18.44.tar                                
-git revert --no-edit $(git log --grep="use admin as the default" -n 1 --format="%H")
+#git revert --no-edit $(git log --grep="use admin as the default" -n 1 --format="%H")
 ‎cat   $GITHUB_WORKSPACE/x-wrt/package/base-files/files/etc/shadow‎|grep admin
 #cp $GITHUB_WORKSPACE/patches/Makefile.scons $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/scons/Makefile
 cd $GITHUB_WORKSPACE/x-wrt/
