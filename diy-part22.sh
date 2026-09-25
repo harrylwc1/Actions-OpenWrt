@@ -25,13 +25,13 @@ sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' targe
 # 同時確保 kmod-media-core 套件有被正式納入編譯設定
 #sed -i 's/AUTOLOAD:=$(call AutoLoad,25,videodev)/AUTOLOAD:=$(call AutoLoad,25,mc videodev)/g' package/kernel/linux/modules/video.mk
 
-cp $GITHUB_WORKSPACE/patches/video.mk $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/
-cp $GITHUB_WORKSPACE/patches/dvb.mk $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/
+#cp $GITHUB_WORKSPACE/patches/video.mk $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/
+#cp $GITHUB_WORKSPACE/patches/dvb.mk $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/
 
-cd package 
-git clone https://github.com/tmn505/openwrt-dvb
-cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
-cd ..
+#cd package 
+#git clone https://github.com/tmn505/openwrt-dvb
+#cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
+#cd ..
 
 
 
