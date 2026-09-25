@@ -6,6 +6,7 @@ cp patches/copy_file.sh x-wrt/
 cd x-wrt
 cd package 
 git clone https://github.com/tmn505/openwrt-dvb
+cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
 cd ..
 
 #kernel 250
