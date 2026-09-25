@@ -1,0 +1,262 @@
+permissions:
+  contents: write
+name: Build OpenWrt Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Functional tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Install ucode build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake pkg-config libjson-c-dev jq
+
+      - name: Build and install ucode
+        run: |
+          git clone --depth 1 https://github.com/jow-/ucode.git /tmp/ucode
+          cmake -S /tmp/ucode -B /tmp/ucode/build \
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
+            -DFS_SUPPORT=ON \
+            -DUCI_SUPPORT=OFF \
+            -DUBUS_SUPPORT=OFF \
+            -DULOOP_SUPPORT=OFF \
+            -DNLS_SUPPORT=OFF \
+            -DRTNL_SUPPORT=OFF
+          cmake --build /tmp/ucode/build -j$(nproc)
+          sudo cmake --install /tmp/ucode/build
+          sudo ldconfig
+
+      - name: Verify ucode
+        run: ucode -e 'import { readfile } from "fs"; print("ucode ok\n");'
+
+      - name: Run functional tests
+        run: bash tests/run_tests.sh
+
+  build:
+    name: Build for ${{ matrix.version }} / ${{ matrix.target }}
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    env:
+      REPO_APK_KEY: ${{ secrets.REPO_APK_KEY }}
+      PKG_NAME: ${{ github.event.repository.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: openwrt-24.10
+            target: x86_64
+            suffix: all
+          # - version: openwrt-24.10
+          #   target: aarch64_cortex-a53
+          # - version: openwrt-24.10
+          #   target: aarch64_generic
+          # - version: openwrt-24.10
+          #   target: arm_cortex-a7
+          # - version: openwrt-24.10
+          #   target: arm_cortex-a9
+          # - version: openwrt-24.10
+          #   target: mips_24kc
+          # - version: openwrt-24.10
+          #   target: mipsel_24kc
+          - version: openwrt-25.12
+            target: x86_64
+            suffix: noarch
+          # - version: openwrt-25.12
+          #   target: aarch64_cortex-a53
+          # - version: openwrt-25.12
+          #   target: aarch64_generic
+          # - version: openwrt-25.12
+          #   target: arm_cortex-a7
+          # - version: openwrt-25.12
+          #   target: arm_cortex-a9
+          # - version: openwrt-25.12
+          #   target: mips_24kc
+          # - version: openwrt-25.12
+          #   target: mipsel_24kc
+
+    steps:
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🧰 Set up melmac feed structure
+        run: |
+          set -e
+          # Also add a shim so ../../luci.mk from package/feeds/melmac/<pkg> works:
+          mkdir -p package
+          printf 'include $(TOPDIR)/feeds/luci/luci.mk\n' > package/luci.mk
+
+          # LuCI-style layout so ../../luci.mk resolves from applications/<pkg>
+          mkdir -p feed/luci/applications/${PKG_NAME}
+
+          # Add shim luci/luci.mk pointing to the official LuCI feed
+          mkdir -p feed/luci
+          printf 'include $(TOPDIR)/feeds/luci/luci.mk\n' > feed/luci/luci.mk
+
+          # Copy the package sources into the feed subdir (exclude CI and feed itself)
+          rsync -av \
+            --exclude='.git' \
+            --exclude='feed' \
+            --exclude='.github' \
+            ./ feed/luci/applications/${PKG_NAME}/
+      # Devices JSON consolidation & pruning is handled by the Makefile
+      # during the OpenWrt buildroot compilation step.
+      # - name: 🧹 Consolidate devices JSON & prune folders
+      #   run: |
+      #     set -euo pipefail
+      #     DEV_DIR="feed/luci/applications/${PKG_NAME}/root/usr/share/advanced-reboot"
+      #     if [ -d "${DEV_DIR}/devices" ]; then
+      #       ( cd "${DEV_DIR}/devices" && jq -s '.' *.json > "../devices.json" )
+      #       if [ -s "${DEV_DIR}/devices.json" ]; then
+      #         rm -rf "${DEV_DIR}/devices" "${DEV_DIR}/devices.disabled"
+      #       fi
+      #     fi
+      - name: 🧮 Compute ARCH
+        run: |
+          # matrix.version is the release-line LABEL baked into artifact filenames
+          # (sync_repo.sh matches *_openwrt-25.12_*), NOT the SDK image tag. Pin the
+          # SDK to a specific STABLE point release so builds are reproducible and
+          # immune to <ver>-SNAPSHOT mirror churn (rotated/truncated tarballs →
+          # sha256 mismatch). Bump these when a new point release ships.
+          case "${{ matrix.version }}" in
+            openwrt-25.12) SDK_VERSION="25.12.5" ;;
+            openwrt-24.10) SDK_VERSION="24.10.7" ;;
+            snapshots)     SDK_VERSION="SNAPSHOT" ;;
+            *)             SDK_VERSION="${{ matrix.version }}" ;;
+          esac
+          echo "ARCH=${{ matrix.target }}-${SDK_VERSION}" >> "$GITHUB_ENV"
+
+      - name: 🏗️ Build with OpenWrt SDK
+        uses: openwrt/gh-action-sdk@v8
+        env:
+          ARCH: ${{ env.ARCH }}
+          FEEDNAME: melmac
+          PACKAGES: ${{ env.PKG_NAME }}
+          INDEX: 0
+          FEED_DIR: ${{ github.workspace }}/feed
+          NO_SHFMT_CHECK: 1
+          NO_REFRESH_CHECK: 1
+          PRIVATE_KEY: ${{ secrets.REPO_APK_KEY }}
+
+      - name: 🔍 Debug build output
+        run: |
+          echo "=== Build directory structure ==="
+          find . -name "*.ipk" -type f 2>/dev/null || echo "No .ipk files found"
+          echo "=== bin directory structure ==="
+          ls -la bin/ 2>/dev/null || echo "No bin directory found"
+          if [ -d "bin/packages" ]; then
+            echo "=== packages directory structure ==="
+            find bin/packages/ -type f -name "*.ipk" 2>/dev/null || echo "No .ipk files in packages directory"
+            echo "=== Full packages directory tree ==="
+            ls -laR bin/packages/ 2>/dev/null || echo "No packages directory"
+          fi
+
+      - name: 🏷️ Rename APK with version and target
+        run: |
+          set -euo pipefail
+          PKG_VERSION=$(grep -E '^PKG_VERSION *:?=' Makefile | head -n1 | cut -d= -f2 | tr -d '[:space:]')
+          PKG_RELEASE=$(grep -E '^PKG_RELEASE *:?=' Makefile | head -n1 | cut -d= -f2 | tr -d '[:space:]')
+          for ext in ipk apk; do
+            # apk keeps OpenWrt's 'r' release prefix (…-r5.apk); opkg does not
+            case "$ext" in apk) REL="r${PKG_RELEASE}" ;; *) REL="${PKG_RELEASE}" ;; esac
+            for f in $(find bin/packages -type f -path "*/melmac/*.${ext}"); do
+              dir=$(dirname "$f")
+              if [ -n "${{ matrix.suffix }}" ]; then
+                mv -v "$f" "$dir/${PKG_NAME}-${PKG_VERSION}-${REL}_${{ matrix.version }}_${{ matrix.suffix }}.${ext}"
+              else
+                mv -v "$f" "$dir/${PKG_NAME}-${PKG_VERSION}-${REL}_${{ matrix.version }}_${{ matrix.target }}.${ext}"
+              fi
+            done
+          done
+
+      - name: 📦 Upload artifact for ${{ matrix.target }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PKG_NAME }}-${{ matrix.target }}-${{ matrix.version }}
+          path: |
+            bin/packages/*/melmac/${{ env.PKG_NAME }}*.ipk
+            bin/packages/*/melmac/${{ env.PKG_NAME }}*.apk
+          #            bin/packages/*/melmac/Packages*
+          #            bin/packages/*/melmac/index.json
+          #            bin/packages/*/melmac/packages.adb
+          if-no-files-found: ignore
+
+  release:
+    name: Release ${{ github.repository }}
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🔍 Extract version and release from Makefile
+        id: version
+        run: |
+          PKG_VERSION=$(grep -E '^PKG_VERSION *:?=' Makefile | head -n1 | cut -d= -f2 | tr -d '[:space:]')
+          PKG_RELEASE=$(grep -E '^PKG_RELEASE *:?=' Makefile | head -n1 | cut -d= -f2 | tr -d '[:space:]')
+          COMBINED_VERSION="${PKG_VERSION}-${PKG_RELEASE}"
+          echo "📦 Version: $COMBINED_VERSION"
+          echo "version=$COMBINED_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: ⬇️ Download all build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: ./release-assets
+
+      - name: 🗃️ Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Build v${{ steps.version.outputs.version }}
+          files: |
+            ./release-assets/**/*.ipk
+            ./release-assets/**/*.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🧹 Prune stale release assets
+        # Delete assets on the tag that THIS build did not produce, so an arch or
+        # release line you stopped building no longer lingers on the release (and
+        # no longer gets re-published by sync_repo.sh, which pulls from releases).
+        # Gated on a fully green build + a non-empty keep set so a transient arch
+        # failure or an empty build can never wipe a still-good binary.
+        if: needs.build.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: v${{ steps.version.outputs.version }}
+        run: |
+          keep=$(find release-assets -type f \( -name '*.ipk' -o -name '*.apk' \) \
+            -exec basename {} \; | sort -u)
+          [ -n "$keep" ] || { echo "no packages built — skipping prune"; exit 0; }
+          gh release view "$TAG" --json assets --jq '.assets[].name' | while read -r a; do
+            case "$a" in *.ipk|*.apk) ;; *) continue ;; esac
+            printf '%s\n' "$keep" | grep -qxF -- "$a" || {
+              echo "pruning stale asset: $a"
+              gh release delete-asset "$TAG" "$a" --yes
+            }
+          done
+      - name: 🔔 Notify repo.mossdef.org
+        # Event-driven sync: ping the repo so it publishes this release immediately
+        # instead of waiting for its hourly poll. Non-fatal if the token is absent.
+        if: needs.build.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_DISPATCH_TOKEN }}
+        run: |
+          gh api -X POST /repos/mossdef-org/repo.mossdef.org/dispatches \
+            -f event_type=package-released \
+            || echo "dispatch failed — repo.mossdef.org still syncs on its hourly schedule"
