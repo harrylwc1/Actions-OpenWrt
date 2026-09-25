@@ -197,6 +197,7 @@ CONFIG_USES_INITRAMFS=y
 CONFIG_USES_SQUASHFS=y
 CONFIG_EMMC_SUPPORT=y
 CONFIG_NAND_SUPPORT=y
+CONFIG_HAS_ATOMIC64=y
 CONFIG_REGULATOR_SUPPORT=y
 CONFIG_arm=y
 CONFIG_arm_v7=y
@@ -291,7 +292,7 @@ CONFIG_KERNEL_KALLSYMS=y
 # CONFIG_KERNEL_FTRACE is not set
 CONFIG_KERNEL_DEBUG_KERNEL=y
 CONFIG_KERNEL_DEBUG_INFO=y
-# CONFIG_KERNEL_DEBUG_INFO_NONE is not set
+CONFIG_KERNEL_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 CONFIG_KERNEL_DEBUG_INFO_REDUCED=y
 CONFIG_KERNEL_FRAME_WARN=1024
 # CONFIG_KERNEL_DEBUG_LL is not set
@@ -367,6 +368,7 @@ CONFIG_KERNEL_IPC_NS=y
 CONFIG_KERNEL_USER_NS=y
 CONFIG_KERNEL_PID_NS=y
 CONFIG_KERNEL_NET_NS=y
+CONFIG_KERNEL_TIME_NS=y
 CONFIG_KERNEL_POSIX_MQUEUE=y
 CONFIG_KERNEL_SECCOMP_FILTER=y
 CONFIG_KERNEL_SECCOMP=y
@@ -694,7 +696,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_MAX_LEN=512
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_HISTORY=256
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVEHISTORY=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVE_ON_EXIT=y
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_REVERSE_SEARCH is not set
+CONFIG_BUSYBOX_DEFAULT_FEATURE_REVERSE_SEARCH=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_TAB_COMPLETION=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_USERNAME_COMPLETION is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_FANCY_PROMPT=y
@@ -2957,10 +2959,6 @@ CONFIG_PACKAGE_sudo=m
 #
 # CONFIG_PACKAGE_autocore-arm is not set
 # CONFIG_PACKAGE_automount is not set
-# CONFIG_PACKAGE_autosamba is not set
-CONFIG_PACKAGE_autosamba_INCLUDE_KSMBD=y
-# CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA3 is not set
-# CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA4 is not set
 # CONFIG_PACKAGE_cpufreq is not set
 # CONFIG_PACKAGE_ipv6helper is not set
 # CONFIG_PACKAGE_jose is not set
@@ -3025,6 +3023,7 @@ CONFIG_PACKAGE_libiwinfo-data=y
 # CONFIG_PACKAGE_ipq-wifi-netgear_rbk350 is not set
 # CONFIG_PACKAGE_ipq-wifi-netgear_rbk40 is not set
 # CONFIG_PACKAGE_ipq-wifi-netgear_rbk750 is not set
+# CONFIG_PACKAGE_ipq-wifi-netgear_rbk850 is not set
 # CONFIG_PACKAGE_ipq-wifi-netgear_sxk80 is not set
 # CONFIG_PACKAGE_ipq-wifi-netgear_wax214 is not set
 # CONFIG_PACKAGE_ipq-wifi-netgear_wax218 is not set
@@ -3039,10 +3038,12 @@ CONFIG_PACKAGE_libiwinfo-data=y
 # CONFIG_PACKAGE_ipq-wifi-skspruce_wia3300-20 is not set
 # CONFIG_PACKAGE_ipq-wifi-spectrum_sax1v1k is not set
 # CONFIG_PACKAGE_ipq-wifi-tcl_linkhub-hh500v is not set
+# CONFIG_PACKAGE_ipq-wifi-tplink_archer-ax55-v1 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c59-v1 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c6-v2 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v1 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v2 is not set
+# CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v3 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_deco-x80-5g is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_eap225-wall-v2 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_eap610-outdoor is not set
@@ -3439,6 +3440,48 @@ CONFIG_PACKAGE_kmod-crypto-xxhash=m
 # end of Cryptographic API modules
 
 #
+# DVB Support
+#
+# CONFIG_PACKAGE_kmod-dvb-af9013 is not set
+# CONFIG_PACKAGE_kmod-dvb-af9033 is not set
+# CONFIG_PACKAGE_kmod-dvb-core is not set
+# CONFIG_PACKAGE_kmod-dvb-cxd2841er is not set
+# CONFIG_PACKAGE_kmod-dvb-dib3000mb is not set
+# CONFIG_PACKAGE_kmod-dvb-dib3000mc is not set
+# CONFIG_PACKAGE_kmod-dvb-dib7000m is not set
+# CONFIG_PACKAGE_kmod-dvb-dib7000p is not set
+# CONFIG_PACKAGE_kmod-dvb-dib8000 is not set
+# CONFIG_PACKAGE_kmod-dvb-dib9000 is not set
+# CONFIG_PACKAGE_kmod-dvb-drxk is not set
+# CONFIG_PACKAGE_kmod-dvb-m88ds3103 is not set
+# CONFIG_PACKAGE_kmod-dvb-mn88472 is not set
+# CONFIG_PACKAGE_kmod-dvb-mn88473 is not set
+# CONFIG_PACKAGE_kmod-dvb-pll is not set
+# CONFIG_PACKAGE_kmod-dvb-rtl2830 is not set
+# CONFIG_PACKAGE_kmod-dvb-rtl2832 is not set
+# CONFIG_PACKAGE_kmod-dvb-si2168 is not set
+# CONFIG_PACKAGE_kmod-dvb-tda10023 is not set
+# CONFIG_PACKAGE_kmod-dvb-tda10048 is not set
+# CONFIG_PACKAGE_kmod-dvb-ts2020 is not set
+# CONFIG_PACKAGE_kmod-dvb-tuner-dib0070 is not set
+# CONFIG_PACKAGE_kmod-dvb-tuner-dib0090 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-a800 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-af9015 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-af9035 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-anysee is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-az6007 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-cxusb is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-dibusb-mb is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-dibusb-mc is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-dvbsky is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-rtl28xxu is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-ttusb2 is not set
+# CONFIG_PACKAGE_kmod-dvb-usb-v2 is not set
+# CONFIG_PACKAGE_kmod-dvb-zl10353 is not set
+# end of DVB Support
+
+#
 # Filesystems
 #
 # CONFIG_PACKAGE_kmod-fs-9p is not set
@@ -3634,6 +3677,7 @@ CONFIG_PACKAGE_kmod-input-core=m
 # CONFIG_PACKAGE_kmod-input-touchscreen-ads7846 is not set
 # CONFIG_PACKAGE_kmod-input-touchscreen-edt-ft5x06 is not set
 # CONFIG_PACKAGE_kmod-input-uinput is not set
+# CONFIG_PACKAGE_kmod-rc-core is not set
 # end of Input modules
 
 #
@@ -3686,6 +3730,43 @@ CONFIG_PACKAGE_kmod-lib-zstd=m
 # CONFIG_PACKAGE_kmod-ltq-ifxos is not set
 CONFIG_PACKAGE_kmod-oid-registry=m
 # end of Libraries
+
+#
+# Media tuners
+#
+# CONFIG_PACKAGE_kmod-media-tuner-e4000 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0011 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0012 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc0013 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-fc2580 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-it913x is not set
+# CONFIG_PACKAGE_kmod-media-tuner-max2165 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mc44s803 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2060 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2063 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt20xx is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2131 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mt2266 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mxl5005s is not set
+# CONFIG_PACKAGE_kmod-media-tuner-mxl5007t is not set
+# CONFIG_PACKAGE_kmod-media-tuner-qt1010 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-r820t is not set
+# CONFIG_PACKAGE_kmod-media-tuner-si2157 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-simple is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18212 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18218 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18250 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda18271 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda827x is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda8290 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tda9887 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tea5761 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tea5767 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-tua9001 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc2028 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc4000 is not set
+# CONFIG_PACKAGE_kmod-media-tuner-xc5000 is not set
+# end of Media tuners
 
 #
 # MultiFunction Device (MFD) Support
@@ -3876,6 +3957,7 @@ CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx is not set
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx-platform is not set
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx-spi is not set
+# CONFIG_PACKAGE_kmod-dsa-yt92xx is not set
 # CONFIG_PACKAGE_kmod-dummy is not set
 # CONFIG_PACKAGE_kmod-e100 is not set
 # CONFIG_PACKAGE_kmod-e1000 is not set
@@ -4012,6 +4094,7 @@ CONFIG_PACKAGE_kmod-iptunnel=m
 # CONFIG_PACKAGE_kmod-l2tp is not set
 # CONFIG_PACKAGE_kmod-l2tp-eth is not set
 # CONFIG_PACKAGE_kmod-l2tp-ip is not set
+# CONFIG_PACKAGE_kmod-macremapper is not set
 # CONFIG_PACKAGE_kmod-macsec is not set
 # CONFIG_PACKAGE_kmod-mdio-netlink is not set
 # CONFIG_PACKAGE_kmod-misdn is not set
@@ -4307,8 +4390,10 @@ CONFIG_PACKAGE_kmod-usb3=y
 # CONFIG_PACKAGE_kmod-fb-tft is not set
 # CONFIG_PACKAGE_kmod-fb-tft-ili9486 is not set
 # CONFIG_PACKAGE_kmod-media-controller is not set
-# CONFIG_PACKAGE_kmod-video-core is not set
 # CONFIG_PACKAGE_kmod-v4l2loopback is not set
+# CONFIG_PACKAGE_kmod-video-core is not set
+# CONFIG_PACKAGE_kmod-video-em28xx is not set
+# CONFIG_PACKAGE_kmod-video-em28xx-dvb is not set
 # end of Video Support
 
 #
@@ -5644,6 +5729,8 @@ CONFIG_PACKAGE_libyaml=m
 #
 # Networking
 #
+# CONFIG_PACKAGE_libdcwproto is not set
+# CONFIG_PACKAGE_libdcwsocket is not set
 CONFIG_PACKAGE_libnetsnmp-nossl=m
 # CONFIG_PACKAGE_libnetsnmp-ssl is not set
 # CONFIG_PACKAGE_libsctp is not set
@@ -6035,6 +6122,7 @@ CONFIG_LIBCURL_HTTP2=y
 CONFIG_LIBCURL_PROXY=y
 # CONFIG_LIBCURL_CRYPTO_AUTH is not set
 # CONFIG_LIBCURL_TLS_SRP is not set
+# CONFIG_LIBCURL_KERBEROS_AUTH is not set
 # CONFIG_LIBCURL_LIBIDN2 is not set
 # CONFIG_LIBCURL_THREADED_RESOLVER is not set
 CONFIG_LIBCURL_ZLIB=y
@@ -6094,9 +6182,67 @@ CONFIG_PACKAGE_libext2fs=m
 CONFIG_PACKAGE_libfdisk=m
 # CONFIG_PACKAGE_libfdt is not set
 CONFIG_PACKAGE_libffi=m
-# CONFIG_PACKAGE_libffmpeg-audio-dec is not set
-# CONFIG_PACKAGE_libffmpeg-custom is not set
-CONFIG_PACKAGE_libffmpeg-full=m
+# CONFIG_PACKAGE_libffmpeg is not set
+
+#
+# FFmpeg configuration
+#
+
+#
+# Licensing
+#
+CONFIG_FFMPEG_GPL=y
+CONFIG_FFMPEG_VERSION3=y
+# CONFIG_FFMPEG_NONFREE is not set
+
+#
+# Build properties
+#
+CONFIG_FFMPEG_OPTIMIZE_SIZE=y
+CONFIG_FFMPEG_PROGRAMS=y
+
+#
+# Hardware acceleration
+#
+CONFIG_FFMPEG_LIBDRM=y
+CONFIG_FFMPEG_V4L2_M2M=y
+CONFIG_FFMPEG_V4L2_REQUEST=y
+
+#
+# Transport layer security
+#
+# CONFIG_FFMPEG_TLS_NONE is not set
+# CONFIG_FFMPEG_TLS_GNUTLS is not set
+# CONFIG_FFMPEG_TLS_OPENSSL is not set
+CONFIG_FFMPEG_TLS_MBEDTLS=y
+
+#
+# External libraries
+#
+CONFIG_FFMPEG_LIBOPUS=y
+# CONFIG_FFMPEG_LIBVORBIS is not set
+# CONFIG_FFMPEG_LIBVPX is not set
+# CONFIG_FFMPEG_LIBWEBP is not set
+# CONFIG_FFMPEG_LIBSPEEX is not set
+# CONFIG_FFMPEG_LIBXML2 is not set
+CONFIG_FFMPEG_LAME=y
+# CONFIG_FFMPEG_SHINE is not set
+CONFIG_FFMPEG_LIBX264=y
+
+#
+# System libraries
+#
+# CONFIG_FFMPEG_LIBV4L2 is not set
+CONFIG_FFMPEG_BZLIB=y
+# CONFIG_FFMPEG_LZMA is not set
+CONFIG_FFMPEG_ICONV=y
+
+#
+# Components
+#
+# CONFIG_FFMPEG_SELECT_COMPONENTS is not set
+# end of FFmpeg configuration
+
 # CONFIG_PACKAGE_libffmpeg-mini is not set
 # CONFIG_PACKAGE_libfido2 is not set
 # CONFIG_PACKAGE_libflac is not set
@@ -6282,6 +6428,7 @@ CONFIG_PACKAGE_libpopt=y
 # CONFIG_PACKAGE_libpri is not set
 # CONFIG_PACKAGE_libprotobuf-c is not set
 # CONFIG_PACKAGE_libpsl is not set
+# CONFIG_PACKAGE_libpulse is not set
 # CONFIG_PACKAGE_libqmi is not set
 # CONFIG_PACKAGE_libqrencode is not set
 # CONFIG_PACKAGE_libqrtr-glib is not set
@@ -6576,7 +6723,6 @@ CONFIG_PACKAGE_luci-app-crowdsec-firewall-bouncer=m
 CONFIG_PACKAGE_luci-app-daede_daed=y
 # CONFIG_PACKAGE_luci-app-daede_dae is not set
 CONFIG_PACKAGE_luci-app-dawn=m
-# CONFIG_PACKAGE_luci-app-dcwapd is not set
 CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-ddns-go=m
 CONFIG_PACKAGE_luci-app-ddnsto=m
@@ -6612,6 +6758,7 @@ CONFIG_PACKAGE_luci-app-irqbalance=m
 # CONFIG_PACKAGE_luci-app-ledtrig-rssi is not set
 # CONFIG_PACKAGE_luci-app-ledtrig-switch is not set
 # CONFIG_PACKAGE_luci-app-ledtrig-usbport is not set
+# CONFIG_PACKAGE_luci-app-librespeed is not set
 # CONFIG_PACKAGE_luci-app-libreswan is not set
 # CONFIG_PACKAGE_luci-app-lldpd is not set
 # CONFIG_PACKAGE_luci-app-lorawan-basicstation is not set
@@ -7887,6 +8034,7 @@ CONFIG_OPENLDAP_DEBUG=y
 #
 # CONFIG_PACKAGE_ampr-ripd is not set
 # CONFIG_PACKAGE_babel-pinger is not set
+# CONFIG_PACKAGE_babeld is not set
 # CONFIG_PACKAGE_batmand is not set
 # CONFIG_PACKAGE_bcp38 is not set
 # CONFIG_PACKAGE_bfdd is not set
@@ -7896,9 +8044,12 @@ CONFIG_OPENLDAP_DEBUG=y
 # CONFIG_PACKAGE_bird3 is not set
 # CONFIG_PACKAGE_bird3c is not set
 # CONFIG_PACKAGE_bird3cl is not set
+# CONFIG_PACKAGE_bmx7 is not set
 # CONFIG_PACKAGE_cjdns is not set
 # CONFIG_PACKAGE_cjdns-tests is not set
 # CONFIG_PACKAGE_dcb is not set
+# CONFIG_PACKAGE_dcstad is not set
+# CONFIG_PACKAGE_dcwapd is not set
 # CONFIG_PACKAGE_devlink is not set
 # CONFIG_PACKAGE_frr is not set
 # CONFIG_PACKAGE_genl is not set
@@ -7907,6 +8058,7 @@ CONFIG_OPENLDAP_DEBUG=y
 CONFIG_PACKAGE_ip-full=m
 CONFIG_PACKAGE_ip-tiny=y
 # CONFIG_PACKAGE_lldpd is not set
+# CONFIG_PACKAGE_mrmctl is not set
 CONFIG_PACKAGE_mwan3=m
 # CONFIG_PACKAGE_mwan3plus is not set
 # CONFIG_PACKAGE_nstat is not set
@@ -7921,6 +8073,7 @@ CONFIG_PACKAGE_mwan3=m
 # CONFIG_PACKAGE_tc-bpf is not set
 # CONFIG_PACKAGE_tc-full is not set
 CONFIG_PACKAGE_tc-tiny=m
+# CONFIG_PACKAGE_tcfilter is not set
 # CONFIG_PACKAGE_tcpproxy is not set
 # CONFIG_PACKAGE_vis is not set
 # CONFIG_PACKAGE_yggdrasil is not set
@@ -8609,6 +8762,7 @@ CONFIG_PACKAGE_ppp-mod-pptp=m
 # CONFIG_PACKAGE_pppstats is not set
 # CONFIG_PACKAGE_proto-bonding is not set
 # CONFIG_PACKAGE_proxychains-ng is not set
+# CONFIG_PACKAGE_prplmesh is not set
 # CONFIG_PACKAGE_qcsuper is not set
 # CONFIG_PACKAGE_radius-mac is not set
 # CONFIG_PACKAGE_radsecproxy is not set
@@ -8655,13 +8809,17 @@ CONFIG_PACKAGE_sing-box=m
 # CONFIG_SINGBOX_WITH_ACME is not set
 # CONFIG_SINGBOX_WITH_CCM is not set
 CONFIG_SINGBOX_WITH_CLASH_API=y
+# CONFIG_SINGBOX_WITH_CLOUDFLARED is not set
 # CONFIG_SINGBOX_WITH_DHCP is not set
 # CONFIG_SINGBOX_WITH_EMBEDDED_TOR is not set
 # CONFIG_SINGBOX_WITH_GRPC is not set
 CONFIG_SINGBOX_WITH_GVISOR=y
 # CONFIG_SINGBOX_WITH_OCM is not set
+# CONFIG_SINGBOX_WITH_OPENCONNECT is not set
+# CONFIG_SINGBOX_WITH_OPENVPN is not set
 CONFIG_SINGBOX_WITH_QUIC=y
 CONFIG_SINGBOX_WITH_TAILSCALE=y
+# CONFIG_SINGBOX_WITH_USBIP is not set
 CONFIG_SINGBOX_WITH_UTLS=y
 # CONFIG_SINGBOX_WITH_V2RAY_API is not set
 CONFIG_SINGBOX_WITH_WIREGUARD=y
@@ -9423,6 +9581,7 @@ CONFIG_FWUPD_PLUGIN_MODEMMANAGER=y
 # CONFIG_PACKAGE_gammu is not set
 CONFIG_PACKAGE_gawk=m
 # CONFIG_PACKAGE_gddrescue is not set
+# CONFIG_PACKAGE_geo2txt is not set
 # CONFIG_PACKAGE_getopt is not set
 # CONFIG_PACKAGE_giflib-utils is not set
 # CONFIG_PACKAGE_gkermit is not set
@@ -9473,7 +9632,6 @@ CONFIG_PACKAGE_jshn=y
 CONFIG_PACKAGE_libjson-script=y
 # CONFIG_PACKAGE_librespeed-cli is not set
 # CONFIG_PACKAGE_librespeed-cli-rust is not set
-# CONFIG_PACKAGE_librespeed-common is not set
 # CONFIG_PACKAGE_libxml2-utils is not set
 # CONFIG_PACKAGE_lm-sensors is not set
 # CONFIG_PACKAGE_lm-sensors-detect is not set
@@ -9919,4 +10077,4 @@ CONFIG_PACKAGE_urllogger=m
 # end of Font-Utils
 # end of Xorg
 
-CONFIG_OVERRIDE_PKGS="UnblockNeteaseMusic adguardhome brook chinadns-ng clashoo dae daed ddns-go ddnsto dns2socks dns2socks-rust dns2tcp geoview gn gost hysteria ipt2socks lua-neturl luci-app-adguardhome luci-app-advanced luci-app-aliddns luci-app-alpha-config luci-app-amlogic luci-app-argon-config luci-app-clashoo luci-app-daede luci-app-ddns-go luci-app-ddnsto luci-app-design-config luci-app-dnsfilter luci-app-dockerman luci-app-easymesh luci-app-eqos luci-app-fchomo luci-app-fileassistant luci-app-gost luci-app-guest-wifi luci-app-homeproxy luci-app-istorex luci-app-lucky luci-app-momo luci-app-mosdns luci-app-netwizard luci-app-nikki luci-app-openclash luci-app-openclaw luci-app-openlist2 luci-app-partexp luci-app-passwall luci-app-passwall2 luci-app-quickfile luci-app-quickstart luci-app-shadowsocks-libev luci-app-smartdns luci-app-ssr-plus luci-app-store luci-app-subconverter luci-app-unblockneteasemusic luci-lib-taskd luci-lib-xterm luci-theme-alpha luci-theme-argon luci-theme-atmaterial_new luci-theme-design luci-theme-glass luci-theme-ifit luci-theme-material3 luci-theme-tomato lucky mentohust microsocks mihomo momo mosdns naiveproxy nikki openlist2 quickfile quickstart redsocks2 shadow-tls shadowsocks-libev shadowsocks-rust shadowsocksr-libev simple-obfs sing-box smartdns ssocks taskd trojan trojan-go trojan-plus tuic-client ucl upx v2dat v2ray-core v2ray-geodata v2ray-plugin v2raya xray-core xray-plugin"
+CONFIG_OVERRIDE_PKGS="UnblockNeteaseMusic adguardhome brook chinadns-ng clashoo dae daed ddns-go ddnsto dns2socks dns2socks-rust dns2tcp geo2txt geoview gn gost honk hysteria ipt2socks lua-neturl luci-app-adguardhome luci-app-advanced luci-app-aliddns luci-app-alpha-config luci-app-amlogic luci-app-argon-config luci-app-clashoo luci-app-daede luci-app-ddns-go luci-app-ddnsto luci-app-design-config luci-app-dnsfilter luci-app-dockerman luci-app-easymesh luci-app-eqos luci-app-fchomo luci-app-fileassistant luci-app-gost luci-app-guest-wifi luci-app-homeproxy luci-app-honk luci-app-istorex luci-app-lucky luci-app-momo luci-app-mosdns luci-app-netwizard luci-app-nikki luci-app-openclash luci-app-openclaw luci-app-openlist2 luci-app-partexp luci-app-passwall luci-app-passwall2 luci-app-quickfile luci-app-quickstart luci-app-shadowsocks-libev luci-app-smartdns luci-app-ssr-plus luci-app-store luci-app-subconverter luci-app-unblockneteasemusic luci-lib-taskd luci-lib-xterm luci-theme-alpha luci-theme-argon luci-theme-atmaterial_new luci-theme-design luci-theme-glass luci-theme-ifit luci-theme-material3 luci-theme-tomato lucky mentohust microsocks mihomo momo mosdns naiveproxy nikki openlist2 quickfile quickstart redsocks2 shadow-tls shadowsocks-libev shadowsocks-rust shadowsocksr-libev simple-obfs sing-box smartdns ssocks taskd trojan trojan-go trojan-plus tuic-client ucl upx v2dat v2ray-core v2ray-geodata v2ray-plugin v2raya xray-core xray-plugin"
