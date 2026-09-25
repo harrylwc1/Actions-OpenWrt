@@ -248,7 +248,7 @@ jobs:
           cp patches/kernel_ver.patch x-wrt/ 
           
           cd x-wrt
-          cd x-wrt
+        
           # 1. 修改 include/kernel-defaults.mk
           # 將 grep '=[ym]' ... | mkhash md5 > ... 替換為直接複製根目錄的 vermagic
           sed -i 's|grep '\''=\[ym\]'\'' \$(LINUX_DIR)/\.config\.set \| LC_ALL=C sort \| mkhash md5 > \$(LINUX_DIR)/\.vermagic|cp \$(TOPDIR)/vermagic \$(LINUX_DIR)/\.vermagic|g' include/kernel-defaults.mk
