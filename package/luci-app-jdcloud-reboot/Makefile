@@ -14,7 +14,7 @@ PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Your Name <you@example.com>
 
 LUCI_TITLE:=LuCI JDCloud Reboot (A/B slot switcher)
-LUCI_DEPENDS:=+luci-base +blkid +sgdisk +u-boot-envtools +coreutils-hexdump +coreutils-strings
+LUCI_DEPENDS:=+luci-base +blkid
 LUCI_PKGARCH:=all
 
 include $(INCLUDE_DIR)/package.mk

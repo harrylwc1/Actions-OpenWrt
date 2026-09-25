@@ -13,9 +13,9 @@ cd  $GITHUB_WORKSPACE/x-wrt/package/
 ‎cat   $GITHUB_WORKSPACE/x-wrt/package/base-files/files/etc/shadow‎|grep admin
 #cp $GITHUB_WORKSPACE/patches/Makefile.scons $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/scons/Makefile
 cd $GITHUB_WORKSPACE/x-wrt/
-git clone https://github.com/tvheadend/tvheadend.git
+#git clone https://github.com/tvheadend/tvheadend.git
 
-cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
+#cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
 rm -r feeds/packages/multimedia/tvheadend
 ln -s $GITHUB_WORKSPACE/lede/feeds/luci/applications/luci-app-nlbwmon $GITHUB_WORKSPACE/x-wrt/package/
 #rm $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/rust/patches/0003-bump-libc-deps-to-0.2.146.patch
