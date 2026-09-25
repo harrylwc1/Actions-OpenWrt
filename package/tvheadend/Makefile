@@ -11,15 +11,16 @@ PKG_NAME:=tvheadend
 PKG_VERSION:=4.3
 PKG_RELEASE:=$(AUTORELEASE)
 
-
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
-PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
-PKG_SOURCE_VERSION:=master
-#ae37453
-
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/tvheadend/tvheadend.git
+
+# 跟随 master 最新 commit
+PKG_SOURCE_VERSION:=master
+# 由于每次 commit 都不同，哈希无法固定，跳过校验
+PKG_MIRROR_HASH:=skip
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 PKG_BUILD_PARALLEL:=1
@@ -28,8 +29,6 @@ PKG_INSTALL:=1
 PKG_LICENSE:=GPL-3.0
 PKG_LICENSE_FILES:=LICENSE.md
 
-
-PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
 PKG_USE_MIPS16:=0
 
@@ -44,31 +43,6 @@ define Package/tvheadend
   URL:=https://tvheadend.org
   MAINTAINER:=CZ.NIC <packaging@turris.cz>
 endef
-
-  #DEPENDS:= \
-	#+librt \
-	#3+libffi \
-	#+libopenssl \
-	#$(ICONV_DEPENDS) \
-	#+zlib \
-	#+TVHEADEND_AVAHI_SUPPORT:libavahi-client \
-	#+TVHEADEND_REGEX_PCRE:libpcre \
-	#+TVHEADEND_REGEX_PCRE2:libpcre2 \
-	#+BUILD_PATENTED&&TVHEADEND_CSA:libdvbcsa
-
-## Transcoding | Add these to DEPENDS.
-##	+TVHEADEND_LIBFFMPEG:libffmpeg-full \
-##	+TVHEADEND_LIBVPX:libvpx \
-##	+TVHEADEND_LIBTHEORA:libtheora \
-##	+TVHEADEND_LIBVORBIS:libvorbis \
-##	+TVHEADEND_LIBOPUS:libopusenc \
-##	+TVHEADEND_LIBFDKAAC:fdk-aac \
-##	+BUILD_PATENTED&&TVHEADEND_LIBX264:libx264 \
-
-
-
-
-
 
 define Package/tvheadend/description
   Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
@@ -119,7 +93,7 @@ else
 endif
 
 ifeq ($(CONFIG_DISABLE_TVHEADEND_FULL_SUPPORT),)
-else 
+else
   CONFIGURE_ARGS += --disable-libav --disable-dbus_1 --disable-capmt --disable-constcw --disable-iptv --disable-satip_server --disable-satip_client --disable-imagecache --disable-uriparser --disable-libx264 --disable-libx264_static --disable-libmfx_static --disable-libx265_static --disable-hdhomerun_client --disable-hdhomerun_static --disable-cwc --disable-cccam
 endif
 
@@ -133,16 +107,19 @@ CONFIGURE_ARGS += \
 	--enable-libx265_static \
 	--disable-vue_build \
 	--enable-vue_bundle \
-        --disable-execinfo
+	--disable-execinfo
 
-#TARGET_CFLAGS += -Wno-error=pointer-compare -ggdb3 -O0
-TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address 
+TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address
 
+# 关键修复：不再复制 files/.git，改为在解压后的源码目录初始化 git 仓库
+# 这样 git describe / 版本号生成逻辑仍可正常工作
 define Build/Prepare
-	cp -r files/.git $(PKG_BUILD_DIR)/
 	$(call Build/Prepare/Default)
-	#echo 'Tvheadend $(shell echo $(PKG_SOURCE_VERSION) | sed "s/^v//")~openwrt$(PKG_RELEASE)' \
-		#> $(PKG_BUILD_DIR)/debian/changelog
+	cd $(PKG_BUILD_DIR) && \
+		git init -q && \
+		git add -A && \
+		git -c user.email=build@local -c user.name=build commit -q -m "OpenWrt build" && \
+		git tag -a "$(PKG_SOURCE_VERSION)" -m "version $(PKG_SOURCE_VERSION)" || true
 endef
 
 define Package/conffiles
@@ -158,4 +135,4 @@ define Package/tvheadend/install
 	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR=$(1)
 endef
 
-$(eval $(call BuildPackage,tvheadend))
+$(eval $(call BuildPackage,tvheadend)):
