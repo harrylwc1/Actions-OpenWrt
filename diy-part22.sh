@@ -4,6 +4,15 @@ cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
+
+#kernel 250
+#git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
+#kernel 213
+git checkout 8444302a92e601a1e05cb8468aaffa140d5a5b80
+##enable PLTS
+sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' target/linux/generic/config-5.4
+
+
 # 使用 cat 覆蓋或追加核心定義，確保 kmod-video-core 包含 mc.ko 並且依賴 kmod-media-core
 #cat << 'EOF' >> package/kernel/linux/modules/video.mk
 
@@ -24,12 +33,7 @@ git clone https://github.com/tmn505/openwrt-dvb
 cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
 cd ..
 
-#kernel 250
-#git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
-#kernel 213
-git checkout 8444302a92e601a1e05cb8468aaffa140d5a5b80
-##enable PLTS
-sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' target/linux/generic/config-5.4
+
 
 
 #kernel 5.4.154 
