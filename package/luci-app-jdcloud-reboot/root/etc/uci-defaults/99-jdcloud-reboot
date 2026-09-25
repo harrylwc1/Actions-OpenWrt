@@ -1,5 +1,0 @@
-#!/bin/sh
-chmod +x /usr/bin/boot_alt.sh
-chmod +x /usr/libexec/jdcloud-reboot
-chmod +x /usr/libexec/jdcloud-reboot-info
-exit 0

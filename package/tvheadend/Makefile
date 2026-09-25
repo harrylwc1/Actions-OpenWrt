@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=https://github.com/tvheadend/tvheadend.git
 
 # 跟随 master 最新 commit
 PKG_SOURCE_VERSION:=master
-# 由于每次 commit 都不同，哈希无法固定，跳过校验
+# 每次 commit 都不同，哈希无法固定，跳过校验
 PKG_MIRROR_HASH:=skip
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 
@@ -111,15 +111,32 @@ CONFIGURE_ARGS += \
 
 TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address
 
-# 关键修复：不再复制 files/.git，改为在解压后的源码目录初始化 git 仓库
-# 这样 git describe / 版本号生成逻辑仍可正常工作
+# 修复 1：不再复制不存在的 files/.git
+# 改为在源码目录里初始化 git，打 annotated tag（git describe 只认 annotated tag）
+# 并把当次 commit 的 short hash 写入 .tvh_commit，供 Build/Compile 使用
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	cd $(PKG_BUILD_DIR) && \
 		git init -q && \
+		git config user.email "build@openwrt.local" && \
+		git config user.name "OpenWrt Build" && \
 		git add -A && \
-		git -c user.email=build@local -c user.name=build commit -q -m "OpenWrt build" && \
-		git tag -a "$(PKG_SOURCE_VERSION)" -m "version $(PKG_SOURCE_VERSION)" || true
+		git commit -q -m "OpenWrt build" && \
+		git tag -a "v$(PKG_VERSION)" -m "version v$(PKG_VERSION)" && \
+		git rev-parse --short HEAD > .tvh_commit
+endef
+
+# 修复 2：Build/Compile 里写死 version.c，格式 4.3~g<short>
+# 去掉 "+make" 的 "+"（在 define 块里 '+' 会被当字面字符传给 shell）
+# 用 $$TVH_SHORT 让 shell 在运行时读取 .tvh_commit
+define Build/Compile
+	TVH_SHORT=$$(cat $(PKG_BUILD_DIR)/.tvh_commit); \
+	printf 'const char *tvheadend_version = "%s~g%s";\n' \
+		"$(PKG_VERSION)" "$$TVH_SHORT" > $(PKG_BUILD_DIR)/src/version.c; \
+	chmod 444 $(PKG_BUILD_DIR)/src/version.c; \
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		$(PKG_MAKE_FLAGS)
 endef
 
 define Package/conffiles
@@ -135,4 +152,4 @@ define Package/tvheadend/install
 	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR=$(1)
 endef
 
-$(eval $(call BuildPackage,tvheadend)):
+$(eval $(call BuildPackage,tvheadend))
