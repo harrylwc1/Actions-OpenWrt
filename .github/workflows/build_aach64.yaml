@@ -68,6 +68,8 @@ jobs:
 
   build_openwrt:
     ###@####
+
+    
     name: Build aarch64 TVH openwrt offical firmware
     runs-on: ubuntu-22.04
     #runs-on: ubuntu-latest
@@ -249,7 +251,7 @@ jobs:
           cp patches/kernel_ver.patch x-wrt/ 
           
           cd x-wrt
-          echo 952ab6bf7329ff5b9354b27b7c5e31d0>./vermagic
+          echo fdf287db8260cefe2a77d14a9c317036>./vermagic
           git apply --ignore-space-change --ignore-whitespace kernel_ver.patch
           #rm package/firmware/wireless-regdb/patches/*
           #sed -i 's/CONFIG_PACKAGE_node=m/#CONFIG_PACKAGE_node=m/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
