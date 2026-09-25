@@ -1,8 +1,13 @@
 git clone https://github.com/openwrt/openwrt x-wrt
 cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
+
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
+cd package 
+git clone https://github.com/tmn505/openwrt-dvb
+cd ..
+
 #kernel 250
 #git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 #kernel 213
