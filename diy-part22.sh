@@ -4,6 +4,19 @@ cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
+# 使用 cat 覆蓋或追加核心定義，確保 kmod-video-core 包含 mc.ko 並且依賴 kmod-media-core
+cat << 'EOF' >> package/kernel/linux/modules/video.mk
+
+# 強制修正或確保 kmod-video-core 依賴項目內含 kmod-media-core
+define KernelPackage/video-core/depends
+  +kmod-media-core
+endef
+EOF
+
+# 同時確保 kmod-media-core 套件有被正式納入編譯設定
+sed -i 's/AUTOLOAD:=$(call AutoLoad,25,videodev)/AUTOLOAD:=$(call AutoLoad,25,mc videodev)/g' package/kernel/linux/modules/video.mk
+
+
 cd package 
 git clone https://github.com/tmn505/openwrt-dvb
 cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
