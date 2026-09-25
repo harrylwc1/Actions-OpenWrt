@@ -248,8 +248,23 @@ jobs:
           cp patches/kernel_ver.patch x-wrt/ 
           
           cd x-wrt
-          echo fdf287db8260cefe2a77d14a9c317036>./vermagic
-          git apply --ignore-space-change --ignore-whitespace kernel_ver.patch
+          cd x-wrt
+          # 1. 修改 include/kernel-defaults.mk
+          # 將 grep '=[ym]' ... | mkhash md5 > ... 替換為直接複製根目錄的 vermagic
+          sed -i 's|grep '\''=\[ym\]'\'' \$(LINUX_DIR)/\.config\.set \| LC_ALL=C sort \| mkhash md5 > \$(LINUX_DIR)/\.vermagic|cp \$(TOPDIR)/vermagic \$(LINUX_DIR)/\.vermagic|g' include/kernel-defaults.mk
+
+          # 2. 修改 package/kernel/linux/Makefile
+          # 將 STAMP_BUILT 尾部的 mkhash md5 計算邏輯，替換為直接讀取 .vermagic 檔案內容
+          sed -i 's|STAMP_BUILT:=\$(STAMP_BUILT)_\$(shell \$(SCRIPT_DIR)/kconfig\.pl \$(LINUX_DIR)/\.config \| mkhash md5)|STAMP_BUILT:=\$(STAMP_BUILT)_\$(shell cat \$(LINUX_DIR)/\.vermagic)|g' package/kernel/linux/Makefile
+
+          # 3. 寫入你 BE6500 閉源 ROM 專屬的 Vermagic 雜湊密碼
+          echo "fdf287db8260cefe2a77d14a9c317036" > vermagic
+
+          # 4. 防止 GitHub Actions 因 DVB 核心新選項互動問答而卡死超時
+          make oldconfig </dev/null
+          
+          #echo fdf287db8260cefe2a77d14a9c317036>./vermagic
+          #git apply --ignore-space-change --ignore-whitespace kernel_ver.patch
           #rm package/firmware/wireless-regdb/patches/*
           #sed -i 's/CONFIG_PACKAGE_node=m/#CONFIG_PACKAGE_node=m/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
           #sed -i 's/CONFIG_NODEJS_ICU_SMALL=y/#CONFIG_NODEJS_ICU_SMALL=y/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
