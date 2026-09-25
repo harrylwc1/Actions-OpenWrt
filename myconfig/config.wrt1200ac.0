@@ -5884,7 +5884,7 @@ CONFIG_PACKAGE_libext2fs=m
 CONFIG_PACKAGE_libfdisk=m
 # CONFIG_PACKAGE_libfdt is not set
 CONFIG_PACKAGE_libffi=m
-CONFIG_PACKAGE_libffmpeg=m
+# CONFIG_PACKAGE_libffmpeg is not set
 
 #
 # FFmpeg configuration
@@ -7460,7 +7460,7 @@ CONFIG_MUTT_OPENSSL=y
 # end of Streaming
 
 # CONFIG_PACKAGE_UnblockNeteaseMusic is not set
-CONFIG_PACKAGE_ffmpeg=m
+# CONFIG_PACKAGE_ffmpeg is not set
 # CONFIG_PACKAGE_ffprobe is not set
 # CONFIG_PACKAGE_fswebcam is not set
 # CONFIG_PACKAGE_go2rtc is not set
@@ -7482,22 +7482,7 @@ CONFIG_PACKAGE_imagemagick=m
 # CONFIG_PACKAGE_minisatip is not set
 # CONFIG_PACKAGE_motion-ffmpeg is not set
 # CONFIG_PACKAGE_motion-noffmpeg is not set
-CONFIG_PACKAGE_tvheadend=m
-
-#
-# Configuration
-#
-CONFIG_TVHEADEND_CWC_SUPPORT=y
-CONFIG_TVHEADEND_V4L_SUPPORT=y
-CONFIG_TVHEADEND_LINUXDVB_SUPPORT=y
-CONFIG_TVHEADEND_DVBSCAN_SUPPORT=y
-CONFIG_TVHEADEND_AVAHI_SUPPORT=y
-CONFIG_TVHEADEND_DVBCSA_SUPPORT=y
-# CONFIG_DISABLE_TVHCSA_DVBCSA_SUPPORT is not set
-# CONFIG_DISABLE_TVHEADEND_FULL_SUPPORT is not set
-CONFIG_TVHEADEND_ENABLE_BUNDLE=y
-# end of Configuration
-
+# CONFIG_PACKAGE_tvheadend is not set
 # CONFIG_PACKAGE_ustreamer is not set
 # CONFIG_PACKAGE_v4l2camera is not set
 # CONFIG_PACKAGE_v4l2rtspserver is not set
