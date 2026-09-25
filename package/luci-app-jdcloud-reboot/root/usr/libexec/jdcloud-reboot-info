@@ -1,0 +1,187 @@
+#!/bin/sh
+
+SLOT_A_KERNEL_LABEL="0:HLOS"
+SLOT_A_ROOTFS_LABEL="rootfs"
+SLOT_B_KERNEL_LABEL="0:HLOS_1"
+SLOT_B_ROOTFS_LABEL="rootfs_1"
+
+TMPMNT="/tmp/other_rootfs"
+
+find_partition_by_label() {
+local label="$1"
+local d
+for d in /dev/mmcblk0p*; do
+[ -b "$d" ] || continue
+local partlabel
+partlabel=$(blkid -s PARTLABEL -o value "$d" 2>/dev/null)
+if [ "$partlabel" = "$label" ]; then
+echo "$d"
+return 0
+fi
+done
+return 1
+}
+
+detect_slot() {
+local rootfs_dev rootfs_num
+
+rootfs_dev=$(find_partition_by_label "$SLOT_A_ROOTFS_LABEL")
+if [ -n "$rootfs_dev" ]; then
+rootfs_num=$(echo "$rootfs_dev" | grep -oE '[0-9]+$')
+if dmesg 2>/dev/null | grep "Mounted root" | grep -q "179:${rootfs_num}"; then
+echo "A"; return
+fi
+fi
+
+rootfs_dev=$(find_partition_by_label "$SLOT_B_ROOTFS_LABEL")
+if [ -n "$rootfs_dev" ]; then
+rootfs_num=$(echo "$rootfs_dev" | grep -oE '[0-9]+$')
+if dmesg 2>/dev/null | grep "Mounted root" | grep -q "179:${rootfs_num}"; then
+echo "B"; return
+fi
+fi
+
+local flag
+flag=$(fw_printenv -n flag_boot_rootfs 2>/dev/null)
+case "$flag" in
+0) echo "A" ;;
+1) echo "B" ;;
+*) echo "unknown" ;;
+esac
+}
+
+get_kernel_version() {
+	local kdev="$1"
+	[ -z "$kdev" ] && { echo ""; return; }
+
+	local ver
+	ver=$(grep -a -m1 -oE "Linux version [0-9]+\.[0-9]+\.[0-9]+[^ ]*" "$kdev" 2>/dev/null | head -1)
+	if [ -n "$ver" ]; then
+		echo "$ver" | sed 's/^Linux version //'
+		return
+	fi
+
+	ver=$(dd if="$kdev" bs=1 count=2097152 2>/dev/null | strings | grep -m1 -oE "Linux version [0-9]+\.[0-9]+\.[0-9]+[^ ]*")
+	if [ -n "$ver" ]; then
+		echo "$ver" | sed 's/^Linux version //'
+		return
+	fi
+
+	echo ""
+}
+
+get_rootfs_info() {
+local rdev="$1"
+[ -z "$rdev" ] && { echo "||"; return; }
+
+mkdir -p "$TMPMNT"
+
+if ! mount -t squashfs -o ro "$rdev" "$TMPMNT" 2>/dev/null; then
+echo "||"
+return
+fi
+
+local device_name=""
+local rom_version=""
+local hostname=""
+
+if [ -r "$TMPMNT/etc/device_info" ]; then
+	. "$TMPMNT/etc/device_info" 2>/dev/null
+	device_name="${DEVICE_MANUFACTURER} ${DEVICE_PRODUCT}"
+fi
+
+if [ -r "$TMPMNT/etc/openwrt_release" ]; then
+rom_version=$(grep "^DISTRIB_DESCRIPTION" "$TMPMNT/etc/openwrt_release" | grep -oE "'[^']*'" | head -1 | tr -d "'")
+fi
+
+if [ -z "$rom_version" ] && [ -r "$TMPMNT/etc/os-release" ]; then
+rom_version=$(grep "^PRETTY_NAME" "$TMPMNT/etc/os-release" | grep -oE '"[^"]*"' | head -1 | tr -d '"')
+fi
+
+if [ -r "$TMPMNT/etc/openwrt_release" ]; then
+	hostname=$(grep "^DISTRIB_ID" "$TMPMNT/etc/openwrt_release" | awk -F"'" '{print $2}')
+fi
+umount "$TMPMNT" 2>/dev/null
+rmdir "$TMPMNT" 2>/dev/null
+
+echo "${device_name}|${rom_version}|${hostname}"
+}
+
+part_info() {
+local label_kernel="$1"
+local label_rootfs="$2"
+
+local kdev
+local rdev
+kdev=$(find_partition_by_label "$label_kernel")
+rdev=$(find_partition_by_label "$label_rootfs")
+
+local kstart_hex=""
+local ksize_hex=""
+local rpartuuid=""
+local kver=""
+
+if [ -n "$kdev" ]; then
+kstart_hex=$(printf '0x%x' "$(cat /sys/class/block/$(basename "$kdev")/start 2>/dev/null)")
+ksize_hex=$(printf '0x%x' "$(cat /sys/class/block/$(basename "$kdev")/size 2>/dev/null)")
+kver=$(get_kernel_version "$kdev")
+fi
+if [ -n "$rdev" ]; then
+rpartuuid=$(blkid -s PARTUUID -o value "$rdev" 2>/dev/null)
+fi
+
+local rootfs_info
+local device_name=""
+local rom_version=""
+local hostname=""
+rootfs_info=$(get_rootfs_info "$rdev")
+device_name=$(echo "$rootfs_info" | cut -d'|' -f1)
+rom_version=$(echo "$rootfs_info" | cut -d'|' -f2)
+hostname=$(echo "$rootfs_info" | cut -d'|' -f3)
+
+printf '{\n'
+printf '  "kernel_dev": "%s",\n' "$kdev"
+printf '  "kernel_start": "%s",\n' "$kstart_hex"
+printf '  "kernel_size": "%s",\n' "$ksize_hex"
+printf '  "kernel_version": "%s",\n' "$kver"
+printf '  "rootfs_dev": "%s",\n' "$rdev"
+printf '  "rootfs_partuuid": "%s",\n' "$rpartuuid"
+printf '  "device_name": "%s",\n' "$device_name"
+printf '  "rom_version": "%s",\n' "$rom_version"
+printf '  "hostname": "%s"\n' "$hostname"
+printf '}\n'
+}
+
+CURRENT=$(detect_slot)
+if [ "$CURRENT" = "A" ]; then
+OTHER="B"
+elif [ "$CURRENT" = "B" ]; then
+OTHER="A"
+else
+OTHER="unknown"
+fi
+
+CUR_DEVICE=""
+if [ -r /etc/board.json ]; then
+CUR_DEVICE=$(grep '"name"' /etc/board.json | head -1 | tr '"' '\n' | sed -n '4p')
+fi
+
+FLAG_BOOT=$(fw_printenv -n flag_boot_rootfs 2>/dev/null)
+FLAG_LAST=$(fw_printenv -n flag_last_success 2>/dev/null)
+
+if [ "$OTHER" = "A" ]; then
+OTHER_INFO=$(part_info "$SLOT_A_KERNEL_LABEL" "$SLOT_A_ROOTFS_LABEL")
+elif [ "$OTHER" = "B" ]; then
+OTHER_INFO=$(part_info "$SLOT_B_KERNEL_LABEL" "$SLOT_B_ROOTFS_LABEL")
+else
+OTHER_INFO="null"
+fi
+
+printf '{\n'
+printf '  "current": "%s",\n' "$CURRENT"
+printf '  "current_device": "%s",\n' "$CUR_DEVICE"
+printf '  "other": "%s",\n' "$OTHER"
+printf '  "other_info": %s,\n' "$OTHER_INFO"
+printf '  "flag_boot_rootfs": "%s",\n' "$FLAG_BOOT"
+printf '  "flag_last_success": "%s"\n' "$FLAG_LAST"
+printf '}\n'
