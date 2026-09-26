@@ -283,10 +283,7 @@ jobs:
           
           
       
-      -  name: SSH connection for failure Debug or KERNEL_MENUCONFIG =TRUE
-         if: ${{ env.KERNEL_MENUCONFIG == 'true' || failure() }}
-         uses: lhotari/action-upterm@v1
- 
+
  
       - name: Compile again after .config updated or add kernel modules
         env:
@@ -311,9 +308,11 @@ jobs:
            #copy_file.sh busybox.$ROUTER_MODEL 
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
-      - name: SSH connection for failure Debug
-        if: ${{ failure() }}
-        uses: lhotari/action-upterm@v1
+           
+      -  name: SSH connection for failure Debug or KERNEL_MENUCONFIG =TRUE
+         if: ${{ env.KERNEL_MENUCONFIG == 'true' || failure() }}
+         uses: lhotari/action-upterm@v1
+ 
 
       - name: Prepare artifact
         run: |
