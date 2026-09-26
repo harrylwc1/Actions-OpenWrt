@@ -66,17 +66,23 @@ EXTRA_CFLAGS:= \
 	-DCONFIG_IOCTL_CFG80211 \
 	-DCONFIG_CONCURRENT_MODE \
 	-Wno-unused-variable \
-	-msoft-float \
 	-DBUILD_OPENWRT
 
+# 1. 處理 32位元 ARM
 ifeq ($(ARCH),arm)
-	#EXTRA_CFLAGS += -mfloat-abi=softfp
         EXTRA_CFLAGS += -msoft-float
+endif
 
+# 2. 處理 64位元 ARM (AArch64) - 同時相容 arm64 與 aarch64 字串
+ifneq ($(filter arm64 aarch64,$(ARCH)),)
+        EXTRA_CFLAGS += -mgeneral-regs-only
 endif
+
+# 3. 處理 x86 架構
 ifeq ($(BOARD),x86)
-	EXTRA_CFLAGS += -mhard-float
+        EXTRA_CFLAGS += -mhard-float
 endif
+
 
 MAKE_OPTS:= \
 	$(KERNEL_MAKE_FLAGS) \
