@@ -4,6 +4,10 @@ git clone -b AU_LINUX_QSDK_NHSS.QSDK.12.5.R6_TARGET_ALL.12.5.6.2987.012.xml http
 mkdir compile
 mv fix_repo.sh compile/
 cd compile
-fix_repo.sh
+./fix_repo.sh
+source qca/configs/qsdk/setup-environment -t ipq53xx -a 64 -p premium -d n -c n
 repo sync
-#cp $GITHUB_WORKSPACE/myconfig/kernel_config.64bit.qsdk $GITHUB_WORKSPACE/compile/qsdk/target/linux/feeeds/ipq53xx/config-5.4
+cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.64bit.qsdk ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
+
+make -j$(nproc) || make -j1 V=s
+
