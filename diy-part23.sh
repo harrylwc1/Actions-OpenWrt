@@ -1,3 +1,5 @@
+#got orignal config from router at /proc/config.gz | gunzip > /tmp/config-5.4.xxx
+
 sudo cp patches/copy_file.sh /usr/bin/
 sudo chmod 755 /usr/bin/copy_file.sh
 sudo curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
@@ -7,6 +9,7 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
+
 source qca/configs/qsdk/setup-environment -t ipq53xx -a 64 -p premium -d n -c n
 repo sync
 cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk64 ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
