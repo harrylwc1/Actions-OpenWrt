@@ -6,4 +6,4 @@ mv fix_repo.sh compile/
 cd compile
 fix_repo.sh
 repo sync
-
+#cp $GITHUB_WORKSPACE/myconfig/kernel_config.64bit.qsdk $GITHUB_WORKSPACE/compile/qsdk/target/linux/feeeds/ipq53xx/config-5.4
