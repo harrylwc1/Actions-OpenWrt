@@ -138,7 +138,7 @@ jobs:
       working-directory: ${{ env.WORKING_DIR }}
       run: |
           #target_device_arch_1="mvebu_ipq40xx_ramips"
-          target_device_arch_1="ramips"
+          target_device_arch_1="aarch64_qsdk"
           gcc_hash=$(gcc --version | sha256sum | awk '{print substr($1,1,8)}')
           #gcc_hash='37dab1b7'
           ldd_hash=$(ldd --version | sha256sum | awk '{print substr($1,1,8)}')
@@ -153,7 +153,7 @@ jobs:
           ccache: 'true'
           mixkey: ${{ steps.gen_cache_mixkey.outputs.mixkey1 }}
           #prefix: ${{ env.WORKING_DIR }}
-          prefix: ${{ github.workspace }}/x-wrt
+          prefix: ${{ github.workspace }}
           skip_saving: ${{ steps.openwrt-cache.outputs.hit == 'true' }}
     - name: Clear Cache
       if: env.CLEARCACHE == 'true'
