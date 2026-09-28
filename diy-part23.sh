@@ -9,21 +9,21 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-
+bit="64"
 #source qca/configs/qsdk/setup-environment -t ipq53xx -a 32 -p premium -d n -c n
-source qca/configs/qsdk/setup-environment -t ipq53xx -a 64 -p premium -d n -c n
+source qca/configs/qsdk/setup-environment -t ipq53xx -a $bit -p premium -d n -c n
 
 repo sync
 
 
-cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk64 ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
+cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
 #cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk32 ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
 
 cd qsdk
-cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.64bit .config
+cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit .config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 
-make kernel_oldconfig
+make olddeconfig
 make -j$(nproc) || make -j1 V=s
 
 mkdir  -p ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/targets/ipq*/generic/drivers
