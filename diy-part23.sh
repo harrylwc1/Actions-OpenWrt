@@ -9,7 +9,7 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-bit="64"
+bit="32"
 #source qca/configs/qsdk/setup-environment -t ipq53xx -a 32 -p premium -d n -c n
 source qca/configs/qsdk/setup-environment -t ipq53xx -a $bit -p premium -d n -c n
 
