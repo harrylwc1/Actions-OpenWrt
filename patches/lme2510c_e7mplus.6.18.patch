@@ -1,0 +1,60 @@
+--- a/drivers/media/usb/dvb-usb/lmedm04.c
++++ b/drivers/media/usb/dvb-usb/lmedm04.c
+@@ -43,6 +43,7 @@
+ #include "ix2505v.h"
+ #include "stv6110x.h"
+ #include "ts2020.h"
++#include "../../dvb-frontends/lgs8gxx.h" /* 修正 6.x 樹狀目錄相對路徑以引入國標解調器標頭檔 */
+ 
+ static int dvb_usb_lme2510_debug;
+ module_param_named(debug, dvb_usb_lme2510_debug, int, 0644);
+@@ -796,6 +797,35 @@
+ static int lme2510_frontend_attach(struct dvb_usb_adapter *adap)
+ {
+ struct lme2510_state *st = adap->dev->priv;
++int ret = 0;
++
++/*
++ * 適配 Galaxy Media-Plus E7 M+ 的 DMB-TH 配置
++ * 第三代 LGS-8GL5 解調晶片，I2C 7-bit 位址為 0x19
++ */
++struct lgs8gxx_config e7_mplus_dmbth_config = {
++.prod = LGS8GXX_PROD_LGS8GL5,  /* 強制指定為 LGS-8GL5 */
++.demod_address = 0x19,         /* 聯格 LME 方案公版 I2C 位址 */
++.serial_ts = 1,                /* 串行傳輸串流 */
++.ts_clk_pol = 0,               /* 同步 TS 流時脈極性 */
++.if_clk_freq = 30400,          /* 30.4 MHz 中頻 */
++.if_freq = 5380,               /* 5.38 MHz 訊號偏移 */
++};
++
++info("Patching lmedm04 for Galaxy E7 M+ on Kernel 6.18 (DMB-TH Mode)...");
++
++/* 
++ * 修正 6.x 核心語法：
++ * 必須使用 dvb_attach 宏來載入 lgs8gxx_attach 函數指針。
++ * 這樣既能精準傳遞 I2C 介面，又符合 6.x 的動態核心符號（Symbol）相依性規範。
++ */
++adap->fe_main = dvb_attach(lgs8gxx_attach, &e7_mplus_dmbth_config, &adap->dev->i2c_adap);
++if (adap->fe_main) {
++info("Successfully attached DMB-TH LGS-8GL5 demodulator on 6.18 kernel!");
++return 0;
++}
++info("Failed to attach LGS-8GL5 demodulator, falling back to stock DVB-S...");
+ 
+ int ret = 0;
+ 
+@@ -1219,6 +1249,14 @@
+ static int lme2510_identify_state(struct usb_device *udev,
+ struct dvb_usb_device_properties *props,
+ struct dvb_usb_device_description **desc,
+ int *cold)
+ {
++/*
++ * 繞過原廠 DVB-S 固件檢查機制
++ * Galaxy E7 M+ 地面波數碼電視棒上電時內部 EEPROM 已將硬體狀態定錨，
++ * 這裡直接回傳 Warm 狀態 (0)，阻止 6.x 內核嘗試去下載和加載完全不相容的 dvb-usb-lme2510c-xxxx.fw 衛星固件。
++ */
++*cold = 0;
++return 0;
++
+ struct lme2510_state *st = udev_to_lme2510(udev);
