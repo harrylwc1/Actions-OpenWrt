@@ -36,7 +36,7 @@ env:
   TVH: false
   BUILD_KERNEL_MODULES: true
   DRIVERS_DIR: x-wrt/bin/targets/ramips/drivers
-  KERNEL_CONFIG: 'myconfig/kernel_config.zteq7
+  KERNEL_CONFIG: 'myconfig/kernel_config.zteq7'
   #KERNEL_CONFIG_DIR: target/linux/ipq40xx
   KERNEL_CONFIG_DIR: x-wrt/target/linux/ramips/mt7620
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7621
