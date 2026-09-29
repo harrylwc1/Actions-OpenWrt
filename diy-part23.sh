@@ -9,20 +9,24 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-bit="32"
+bit="64"
+cd qsdk
+repo sync
+cd..
+
 #source qca/configs/qsdk/setup-environment -t ipq53xx -a 32 -p premium -d n -c n
 source qca/configs/qsdk/setup-environment -t ipq53xx -a $bit -p premium -d n -c n
+jdc-be65000-qsdk-compile/cover
 
-repo sync
 
 
 cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
 #cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk32 ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
 
-cd qsdk
+
 cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit .config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
-
+cd qsdk
 make kernel_oldconfig
 make -j$(nproc) || make -j1 V=s
 
