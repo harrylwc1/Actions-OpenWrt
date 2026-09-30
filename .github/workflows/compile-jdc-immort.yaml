@@ -7,7 +7,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 #
 ####@
-name: Compile JDC TVH OpenWrt offical Images  
+name: Compile JDC TVH immortalwrt-penWrt offical Images  
 
 on:
   #repository_dispatch:
@@ -35,7 +35,7 @@ env:
   #####change model here ####@# 
   ROUTER_MODEL: jdc
   TVH: true
-  CONFIG_FILENAME_FOR_2ND_COMPILE: config.jdc.2
+  CONFIG_FILENAME_FOR_2ND_COMPILE: config.immort.2
   BUILD_KERNEL_MODULES: true
   DRIVERS_DIR: x-wrt/bin/targets/ipq40xx/drivers
   KMOD_DIR: x-wrt/bin/targets/ipq40xx/kmod 
@@ -68,7 +68,7 @@ jobs:
 
   build_openwrt:
     ###@####
-    name: Build JDC TVH openwrt offical firmware
+    name: Build JDC BE6500  TVH immortalwrt  firmware
     runs-on: ubuntu-22.04
     #runs-on: ubuntu-latest
     #continue-on-error: true 
