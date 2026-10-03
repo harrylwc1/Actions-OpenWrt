@@ -20,5 +20,38 @@ git clone https://github.com/sx-ui2/immortalwrt-be6500-port.git /tmp/be6500-over
 # 5. 使用 initramfs.config 或 initramfs-minimal.config 作为 .config
 cp /tmp/be6500-overlay/initramfs.config .config
 
+
+cp -r /tmp/be6500-overlay/target/linux/qualcommax/* target/linux/qualcommax/
+
+cp -r /tmp/be6500-overlay/package/* package/
+cp -r ../package/* package/
+cp -r /tmp/be6500-overlay/include/* include/
+
+cp -r /tmp/be6500-overlay/build-overrides/include/* include/
+cp -r /tmp/be6500-overlay/target/linux/qualcommax/* target/linux/qualcommax/
+cp -r /tmp/be6500-overlay/build-overrides/feeds.conf.default .
+cp -r /tmp/be6500-overlay/build-overrides/qmodem.config .
+git clone https://git.codelinaro.org/clo/qsdk/oss/kernel/linux-ipq-6.6.git
+cd linux-ipq-6.6
+git checkout 16f31b0750888769b5418c1f32f2cd385b09972d
+ cp /tmp/be6500-overlay/kernel-patches/qsdk14-r9/853-v6.10-mhi-power-down-keep-dev.patch .
+git apply 853-v6.10-mhi-power-down-keep-dev.patch
+mkdir -p drivers/bus/mhi/clients
+echo "# empty placeholder" > drivers/bus/mhi/clients/Kconfig
+echo "obj-y := " > drivers/bus/mhi/clients/Makefile
+cd ../
+
+sed -i 's|/home/nara0318.guest/src/qsdk14-r9/linux-ipq-6.6|/home/runner/work/Actions-OpenWrt/Actions-OpenWrt/immortalwrt/linux-ipq-6.6|' .config
+#mkdir -p build_dir/toolchain-aarch64_cortex-a53_gcc-13.3.0_musl
+#rm -rf build_dir/toolchain-aarch64_cortex-a53_gcc-13.3.0_musl/linux-6.6.116
+#ln -sf ~/work/Actions-OpenWrt/Actions-OpenWrt/immortalwrt/linux-ipq-6.6/ build_dir/toolchain-aarch64_cortex-a53_gcc-13.3.0_musl/linux-6.6.116
+
+
+ ./scripts/feeds update -a
+ ./scripts/feeds install -a
+
+#make menuconfig -j4
+
+
 # 6. make menuconfig 微调，然后 make
 
