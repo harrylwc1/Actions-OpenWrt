@@ -28,7 +28,8 @@ cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit .config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 cd qsdk
 make kernel_oldconfig
-make -j$(nproc) || make -j1 V=s
+make prepare V=s -j4
+#make -j$(nproc) || make -j1 V=s
 
 mkdir  -p ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/targets/ipq*/generic/drivers
 
