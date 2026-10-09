@@ -5,6 +5,9 @@ sudo cp patches/copy_file.sh /usr/bin
 cp patches/copy_file.sh x-wrt/
 cd x-wrt
 
+
+
+
 #kernel 250
 #git checkout 57a6d97ddf8f6541a52e0f8fad8c6f47685a1bc3
 #kernel 213
@@ -65,7 +68,8 @@ rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/013-net-mvneta-rely-on
 rm $GITHUB_WORKSPACE/x-wrt/target/linux/mvebu/patches-5.4/009-net-mvneta-add-XDP_TX-support.patch
 cp $GITHUB_WORKSPACE/patches/Makefile.ccache tools/ccache/Makefile
 
-
+git clone https://github.com/kenzok8/openwrt-packages.git $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages
+git clone https://github.com/kenzok8/small.git $GITHUB_WORKSPACE/x-wrt/package/small
 
 
 # 1. 檢查並安裝 OpenCC
