@@ -40,7 +40,7 @@ define Package/tvheadend
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=Tvheadend is a TV streaming server for Linux
-  DEPENDS:=+libdvbcsa +libvpx +libvorbis +libtheora +libopusenc +fdk-aac +libffmpeg +ffmpeg +libx264 +libpcre2 +libopenssl +librt +zlib +TVHEADEND_AVAHI_SUPPORT:libavahi-client $(ICONV_DEPENDS)
+  DEPENDS:=+libdvbcsa +libiconv-full +libvpx +libvorbis +libtheora +libopusenc +fdk-aac +libffmpeg +ffmpeg +libx264 +libpcre2 +libopenssl +librt +zlib +TVHEADEND_AVAHI_SUPPORT:libavahi-client $(ICONV_DEPENDS)
   URL:=https://tvheadend.org
   MAINTAINER:=CZ.NIC <packaging@turris.cz>
 endef
@@ -84,11 +84,14 @@ define Package/tvheadend/config
   endmenu
 endef
 
-ifeq ($(CONFIG_BUILD_NLS),y)
-  ifeq ($(CONFIG_TVHEADEND_ENABLE_BUNDLE),y)
-    CONFIGURE_ARGS += --enable-bundle
-    TARGET_LDFLAGS += $(if $(ICONV_FULL),-liconv)
-  endif
+
+# tvheadend needs iconv //TRANSLIT to build recording file names, which musl
+# does not implement, so always build against GNU libiconv.
+# With BUILD_NLS set, nls.mk already adds these for the same prefix.
+ifneq ($(CONFIG_BUILD_NLS),y)
+	ICONV_FULL_PREFIX:=$(STAGING_DIR)/usr/lib/libiconv-full
+	TARGET_CFLAGS += -I$(ICONV_FULL_PREFIX)/include
+	TARGET_LDFLAGS += -L$(ICONV_FULL_PREFIX)/lib -Wl,-rpath-link=$(ICONV_FULL_PREFIX)/lib
 endif
 
 ifeq ($(CONFIG_TVHEADEND_CWC_SUPPORT),)
