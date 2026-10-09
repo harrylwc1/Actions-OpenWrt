@@ -88,6 +88,12 @@ endef
 # tvheadend needs iconv //TRANSLIT to build recording file names, which musl
 # does not implement, so always build against GNU libiconv.
 # With BUILD_NLS set, nls.mk already adds these for the same prefix.
+# ── bundle：由用户自己的选项控制，与 NLS 无关 ──
+
+ifeq ($(CONFIG_TVHEADEND_ENABLE_BUNDLE),y)
+  CONFIGURE_ARGS += --enable-bundle
+endif
+
 ifneq ($(CONFIG_BUILD_NLS),y)
 	ICONV_FULL_PREFIX:=$(STAGING_DIR)/usr/lib/libiconv-full
 	TARGET_CFLAGS += -I$(ICONV_FULL_PREFIX)/include
