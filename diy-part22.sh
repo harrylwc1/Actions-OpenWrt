@@ -54,9 +54,9 @@ cd $GITHUB_WORKSPACE/x-wrt/
 rm target/linux/generic/backport-5.4/430-v6.3-ubi*.patch
 rm target/linux/mvebu/patches-5.4/008-net-mvneta-make-tx-buffer-array-agnostic.patch
 cd $GITHUB_WORKSPACE/x-wrt/
-git clone https://github.com/tvheadend/tvheadend.git
+#git clone https://github.com/tvheadend/tvheadend.git
 
-cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
+#cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
 rm -r feeds/packages/multimedia/tvheadend
 cp $GITHUB_WORKSPACE/patches/kernel-5.4 $GITHUB_WORKSPACE/x-wrt/include/
 #cp $GITHUB_WORKSPACE/patches/Makefile.rtl8821cu.5.4 $GITHUB_WORKSPACE/x-wrt/package/rtl8821cu/Makefile
@@ -73,6 +73,8 @@ git clone https://github.com/kenzok8/small.git $GITHUB_WORKSPACE/x-wrt/package/s
 
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
 #git clone https://github.com/kenzok78/luci-app-filebrowser.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-filebrowser
+
+sed -i 's|\./files/|./root/|g' $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile
 
 
 # 1. 檢查並安裝 OpenCC

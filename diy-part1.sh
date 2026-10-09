@@ -70,6 +70,8 @@ git revert --no-edit $(git log --grep="use admin as the default" -n 1 --format="
 git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone https://github.com/muink/luci-app-netspeedtest.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-netspeedtest
 
+sed -i 's|\./files/|./root/|g' $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile 
+
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
 #rm -rf `find  $GITHUB_WORKSPACE/x-wrt/feeds -name *filebrowser*`
 #rm -rf `find  $GITHUB_WORKSPACE/x-wrt/package -name *filebrowser*`
