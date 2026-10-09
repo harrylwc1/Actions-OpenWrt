@@ -15,8 +15,6 @@ sudo cp patches/copy_file.sh /usr/bin
 sudo chmod 755 /usr/bin/copy_file.sh
 cp patches/copy_file.sh x-wrt/
 
-sudo cp patches/copy_file1.sh /usr/bin
-cp patches/copy_file1.sh x-wrt/
 sudo chmod 755 x-wrt/copy_file.sh
 
 cd x-wrt
