@@ -71,6 +71,9 @@ cp $GITHUB_WORKSPACE/patches/Makefile.ccache tools/ccache/Makefile
 git clone https://github.com/kenzok8/openwrt-packages.git $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages
 git clone https://github.com/kenzok8/small.git $GITHUB_WORKSPACE/x-wrt/package/small
 
+sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
+#git clone https://github.com/kenzok78/luci-app-filebrowser.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-filebrowser
+
 
 # 1. 檢查並安裝 OpenCC
 if ! command -v opencc >/dev/null 2>&1; then

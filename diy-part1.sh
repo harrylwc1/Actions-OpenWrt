@@ -70,15 +70,17 @@ git revert --no-edit $(git log --grep="use admin as the default" -n 1 --format="
 git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone https://github.com/muink/luci-app-netspeedtest.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-netspeedtest
 
+sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
 #rm -rf `find  $GITHUB_WORKSPACE/x-wrt/feeds -name *filebrowser*`
 #rm -rf `find  $GITHUB_WORKSPACE/x-wrt/package -name *filebrowser*`
 ./scripts/feeds update -a
+
 
 rm -rf `find  $GITHUB_WORKSPACE/x-wrt/feeds -name *filebrowser*`
 rm -rf `find  $GITHUB_WORKSPACE/x-wrt/package -name *filebrowser*`
 rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/luci/applications/luci-app-filebrowser
 
-git clone https://github.com/xiaozhuai/luci-app-filebrowser  $GITHUB_WORKSPACE/x-wrt/feeds/luci/applications/luci-app-filebrowser
+#git clone https://github.com/xiaozhuai/luci-app-filebrowser  $GITHUB_WORKSPACE/x-wrt/feeds/luci/applications/luci-app-filebrowser
 ./scripts/feeds install -a -f
 
 
