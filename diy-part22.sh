@@ -74,7 +74,14 @@ git clone https://github.com/kenzok8/small.git $GITHUB_WORKSPACE/x-wrt/package/s
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
 #git clone https://github.com/kenzok78/luci-app-filebrowser.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-filebrowser
 
-sed -i 's|\./files/|./root/|g' $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile
+# ========== luci-app-eqos Makefile ............ ==========
+EQOS_MK="$GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile"
+if [ -f "$EQOS_MK" ]; then
+    sed -i 's|\./files/|./root/|g' "$EQOS_MK"
+    # ...... hotplug.d/iface ............root ........................
+    sed -i '/hotplug\.d\/iface/d' "$EQOS_MK"
+    echo "......... luci-app-eqos Makefile"
+fi
 
 
 # 1. 檢查並安裝 OpenCC
