@@ -66,6 +66,8 @@ sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 git pull
 git revert --no-edit $(git log --grep="use admin as the default" -n 1 --format="%H")
 
+sudo  rm -rf `find  $GITHUB_WORKSPACE/x-wrt/feeds/ -name luci-theme-argon`
+sudo  rm -rf `find  $GITHUB_WORKSPACE/x-wrt/package/ -name luci-theme-argon`
 
 git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone https://github.com/muink/luci-app-netspeedtest.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-netspeedtest
