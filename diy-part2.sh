@@ -223,6 +223,7 @@ rm -r $GITHUB_WORKSPACE/x-wrt/package/small/pdnsd-alt
 
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/feeds/small/tcping 
 sudo rm -r $GITHUB_WORKSPACE/x-wrt/package/small/tcping
+sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/feeds/kenzo/luci-app-eqos
 # ========== luci-app-eqos Makefile ............ ==========
 EQOS_MK="$GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile"
 if [ -f "$EQOS_MK" ]; then
