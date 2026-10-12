@@ -36,7 +36,7 @@ sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' targe
 #cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
 #cd ..
 
-
+unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
 
 
 #kernel 5.4.154 
@@ -235,6 +235,6 @@ else
     echo "==> CPU_MULTI_CORE != true，跳过多核 top 补丁"
 fi
 
-unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
+#unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
 
 sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include -Wno-array-bounds|g' package/network/services/umdns/Makefile
