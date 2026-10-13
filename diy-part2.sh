@@ -232,7 +232,7 @@ if [ -f "$EQOS_MK" ]; then
     sed -i '/hotplug\.d\/iface/d' "$EQOS_MK"
     echo "......... luci-app-eqos Makefile"
 fi
-
+unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 #cp $GITHUB_WORKSPACE/patches/Makefile.eqos $GITHUB_WORKSPACE/x-wrt/feeds/kenzo/luci-app-eqos/Makefile
 sed -i 's|TARGET_LDFLAGS:=-L\$(STAGING_DIR)/usr/lib/libxcrypt \$(TARGET_LDFLAGS)|& -lintl|' $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/shadow/Makefile
 #sed -i '/define KernelPackage\/dvb-usb-cxusb/,/endef/ { s/\($(call AddDepends\/dvb-usb,.*\))/\1 +kmod-video-videobuf2 +kmod-video-videobuf2-vmalloc)/ }'  $GITHUB_WORKSPACE/x-wrt/package/kernel/linux/modules/dvb.mk
