@@ -9,7 +9,7 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-bit="32"
+bit="64"
 cd qsdk
 repo sync
 cd..
@@ -27,10 +27,11 @@ cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/wor
 cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit .config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 cd qsdk
+unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
 make kernel_oldconfig
 make prepare V=s -j4
 #make -j$(nproc) || make -j1 V=s
 
 mkdir  -p ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/targets/ipq*/generic/drivers
 
-zip -r qsdk_64bit_`date +%d%h%y_%H%M`.zip  ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/targets/ipq*/generic/
+#zip -r qsdk_64bit_`date +%d%h%y_%H%M`.zip  ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/targets/ipq*/generic/
