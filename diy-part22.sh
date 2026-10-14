@@ -36,7 +36,7 @@ sed -i 's/^# CONFIG_ARM_MODULE_PLTS is not set$/CONFIG_ARM_MODULE_PLTS=y/' targe
 #cp  $GITHUB_WORKSPACE/patches/Makefile.linuxtv $GITHUB_WORKSPACE/x-wrt/package/openwrt-dvb/linuxtv/Makefile
 #cd ..
 sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/small/clashoo/
-unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
+unzip  $GITHUB_WORKSPACE/iCast_source.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 unzip  $GITHUB_WORKSPACE/clashoo.zip -d $GITHUB_WORKSPACE/x-wrt/package/small/
 unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
 

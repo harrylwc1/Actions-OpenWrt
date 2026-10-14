@@ -27,13 +27,13 @@ cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/wor
 cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit .config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 cd qsdk
-unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
+unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast_source.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
 make kernel_oldconfig
 make prepare V=s -j4
 make package/iCast/compile V=s -j4
 mkdir drivers_$bit
 find build_dir/target-*/linux-*/linux-*/drivers/media/ -name *.ko -exec cp {} drivers_$bit/ \;
-cp -rf `find bin |grep iCast*.ipk` drivers_$bit/
+cp -rf `find bin/ -name *iCast*.ipk` drivers_$bit/
 zip -r qsdk_$bit_drivers.zip drivers_$bit
 #copy_file  
 #make -j$(nproc) || make -j1 V=s

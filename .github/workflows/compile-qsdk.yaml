@@ -255,7 +255,7 @@ jobs:
           URL1="${URL1%:8088*}:8088/upload"
               
           curl --limit-rate 2M --no-buffer --connect-timeout 10 --max-time 600 \
-          --progress-bar -u "${PASS}" -F "files=@drivers*.zip" "${URL1}"
+          --progress-bar -u "${PASS}" -F "files=@qsdk*drivers*.zip" "${URL1}"
 
           #cd x-wrt
           #ls -alt $GITHUB_WORKSPACE/x-wrt/.config
