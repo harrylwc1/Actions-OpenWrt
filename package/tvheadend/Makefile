@@ -11,10 +11,12 @@ PKG_NAME:=tvheadend
 PKG_VERSION:=4.3
 PKG_RELEASE:=$(AUTORELEASE)
 
+
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 PKG_SOURCE_VERSION:=master
+#ae37453
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/tvheadend/tvheadend.git
@@ -26,11 +28,10 @@ PKG_INSTALL:=1
 PKG_LICENSE:=GPL-3.0
 PKG_LICENSE_FILES:=LICENSE.md
 
+
+PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
 PKG_USE_MIPS16:=0
-
-# Explicitly declare host-side node package reliance for client-side toolchains (vite, vue-tsc, npm)
-PKG_BUILD_DEPENDS:=node/host
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -43,6 +44,31 @@ define Package/tvheadend
   URL:=https://tvheadend.org
   MAINTAINER:=CZ.NIC <packaging@turris.cz>
 endef
+
+  #DEPENDS:= \
+	#+librt \
+	#3+libffi \
+	#+libopenssl \
+	#$(ICONV_DEPENDS) \
+	#+zlib \
+	#+TVHEADEND_AVAHI_SUPPORT:libavahi-client \
+	#+TVHEADEND_REGEX_PCRE:libpcre \
+	#+TVHEADEND_REGEX_PCRE2:libpcre2 \
+	#+BUILD_PATENTED&&TVHEADEND_CSA:libdvbcsa
+
+## Transcoding | Add these to DEPENDS.
+##	+TVHEADEND_LIBFFMPEG:libffmpeg-full \
+##	+TVHEADEND_LIBVPX:libvpx \
+##	+TVHEADEND_LIBTHEORA:libtheora \
+##	+TVHEADEND_LIBVORBIS:libvorbis \
+##	+TVHEADEND_LIBOPUS:libopusenc \
+##	+TVHEADEND_LIBFDKAAC:fdk-aac \
+##	+BUILD_PATENTED&&TVHEADEND_LIBX264:libx264 \
+
+
+
+
+
 
 define Package/tvheadend/description
   Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
@@ -57,6 +83,12 @@ define Package/tvheadend/config
   source "$(SOURCE)/Config.in"
   endmenu
 endef
+
+
+# tvheadend needs iconv //TRANSLIT to build recording file names, which musl
+# does not implement, so always build against GNU libiconv.
+# With BUILD_NLS set, nls.mk already adds these for the same prefix.
+# ── bundle：由用户自己的选项控制，与 NLS 无关 ──
 
 ifeq ($(CONFIG_TVHEADEND_ENABLE_BUNDLE),y)
   CONFIGURE_ARGS += --enable-bundle
@@ -108,15 +140,18 @@ CONFIGURE_ARGS += \
 	--disable-libx265 \
 	--disable-hdhomerun \
 	--enable-libx265_static \
-	--enable-vue_build \
-	--disable-vue_cache \
-	--disable-execinfo
+	--disable-vue_build \
+	--enable-vue_bundle \
+        --disable-execinfo
 
+#TARGET_CFLAGS += -Wno-error=pointer-compare -ggdb3 -O0
 TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address 
 
 define Build/Prepare
 	cp -r files/.git $(PKG_BUILD_DIR)/
 	$(call Build/Prepare/Default)
+	#echo 'Tvheadend $(shell echo $(PKG_SOURCE_VERSION) | sed "s/^v//")~openwrt$(PKG_RELEASE)' \
+		#> $(PKG_BUILD_DIR)/debian/changelog
 endef
 
 define Package/conffiles
@@ -133,4 +168,3 @@ define Package/tvheadend/install
 endef
 
 $(eval $(call BuildPackage,tvheadend))
-
