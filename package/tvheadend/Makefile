@@ -29,7 +29,7 @@ PKG_LICENSE_FILES:=LICENSE.md
 PKG_FIXUP:=autoreconf
 PKG_USE_MIPS16:=0
 
-# 【關鍵修改 1】通知 OpenWrt 編譯主機需要準備好 Node.js，以便 TVH 釋放內建的 Vue Cache 資源
+# Explicitly declare host-side node package reliance for client-side toolchains (vite, vue-tsc, npm)
 PKG_BUILD_DEPENDS:=node/host
 
 include $(INCLUDE_DIR)/package.mk
@@ -108,11 +108,9 @@ CONFIGURE_ARGS += \
 	--disable-libx265 \
 	--disable-hdhomerun \
 	--enable-libx265_static \
-	--disable-vue_build \
-	--enable-vue_cache \
+	--enable-vue_build \
+	--disable-vue_cache \
 	--disable-execinfo
-
-# 【關鍵修改 2】上面將 --enable-vue_bundle 修正為了 --enable-vue_cache
 
 TARGET_CFLAGS += -Wno-format-security -Wno-error=array-bounds -Wno-error=address 
 
