@@ -287,6 +287,9 @@ jobs:
           
           # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
           #ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
+          mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+          cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+
            
       - name: 1. 在背景啟動 Upterm SSH 通道
         id: upterm_ssh

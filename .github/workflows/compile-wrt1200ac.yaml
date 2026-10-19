@@ -270,6 +270,10 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
+          mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+          cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+
+
       - name: SSH链接管理
         uses: lhotari/action-upterm@v1 
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
