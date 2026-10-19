@@ -270,6 +270,9 @@ jobs:
 
       - name: 下载安装包
         run: |
+          mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+          cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/ 
+        
           cd x-wrt 
           make download -j8 || make download -j1 V=s
           rm -rf $(find ./dl/ -size -1024c)
@@ -277,9 +280,9 @@ jobs:
           #git reset --hard 639419e
           #git revert 1a9ee367343edce263f82cc91a49d796c9d45ea3
           #git revert 41e1e838fbbb0308ad7353a3714e04b8c4585e7e
-          ##- name: Install SSH Key for Router
-          #run: |
-          # mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
+      ##- name: Install SSH Key for Router
+        #run: |
+         # mkdir -p $GITHUB_WORKSPACE/x-wrt/tmp_upload
           #mkdir -p ~/.ssh
           ### 從 GitHub Secrets 讀入私鑰並寫入檔案
           #echo "${{ secrets.ROUTER_SSH_KEY }}" > ~/.ssh/router_key
@@ -287,10 +290,7 @@ jobs:
           
           # 掃描並信任遠端路由器的主機指紋（預設埠 422），防止 SSH 互動式確認卡死
           #ssh-keyscan -p ${{ secrets.ROUTER_PORT }} ${{ secrets.SERVER1 }} >> ~/.ssh/known_hosts 2>/dev/null || true
-          mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
-          cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
-
-           
+          
       - name: 1. 在背景啟動 Upterm SSH 通道
         id: upterm_ssh
         uses: lhotari/action-upterm@v1
