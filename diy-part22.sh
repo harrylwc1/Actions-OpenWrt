@@ -245,6 +245,7 @@ cp $GITHUB_WORKSPACE/patches/Makefile.node $GITHUB_WORKSPACE/x-wrt/feeds/package
 
 
 sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include -Wno-array-bounds|g' package/network/services/umdns/Makefile
+sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/shadowsocks-libev
 
 sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/libs/mbedtls
 unzip $GITHUB_WORKSPACE/mbedtls.zip -d $GITHUB_WORKSPACE/x-wrt/package/libs/
