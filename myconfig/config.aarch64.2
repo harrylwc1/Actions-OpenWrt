@@ -5083,6 +5083,7 @@ CONFIG_PACKAGE_libopenssl=y
 # Build Options
 #
 CONFIG_OPENSSL_OPTIMIZE_SPEED=y
+# CONFIG_OPENSSL_KTLS is not set
 CONFIG_OPENSSL_WITH_ASM=y
 CONFIG_OPENSSL_WITH_DEPRECATED=y
 # CONFIG_OPENSSL_NO_DEPRECATED is not set
@@ -5313,7 +5314,6 @@ CONFIG_PACKAGE_libaprutil-ldap=m
 # CONFIG_PACKAGE_libaudit is not set
 # CONFIG_PACKAGE_libauparse is not set
 CONFIG_PACKAGE_libavahi-client=y
-# CONFIG_PACKAGE_libavahi-compat-libdnssd is not set
 CONFIG_PACKAGE_libavahi-dbus-support=y
 # CONFIG_PACKAGE_libavahi-nodbus-support is not set
 # CONFIG_PACKAGE_libbfd is not set
@@ -5393,14 +5393,14 @@ CONFIG_PACKAGE_libdevmapper=m
 # CONFIG_PACKAGE_libdevmapper-selinux is not set
 # CONFIG_PACKAGE_libdmapsharing is not set
 # CONFIG_PACKAGE_libdnet is not set
-# CONFIG_PACKAGE_libdrm is not set
+CONFIG_PACKAGE_libdrm=m
 CONFIG_PACKAGE_libdvbcsa=m
 
 #
 # Configuration
 #
 # CONFIG_LIBDVBCSA_DEBUG is not set
-# CONFIG_LIBDVBCSA_NEON is not set
+CONFIG_LIBDVBCSA_NEON=y
 # end of Configuration
 
 # CONFIG_PACKAGE_libdw is not set
@@ -5428,8 +5428,7 @@ CONFIG_PACKAGE_libfaad2=m
 CONFIG_PACKAGE_libfdisk=m
 # CONFIG_PACKAGE_libfdt is not set
 CONFIG_PACKAGE_libffi=y
-CONFIG_PACKAGE_libffmpeg-audio-dec=m
-# CONFIG_PACKAGE_libffmpeg-custom is not set
+CONFIG_PACKAGE_libffmpeg=m
 
 #
 # FFmpeg configuration
@@ -5452,8 +5451,8 @@ CONFIG_FFMPEG_PROGRAMS=y
 # Hardware acceleration
 #
 CONFIG_FFMPEG_LIBDRM=y
-CONFIG_FFMPEG_V4L2_M2M=y
-CONFIG_FFMPEG_V4L2_REQUEST=y
+# CONFIG_FFMPEG_V4L2_M2M is not set
+# CONFIG_FFMPEG_V4L2_REQUEST is not set
 
 #
 # Transport layer security
@@ -5490,7 +5489,6 @@ CONFIG_FFMPEG_ICONV=y
 # CONFIG_FFMPEG_SELECT_COMPONENTS is not set
 # end of FFmpeg configuration
 
-CONFIG_PACKAGE_libffmpeg-full=m
 # CONFIG_PACKAGE_libffmpeg-mini is not set
 CONFIG_PACKAGE_libfido2=m
 CONFIG_PACKAGE_libflac=m
