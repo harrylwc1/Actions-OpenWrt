@@ -39,8 +39,8 @@ sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/small/clashoo/
 unzip  $GITHUB_WORKSPACE/iCast_source.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 unzip  $GITHUB_WORKSPACE/clashoo.zip -d $GITHUB_WORKSPACE/x-wrt/package/small/
 unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
-
-
+sudo -rf $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/ffmpeg/
+unzip $GITHUB_WORKSPACE/ffmpeg.zip $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/
 #kernel 5.4.154 
 #git checkout 2f04012b20515eec74563de74d0528e603aa6f89
 
