@@ -12,12 +12,10 @@ cd compile
 bit="32"
 cd qsdk
 repo sync
-cd ..
 
 #source qca/configs/qsdk/setup-environment -t ipq53xx -a 32 -p premium -d n -c n
 source qca/configs/qsdk/setup-environment -t ipq53xx -a $bit -p premium -d n -c n
-jdc-be65000-qsdk-compile/cover
-
+~/work/Actions-OpenWrt/Actions-OpenWrt/jdc-be65000-qsdk-compile/cover
 
 
 cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/target/linux/feeds/ipq53xx/config-5.4
