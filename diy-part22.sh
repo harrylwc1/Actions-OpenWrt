@@ -238,5 +238,11 @@ else
 fi
 
 #unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
+rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/node/Makefile
+rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/node/patches/*
+
+cp $GITHUB_WORKSPACE/patches/007-fix_host_build_on_macos.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/node/patches/
+cp $GITHUB_WORKSPACE/patches/Makefile.node $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/node/Makefile
+
 
 sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include -Wno-array-bounds|g' package/network/services/umdns/Makefile
