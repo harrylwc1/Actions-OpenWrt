@@ -5313,6 +5313,7 @@ CONFIG_PACKAGE_libaprutil-ldap=m
 # CONFIG_PACKAGE_libaudit is not set
 # CONFIG_PACKAGE_libauparse is not set
 CONFIG_PACKAGE_libavahi-client=y
+# CONFIG_PACKAGE_libavahi-compat-libdnssd is not set
 CONFIG_PACKAGE_libavahi-dbus-support=y
 # CONFIG_PACKAGE_libavahi-nodbus-support is not set
 # CONFIG_PACKAGE_libbfd is not set
@@ -5427,188 +5428,9 @@ CONFIG_PACKAGE_libfaad2=m
 CONFIG_PACKAGE_libfdisk=m
 # CONFIG_PACKAGE_libfdt is not set
 CONFIG_PACKAGE_libffi=y
-CONFIG_PACKAGE_libffmpeg=m
-
-#
-# FFmpeg configuration
-#
-
-#
-# Licensing
-#
-CONFIG_FFMPEG_GPL=y
-CONFIG_FFMPEG_VERSION3=y
-# CONFIG_FFMPEG_NONFREE is not set
-
-#
-# Build properties
-#
-CONFIG_FFMPEG_OPTIMIZE_SIZE=y
-CONFIG_FFMPEG_PROGRAMS=y
-
-#
-# Hardware acceleration
-#
-CONFIG_FFMPEG_LIBDRM=y
-# CONFIG_FFMPEG_V4L2_M2M is not set
-# CONFIG_FFMPEG_V4L2_REQUEST is not set
-
-#
-# Transport layer security
-#
-# CONFIG_FFMPEG_TLS_NONE is not set
-# CONFIG_FFMPEG_TLS_GNUTLS is not set
-# CONFIG_FFMPEG_TLS_OPENSSL is not set
-CONFIG_FFMPEG_TLS_MBEDTLS=y
-
-#
-# External libraries
-#
-CONFIG_FFMPEG_LIBOPUS=y
-CONFIG_FFMPEG_LIBVORBIS=y
-CONFIG_FFMPEG_LIBVPX=y
-# CONFIG_FFMPEG_LIBWEBP is not set
-# CONFIG_FFMPEG_LIBSPEEX is not set
-# CONFIG_FFMPEG_LIBXML2 is not set
-CONFIG_FFMPEG_LAME=y
-# CONFIG_FFMPEG_SHINE is not set
-CONFIG_FFMPEG_LIBX264=y
-
-#
-# System libraries
-#
-# CONFIG_FFMPEG_LIBV4L2 is not set
-CONFIG_FFMPEG_BZLIB=y
-# CONFIG_FFMPEG_LZMA is not set
-CONFIG_FFMPEG_ICONV=y
-
-#
-# Components
-#
-CONFIG_FFMPEG_SELECT_COMPONENTS=y
-
-#
-# Encoders
-#
-CONFIG_FFMPEG_ENCODER_ac3=y
-# CONFIG_FFMPEG_ENCODER_jpegls is not set
-# CONFIG_FFMPEG_ENCODER_mpeg1video is not set
-# CONFIG_FFMPEG_ENCODER_mpeg2video is not set
-# CONFIG_FFMPEG_ENCODER_mpeg4 is not set
-# CONFIG_FFMPEG_ENCODER_pcm_s16be is not set
-# CONFIG_FFMPEG_ENCODER_pcm_s16le is not set
-# CONFIG_FFMPEG_ENCODER_png is not set
-CONFIG_FFMPEG_ENCODER_vorbis=y
-CONFIG_FFMPEG_ENCODER_zlib=y
-
-#
-# Decoders
-#
-CONFIG_FFMPEG_DECODER_aac=y
-CONFIG_FFMPEG_DECODER_aac_latm=y
-# CONFIG_FFMPEG_DECODER_adpcm is not set
-CONFIG_FFMPEG_DECODER_ac3=y
-# CONFIG_FFMPEG_DECODER_alac is not set
-# CONFIG_FFMPEG_DECODER_amrnb is not set
-# CONFIG_FFMPEG_DECODER_amrwb is not set
-# CONFIG_FFMPEG_DECODER_ape is not set
-# CONFIG_FFMPEG_DECODER_atrac3 is not set
-CONFIG_FFMPEG_DECODER_flac=y
-# CONFIG_FFMPEG_DECODER_gif is not set
-# CONFIG_FFMPEG_DECODER_h264 is not set
-CONFIG_FFMPEG_DECODER_hevc=y
-# CONFIG_FFMPEG_DECODER_jpegls is not set
-# CONFIG_FFMPEG_DECODER_mp2 is not set
-CONFIG_FFMPEG_DECODER_mp3=y
-# CONFIG_FFMPEG_DECODER_mpegvideo is not set
-# CONFIG_FFMPEG_DECODER_mpeg1video is not set
-# CONFIG_FFMPEG_DECODER_mpeg2video is not set
-# CONFIG_FFMPEG_DECODER_mpeg4 is not set
-CONFIG_FFMPEG_DECODER_mpc7=y
-# CONFIG_FFMPEG_DECODER_mpc8 is not set
-CONFIG_FFMPEG_DECODER_opus=y
-# CONFIG_FFMPEG_DECODER_pcm_s16be is not set
-# CONFIG_FFMPEG_DECODER_pcm_s16le is not set
-# CONFIG_FFMPEG_DECODER_png is not set
-# CONFIG_FFMPEG_DECODER_vc1 is not set
-# CONFIG_FFMPEG_DECODER_vorbis is not set
-# CONFIG_FFMPEG_DECODER_wavpack is not set
-# CONFIG_FFMPEG_DECODER_wmav1 is not set
-# CONFIG_FFMPEG_DECODER_wmav2 is not set
-# CONFIG_FFMPEG_DECODER_wmalossless is not set
-# CONFIG_FFMPEG_DECODER_wmapro is not set
-CONFIG_FFMPEG_DECODER_zlib=y
-
-#
-# Muxers
-#
-CONFIG_FFMPEG_MUXER_ac3=y
-# CONFIG_FFMPEG_MUXER_avi is not set
-# CONFIG_FFMPEG_MUXER_h264 is not set
-CONFIG_FFMPEG_MUXER_hevc=y
-# CONFIG_FFMPEG_MUXER_mp3 is not set
-# CONFIG_FFMPEG_MUXER_mp4 is not set
-# CONFIG_FFMPEG_MUXER_mpeg1video is not set
-# CONFIG_FFMPEG_MUXER_mpeg2video is not set
-CONFIG_FFMPEG_MUXER_mpegts=y
-# CONFIG_FFMPEG_MUXER_ogg is not set
-# CONFIG_FFMPEG_MUXER_rtp is not set
-
-#
-# Demuxers
-#
-CONFIG_FFMPEG_DEMUXER_aac=y
-# CONFIG_FFMPEG_DEMUXER_avi is not set
-CONFIG_FFMPEG_DEMUXER_ac3=y
-# CONFIG_FFMPEG_DEMUXER_aiff is not set
-# CONFIG_FFMPEG_DEMUXER_amr is not set
-# CONFIG_FFMPEG_DEMUXER_ape is not set
-CONFIG_FFMPEG_DEMUXER_flac=y
-# CONFIG_FFMPEG_DEMUXER_h264 is not set
-CONFIG_FFMPEG_DEMUXER_hevc=y
-CONFIG_FFMPEG_DEMUXER_matroska=y
-CONFIG_FFMPEG_DEMUXER_mov=y
-CONFIG_FFMPEG_DEMUXER_mp3=y
-# CONFIG_FFMPEG_DEMUXER_mpegvideo is not set
-# CONFIG_FFMPEG_DEMUXER_mpegps is not set
-CONFIG_FFMPEG_DEMUXER_mpegts=y
-CONFIG_FFMPEG_DEMUXER_mpc=y
-# CONFIG_FFMPEG_DEMUXER_mpc8 is not set
-CONFIG_FFMPEG_DEMUXER_ogg=y
-# CONFIG_FFMPEG_DEMUXER_rm is not set
-# CONFIG_FFMPEG_DEMUXER_rtsp is not set
-# CONFIG_FFMPEG_DEMUXER_sdp is not set
-# CONFIG_FFMPEG_DEMUXER_rtp is not set
-# CONFIG_FFMPEG_DEMUXER_vc1 is not set
-# CONFIG_FFMPEG_DEMUXER_wav is not set
-# CONFIG_FFMPEG_DEMUXER_wv is not set
-
-#
-# Parsers
-#
-CONFIG_FFMPEG_PARSER_aac=y
-CONFIG_FFMPEG_PARSER_ac3=y
-CONFIG_FFMPEG_PARSER_flac=y
-# CONFIG_FFMPEG_PARSER_h264 is not set
-CONFIG_FFMPEG_PARSER_hevc=y
-# CONFIG_FFMPEG_PARSER_mpegaudio is not set
-# CONFIG_FFMPEG_PARSER_mpegvideo is not set
-# CONFIG_FFMPEG_PARSER_mpeg4video is not set
-CONFIG_FFMPEG_PARSER_opus=y
-# CONFIG_FFMPEG_PARSER_vc1 is not set
-
-#
-# Protocols
-#
-CONFIG_FFMPEG_PROTOCOL_file=y
-CONFIG_FFMPEG_PROTOCOL_http=y
-# CONFIG_FFMPEG_PROTOCOL_icecast is not set
-CONFIG_FFMPEG_PROTOCOL_pipe=y
-# CONFIG_FFMPEG_PROTOCOL_rtp is not set
-# CONFIG_FFMPEG_PROTOCOL_tcp is not set
-# CONFIG_FFMPEG_PROTOCOL_udp is not set
-# end of FFmpeg configuration
-
+CONFIG_PACKAGE_libffmpeg-audio-dec=m
+# CONFIG_PACKAGE_libffmpeg-custom is not set
+CONFIG_PACKAGE_libffmpeg-full=m
 # CONFIG_PACKAGE_libffmpeg-mini is not set
 CONFIG_PACKAGE_libfido2=m
 CONFIG_PACKAGE_libflac=m
@@ -8649,7 +8471,7 @@ CONFIG_PACKAGE_fdk-aac=m
 #
 # Configuration
 #
-# CONFIG_FDK-AAC_OPTIMIZE_SPEED is not set
+CONFIG_FDK-AAC_OPTIMIZE_SPEED=y
 # end of Configuration
 
 # CONFIG_PACKAGE_forked-daapd is not set
@@ -8660,7 +8482,7 @@ CONFIG_PACKAGE_lame-lib=m
 #
 # Configuration
 #
-# CONFIG_LAME-LIB_OPTIMIZE_SPEED is not set
+CONFIG_LAME-LIB_OPTIMIZE_SPEED=y
 # end of Configuration
 
 # CONFIG_PACKAGE_liblo-utils is not set
