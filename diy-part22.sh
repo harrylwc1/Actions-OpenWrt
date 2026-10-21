@@ -249,9 +249,9 @@ sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/shadowsocks-libev
 mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
 cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
 
-sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/libs/mbedtls
-unzip $GITHUB_WORKSPACE/mbedtls.zip -d $GITHUB_WORKSPACE/x-wrt/package/libs/
-sudo rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg
-unzip $GITHUB_WORKSPACE/ffmpeg.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/
-sudo rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/avahi
-unzip $GITHUB_WORKSPACE/avahi.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/
+#sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/libs/mbedtls
+#unzip $GITHUB_WORKSPACE/mbedtls.zip -d $GITHUB_WORKSPACE/x-wrt/package/libs/
+#sudo rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/ffmpeg
+#unzip $GITHUB_WORKSPACE/ffmpeg.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/
+#sudo rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/avahi
+#unzip $GITHUB_WORKSPACE/avahi.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/
