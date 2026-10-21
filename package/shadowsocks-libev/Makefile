@@ -14,7 +14,7 @@ include $(TOPDIR)/rules.mk
 #
 PKG_NAME:=shadowsocks-libev
 PKG_VERSION:=3.3.5
-PKG_RELEASE:=11
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(PKG_VERSION)
@@ -24,13 +24,12 @@ PKG_MAINTAINER:=Yousong Zhou <yszhou4tech@gmail.com>
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_LICENSE_FILES:=LICENSE
-PKG_CPE_ID:=cpe:/a:shadowsocks:shadowsocks-libev
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
-PKG_BUILD_FLAGS:=no-mips16 lto
+PKG_USE_MIPS16:=0
 PKG_BUILD_PARALLEL:=1
-PKG_BUILD_DEPENDS:=c-ares pcre2
+PKG_BUILD_DEPENDS:=c-ares pcre
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -72,8 +71,8 @@ define Package/shadowsocks-libev/Default
 
 endef
 
-DEPENDS_ss-local = +libpcre2
-DEPENDS_ss-server = +libcares +libpcre2
+DEPENDS_ss-local = +libpcre
+DEPENDS_ss-server = +libcares +libpcre
 
 SHADOWSOCKS_COMPONENTS:=ss-local ss-redir ss-tunnel ss-server
 define shadowsocks-libev/templates
@@ -90,19 +89,25 @@ define Package/shadowsocks-libev-ss-rules
   SUBMENU:=Web Servers/Proxies
   TITLE:=shadowsocks-libev ss-rules
   URL:=https://github.com/shadowsocks/shadowsocks-libev
-  DEPENDS:=+firewall4 \
-	   +ip \
-	   +resolveip \
-	   +ucode \
-	   +ucode-mod-fs \
-	   +shadowsocks-libev-ss-redir \
-	   +shadowsocks-libev-config \
-	   +kmod-nft-tproxy
+  DEPENDS:=+ip +ipset +iptables-mod-tproxy +resolveip +shadowsocks-libev-ss-redir +shadowsocks-libev-config
 endef
 
 define Package/shadowsocks-libev-ss-rules/install
-	$(INSTALL_DIR) $(1)/usr/share/ss-rules
-	$(INSTALL_DATA) ./files/ss-rules/* $(1)/usr/share/ss-rules/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/ss-rules $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) ./files/firewall.ss-rules $(1)/etc
+	$(INSTALL_BIN) ./files/ss-rules.defaults $(1)/etc/uci-defaults
+endef
+
+define Package/shadowsocks-libev-ss-rules/prerm
+#!/bin/sh
+s=firewall.ss_rules
+uci get "$$s" >/dev/null || exit 0
+uci batch <<-EOF
+	delete $$s
+	commit firewall
+EOF
 endef
 
 define Build/Prepare
@@ -121,6 +126,7 @@ CONFIGURE_ARGS += \
 	--disable-assert \
 	--disable-ssp \
 
+TARGET_CFLAGS += -flto
 TARGET_LDFLAGS += -Wl,--gc-sections,--as-needed
 
 $(eval $(call BuildPackage,shadowsocks-libev-config))
