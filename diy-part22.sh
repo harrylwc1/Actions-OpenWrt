@@ -250,7 +250,7 @@ mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
 cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
 
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/lang/php8/
-unzip $GITHUB_WORKSPACE/php8.zip -d  -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
+unzip $GITHUB_WORKSPACE/php8.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
 
 
 #sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/libs/mbedtls
