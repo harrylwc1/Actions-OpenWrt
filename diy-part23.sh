@@ -25,7 +25,7 @@ cp  ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/kernel_config.qsdk$bit ~/wor
 cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/.config
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 cd qsdk
-unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast_source.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
+unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
 make kernel_oldconfig
 make prepare V=s -j4
 make package/iCast/compile V=s -j4
