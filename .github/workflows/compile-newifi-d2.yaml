@@ -366,7 +366,7 @@ jobs:
           echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
           
           # 使用你廣義的核心路徑，並排除 oot 驅動
-          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko`  $DRIVERS_DIR/
+          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko|grep ipk`  $DRIVERS_DIR/
           KO_FILES=$(find x-wrt/build_dir/target*/linux*/linux-*/ -name "*.ko" | grep -v oot || true)
           if [ -n "$KO_FILES" ]; then
               echo "$KO_FILES" | while read -r src_file; do

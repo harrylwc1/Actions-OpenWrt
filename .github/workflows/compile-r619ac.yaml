@@ -446,7 +446,8 @@ jobs:
         
           # 2. 安全地尋找並複製核心驅動程式 (.ko)
           echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
-          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko`  $DRIVERS_DIR/
+ 
+          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko|grep ipk`  $DRIVERS_DIR/
 
           find x-wrt/build_dir/target*a7*/linux*/linux-*/ -name "*.ko" | grep -v oot | while read -r src_file; do
               if [ -f "$src_file" ]; then
