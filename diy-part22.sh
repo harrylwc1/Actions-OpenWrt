@@ -39,6 +39,8 @@ sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/small/clashoo/
 unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 unzip  $GITHUB_WORKSPACE/clashoo.zip -d $GITHUB_WORKSPACE/x-wrt/package/small/
 unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
+sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/lang/php8/
+unzip $GITHUB_WORKSPACE/php8.zip -d  -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
 
 #kernel 5.4.154 
 #git checkout 2f04012b20515eec74563de74d0528e603aa6f89
