@@ -39,8 +39,6 @@ sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/small/clashoo/
 unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 unzip  $GITHUB_WORKSPACE/clashoo.zip -d $GITHUB_WORKSPACE/x-wrt/package/small/
 unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
-sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/lang/php8/
-unzip $GITHUB_WORKSPACE/php8.zip -d  -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
 
 #kernel 5.4.154 
 #git checkout 2f04012b20515eec74563de74d0528e603aa6f89
@@ -250,6 +248,10 @@ sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|TARGET_CFLAGS += -I$(STA
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/shadowsocks-libev
 mkdir  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
 cp $GITHUB_WORKSPACE/patches/001-neon-float-abi.patch  $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/libdvbcsa/patches/
+
+sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/lang/php8/
+unzip $GITHUB_WORKSPACE/php8.zip -d  -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
+
 
 #sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/libs/mbedtls
 #unzip $GITHUB_WORKSPACE/mbedtls.zip -d $GITHUB_WORKSPACE/x-wrt/package/libs/
