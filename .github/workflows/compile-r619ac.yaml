@@ -476,7 +476,7 @@ jobs:
          PASS: ${{ secrets.FILEUPLOAD }}
         run: |
           
-          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko|grep ipk`  drivers/
+          cp -f `find x-wrt/build_dir/target*/ -name *icast*.ko|grep ipk`  $DRIVERS_DIR/
           ZIP_NAME="OpenWrt_bin_${{ env.DEVICE_NAME }}${{ env.BUILD_VERSION }}${{ env.FILE_DATE }}${{ env.KERNEL_VER }}.zip"
           echo "====== 開始打包韌體檔案: ${ZIP_NAME} ======"
           
