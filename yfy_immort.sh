@@ -1,11 +1,12 @@
 
-git clone https://github.com/VIKINGYFY/immortal x-wrt 
+git clone https://github.com/VIKINGYFY/immortalwrt x-wrt
+cp myconfig/config.yfy.2 x-wrt/.config
 
 sudo cp patches/copy_file.sh /usr/bin
 sudo chmod 755 /usr/bin/copy_file.sh
 cp patches/copy_file.sh x-wrt/
 chmod 755 x-wrt/copy_file.sh
-
+cd x-wrt
 ./scripts/feeds update -a
 ./scripts/feeds install -a -f
 
@@ -84,7 +85,7 @@ cd  $GITHUB_WORKSPACE/x-wrt/package/
 cd $GITHUB_WORKSPACE/x-wrt/
 git clone https://github.com/tvheadend/tvheadend.git
 cp -r $GITHUB_WORKSPACE/x-wrt/tvheadend/.git $GITHUB_WORKSPACE/x-wrt/package/tvheadend/files/
-rm -r feeds/packages/multimedia/tvheadend
+sudo rm -rf  feeds/packages/multimedia/tvheadend/
 
 
 #cp $GITHUB_WORKSPACE/patches/0003-mutils_time.patch $GITHUB_WORKSPACE/x-wrt/package/feeds/packages/mailsend/patches/
