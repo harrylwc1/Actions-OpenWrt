@@ -37,10 +37,10 @@ env:
   TVH: true
   CONFIG_FILENAME_FOR_2ND_COMPILE: config.yfy.2
   BUILD_KERNEL_MODULES: true
-  DRIVERS_DIR: x-wrt/bin/targets/ipq53xx/drivers
-  KMOD_DIR: x-wrt/bin/targets/ipq53xx/kmod 
+  DRIVERS_DIR: x-wrt/bin/targets/qualcommbe/ipq53xx/drivers
+  KMOD_DIR: x-wrt/bin/targets/qualcommbe/ipq53xx/kmod 
   KERNEL_CONFIG: 'myconfig/kernel_config.yfy'
-  KERNEL_CONFIG_DIR: x-wrt/target/linux/ipq53xx
+  KERNEL_CONFIG_DIR: x-wrt/target/linux/qualcommbe
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7620
   #KERNEL_CONFIG_DIR: target/linux/ramips/mt7621
   #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
