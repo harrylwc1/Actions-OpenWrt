@@ -68,8 +68,8 @@ jobs:
   build_openwrt:
     ###@####
     name: Build JDC BE6500  TVH yfy immortalwrt  firmware
-    runs-on: ubuntu-22.04
-    #runs-on: ubuntu-latest
+    #runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     #continue-on-error: true 
     #runs-on: ubuntu-22.10
     #if: github.event.repository.owner.id == github.event.sender.idzip
