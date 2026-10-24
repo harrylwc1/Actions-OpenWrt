@@ -182,35 +182,17 @@ jobs:
 
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
- 
-
-      - name: Space cleanup & Install dependencies
-        env:
-          SSH_ACTIONS: true
-          DEBIAN_FRONTEND: noninteractive
+      - name: Install dependencies
         run: |
-          # 1. 優先關閉 Swap 釋放實體空間
-          sudo swapoff -a
-          sudo rm -f /swapfile
-          
-          # 2. 移除大型預裝目錄
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
-          sudo rm -f /usr/local/share/chromium/chrome-linux/chrome /opt/microsoft/msedge/msedge
-          
-          # 3. 精簡 purge 清單（只砍真正存在的大型套件，避免 apt 盲目搜尋）
-          sudo -E apt-get -y purge firefox* google* dotnet* openjdk* temurin* mysql* php* mongodb* snapd* rclone nginx* || true
-          
-          # 4. 清理乾淨後再更新來源
-          sudo -E apt-get clean
-          sudo -E apt-get update
-          
-          # 5. 【關鍵修正】使用 --no-install-recommends 阻止安裝巨型 LaTeX (dblatex)
-          sudo -E apt-get -y --no-install-recommends install nodejs npm opencc ccache build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libfuse-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig libtinfo5 rsync
-          
-          # 6. 最後深度清理並檢查空間
-          sudo -E apt-get -y autoremove --purge
-          sudo -E apt-get clean
-          df -kh
+           sudo apt-get update
+           # 移除 libtinfo5，因为它已通过上面的 .deb 包手动安装
+           sudo -E apt-get -y --no-install-recommends install \
+           nodejs npm opencc ccache build-essential asciidoc binutils bzip2 gawk gettext \
+           git libncurses5-dev libfuse-dev libz-dev patch python3 unzip zlib1g-dev \
+           lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib \
+           p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils \
+           upx libelf-dev autoconf automake libtool autopoint device-tree-compiler \
+           antlr3 gperf swig rsync bison cmake ninja-build python3-distutils file wget xsltproc
       - name: 清理空间(Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
