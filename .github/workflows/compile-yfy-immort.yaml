@@ -192,7 +192,8 @@ jobs:
            lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib \
            p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils \
            upx libelf-dev autoconf automake libtool autopoint device-tree-compiler \
-           antlr3 gperf swig rsync bison cmake ninja-build python3-distutils file wget xsltproc
+           antlr3 gperf swig rsync bison cmake ninja-build file wget xsltproc \
+           python3-setuptools python3-dev python3-pip
       - name: 清理空间(Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
