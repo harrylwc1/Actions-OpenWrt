@@ -7,7 +7,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 #
 ####@
-name: Compile JDC TVH immortalwrt-penWrt offical Images  
+name: Compile JDC TVH yfy immort Images  
 
 on:
   #repository_dispatch:
@@ -53,7 +53,7 @@ env:
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
   UPDATE_MULTI_CORE_FILE3: myconfig/sys.uc
-  KERNEL_MODULE: myconfig/kernel_jdc3
+  KERNEL_MODULE: myconfig/kernel_jdc
   FEEDS_CONF: feeds.conf.default
   DIY_P1_SH: yfy_immort.sh
   DIY_P2_SH: diy-part22.sh
@@ -67,7 +67,7 @@ jobs:
 
   build_openwrt:
     ###@####
-    name: Build JDC BE6500  TVH immortalwrt  firmware
+    name: Build JDC BE6500  TVH yfy immortalwrt  firmware
     runs-on: ubuntu-22.04
     #runs-on: ubuntu-latest
     #continue-on-error: true 
@@ -279,39 +279,10 @@ jobs:
         run: |
           mkdir -p $KMOD_DIR
           mkdir -p $DRIVERS_DIR
-          #cp patches/Makefile.golang x-wrt/feeds/packages/lang/golang/golang/Makefile
-          #rm x-wrt/feeds/packages/lang/golang/golang/patches/001* 
           cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
           [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
- 
-          cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config 
-          cp patches/kernel_ver.patch x-wrt/ 
-          
           cd x-wrt
-          # 1. 修改 include/kernel-defaults.mk
-          # 將 grep '=[ym]' ... | mkhash md5 > ... 替換為直接複製根目錄的 vermagic
-          sed -i 's|grep '\''=\[ym\]'\'' \$(LINUX_DIR)/\.config\.set \| LC_ALL=C sort \| mkhash md5 > \$(LINUX_DIR)/\.vermagic|cp \$(TOPDIR)/vermagic \$(LINUX_DIR)/\.vermagic|g' include/kernel-defaults.mk
 
-          # 2. 修改 package/kernel/linux/Makefile
-          # 將 STAMP_BUILT 尾部的 mkhash md5 計算邏輯，替換為直接讀取 .vermagic 檔案內容
-          sed -i 's|STAMP_BUILT:=\$(STAMP_BUILT)_\$(shell \$(SCRIPT_DIR)/kconfig\.pl \$(LINUX_DIR)/\.config \| mkhash md5)|STAMP_BUILT:=\$(STAMP_BUILT)_\$(shell cat \$(LINUX_DIR)/\.vermagic)|g' package/kernel/linux/Makefile
-
-          # 3. 寫入你 BE6500 閉源 ROM 專屬的 Vermagic 雜湊密碼
-          echo "f9a2fd602dfa70f813430985afc15873" > vermagic
-
-          # 4. 防止 GitHub Actions 因 DVB 核心新選項互動問答而卡死超時
-          make oldconfig </dev/null
-          
-          #echo f9a2fd602dfa70f813430985afc15873>./vermagic
-          #git apply --ignore-space-change --ignore-whitespace kernel_ver.patch
-          #echo 952ab6bf7329ff5b9354b27b7c5e31d0>./vermagic
-          #echo d04d8d4d6f3bad7588be7c9e49004fda>./vermagic 
-          #git apply --ignore-space-change --ignore-whitespace kernel_ver.patch
-          
-          #rm package/firmware/wireless-regdb/patches/*
-          #sed -i 's/CONFIG_PACKAGE_node=m/#CONFIG_PACKAGE_node=m/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
-          #sed -i 's/CONFIG_NODEJS_ICU_SMALL=y/#CONFIG_NODEJS_ICU_SMALL=y/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
-          #sed -i 's/CONFIG_PACKAGE_node-npm=m/#CONFIG_PACKAGE_node-npm=m/g' $GITHUB_WORKSPACE/myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE
  
           [ -d "build_dir" ] && sudo mv build_dir /mnt/ || ( mkdir build_dir;sudo mv build_dir /mnt/ )
           ln -s /mnt/build_dir .
@@ -347,15 +318,9 @@ jobs:
         run: |
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
-           #sed -i 's/CONFIG_PREEMPT_NONE_BUILD=y/CONFIG_PREEMPT=y/g' $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
-           #[ -e $KERNEL_MODULE ] && cat $KERNEL_MODULE >> $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION 
            cd x-wrt 
-           #sudo rm -rf package/feeds/packages/python-py
-           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
            echo cpu core=$(nproc)
            make -j$(nproc)
-           #|| make -j1 V=s
-           #[ $? != 0 ] && make V=s || echo "build success" 
            cd ../ 
            cp -f x-wrt/build_dir/target-*a7*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR
            chmod 755 $DRIVERS_DIR/busybox
