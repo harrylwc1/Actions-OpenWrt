@@ -373,6 +373,7 @@ jobs:
           VERSION_FILE=$(find x-wrt/bin/targets/ -name version.buildinfo | head -n 1)
           if [ -n "$VERSION_FILE" ] && [ -f "$VERSION_FILE" ]; then
               head -n 1 "$VERSION_FILE" > BUILD_VERSION
+              echo "BUILD_VERSION=_$(cat BUILD_VERSION)" >> $GITHUB_ENV
               echo "成功寫入版本號：$(cat BUILD_VERSION)"
           else
               echo "警告：找不到 version.buildinfo 檔案"
