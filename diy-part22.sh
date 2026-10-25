@@ -260,3 +260,4 @@ unzip $GITHUB_WORKSPACE/php8.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/lang/
 #unzip $GITHUB_WORKSPACE/ffmpeg.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/multimedia/
 #sudo rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/avahi
 #unzip $GITHUB_WORKSPACE/avahi.zip -d $GITHUB_WORKSPACE/x-wrt/feeds/packages/libs/
+cp $GITHUB_WORKSPACE/x-wrt/package/shadowsocks-libev/Makefile.old $GITHUB_WORKSPACE/x-wrt/package/shadowsocks-libev/Makefile
