@@ -174,7 +174,7 @@ mv $GITHUB_WORKSPACE/patches/400-custom_hk-change-txpower-and-dfs.patch $GITHUB_
 unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 cd /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt
 
-sed -i 's/+PACKAGE_icu:icu/+libicu/' feeds/packages/net/samba4/Makefile
+sed -i 's/+PACKAGE_icu:icu/+icu/' feeds/packages/net/samba4/Makefile
 
 
 exit 0
