@@ -275,17 +275,19 @@ jobs:
       - name: Compile again after .config updated or add kernel modules
         if: env.BUILD_KERNEL_MODULES == 'true'
         run: |
+           sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU=y/g' x-wrt/.config
+           sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS=y/g' x-wrt/.config
            cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
            cd x-wrt 
            echo cpu core=$(nproc)
            make -j$(nproc)
            cd ../ 
-           cp -f x-wrt/build_dir/target-*a7*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR
-           chmod 755 $DRIVERS_DIR/busybox
-           cp -f x-wrt/build_dir/target-*a7*/busybox-*/busybox-*/ipkg-install/bin/busybox busybox.$ROUTER_MODEL
+           #cp -f x-wrt/build_dir/target*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR
+           ##chmod 755 $DRIVERS_DIR/busybox
+           #cp -f x-wrt/build_dir/target*/busybox-*/busybox-*/ipkg-install/bin/busybox busybox.$ROUTER_MODEL
            
-           cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
+           #cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
       - name: Prepare artifact
@@ -297,7 +299,7 @@ jobs:
         
           # 2. 安全地尋找並複製核心驅動程式 (.ko)
           echo "=== 正在尋找所有核心目錄下的 .ko 檔案 ==="
-          find x-wrt/build_dir/target*a7*/linux*/linux-*/ -name "*.ko" | grep -v oot | while read -r src_file; do
+          find x-wrt/build_dir/target*/linux*/linux-*/ -name "*.ko" | grep -v oot | while read -r src_file; do
               if [ -f "$src_file" ]; then
                   filename=$(basename "$src_file")
                   dest_file="$DRIVERS_DIR/$filename"

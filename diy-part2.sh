@@ -1,4 +1,4 @@
-
+echo "set paste" >> ~/.vimrc
 
 
 sudo -E apt-get update

@@ -1,3 +1,4 @@
+echo "set paste" >> ~/.vimrc
 #got orignal config from router at /proc/config.gz | gunzip > /tmp/config-5.4.xxx
 
 sudo cp patches/copy_file.sh /usr/bin/

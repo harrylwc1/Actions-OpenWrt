@@ -1,3 +1,4 @@
+echo "set paste" >> ~/.vimrc
 git clone https://github.com/openwrt/openwrt x-wrt
 cp -r $GITHUB_WORKSPACE/myconfig/* $GITHUB_WORKSPACE/x-wrt/
 
