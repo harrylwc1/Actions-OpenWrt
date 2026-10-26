@@ -53,7 +53,7 @@ env:
   UPDATE_MULTI_CORE_FILE1: myconfig/sys.lua
   UPDATE_MULTI_CORE_FILE2: myconfig/processes.js
   UPDATE_MULTI_CORE_FILE3: myconfig/sys.uc
-  KERNEL_MODULE: myconfig/kernel_jdc
+  KERNEL_MODULE: myconfig/kernel_yfy
   FEEDS_CONF: feeds.conf.default
   DIY_P1_SH: yfy_immort.sh
   DIY_P2_SH: diy-part22.sh
@@ -275,9 +275,10 @@ jobs:
       - name: Compile again after .config updated or add kernel modules
         if: env.BUILD_KERNEL_MODULES == 'true'
         run: |
+          cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
+           
            sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU=y/g' x-wrt/.config
            sed -i 's/# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS is not set/CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS=y/g' x-wrt/.config
-           cp myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE x-wrt/.config
            [ -e $KERNEL_CONFIG ] && cp -f $KERNEL_CONFIG $KERNEL_CONFIG_DIR/config-$KERNEL_VERSION
            cd x-wrt 
            echo cpu core=$(nproc)
