@@ -46,7 +46,7 @@ env:
   #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu
   #KERNEL_CONFIG_DIR: x-wrt/target/linux/mvebu  
   MAKEMENU_CONFIG: false
-  KERNEL_MENUCONFIG: false
+  KERNEL_MENUCONFIG: true
   CPU_MULTI_CORE: true
   #5352319218:AAGkspTTlIjIRyfYlI7Egz4NciZ78bT3NF4
   KERNEL_VERSION: '6.18'
@@ -263,13 +263,7 @@ jobs:
          env:
            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
-      - name: SSH connection for KERNEL MENU CONFIG
-        if: env.KERNEL_MENUCONFIG == 'true'
-          # uses: lhotari/action-upterm@v1
-        uses: lhotari/action-upterm@v1
-        env:
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
+
 
 
       - name: Compile again after .config updated or add kernel modules
@@ -291,6 +285,13 @@ jobs:
            #cp busybox.$ROUTER_MODEL $GITHUB_WORKSPACE/x-wrt/tmp_upload
            #cp -f bin/targets/mvebu/cortexa9/openwrt-mvebu-cortexa9-linksys_wrt1200ac-squashfs-sysupgrade.bin bin/targets/mvebu/drivers/                                                               
            df -kh
+      - name: SSH connection for KERNEL MENU CONFIG
+        if: env.KERNEL_MENUCONFIG == 'true'
+          # uses: lhotari/action-upterm@v1
+        uses: lhotari/action-upterm@v1
+        env:
+         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}    
       - name: Prepare artifact
         run: |
           # 1. 確保目標資料夾存在（設定預設值）
