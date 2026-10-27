@@ -15,7 +15,7 @@ PKG_RELEASE:=1
 
 # 使用 Git 拉取源碼（包含完整的第三方依賴目錄）
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com
+PKG_SOURCE_URL:=https://github.com/shadowsocks/shadowsocks-c.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
 PKG_MIRROR_HASH:=skip
 
