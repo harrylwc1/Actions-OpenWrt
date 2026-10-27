@@ -1803,8 +1803,7 @@ CONFIG_BUSYBOX_CONFIG_FEATURE_TAR_FROM=y
 CONFIG_BUSYBOX_CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
 # CONFIG_BUSYBOX_CONFIG_FEATURE_TAR_UNAME_GNAME is not set
 # CONFIG_BUSYBOX_CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
-CONFIG_BUSYBOX_CONFIG_UNZIP=y
-# CONFIG_BUSYBOX_CONFIG_FEATURE_UNZIP_CDF is not set
+# CONFIG_BUSYBOX_CONFIG_UNZIP is not set
 # CONFIG_BUSYBOX_CONFIG_FEATURE_PATH_TRAVERSAL_PROTECTION is not set
 # end of Archival Utilities
 
@@ -2495,7 +2494,7 @@ CONFIG_BUSYBOX_CONFIG_TOP=y
 # CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_INTERACTIVE is not set
 CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
 CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
-# CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU is not set
+CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_CPU=y
 # CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_DECIMALS is not set
 CONFIG_BUSYBOX_CONFIG_FEATURE_TOP_SMP_PROCESS=y
 # CONFIG_BUSYBOX_CONFIG_FEATURE_TOPMEM is not set
@@ -4118,14 +4117,8 @@ CONFIG_PACKAGE_kmod-netlink-diag=y
 # CONFIG_PACKAGE_kmod-nsh is not set
 # CONFIG_PACKAGE_kmod-openvswitch is not set
 # CONFIG_PACKAGE_kmod-openvswitch-geneve is not set
-# CONFIG_PACKAGE_kmod-openvswitch-geneve-intree is not set
 # CONFIG_PACKAGE_kmod-openvswitch-gre is not set
-# CONFIG_PACKAGE_kmod-openvswitch-gre-intree is not set
-# CONFIG_PACKAGE_kmod-openvswitch-intree is not set
-# CONFIG_PACKAGE_kmod-openvswitch-lisp-intree is not set
-# CONFIG_PACKAGE_kmod-openvswitch-stt-intree is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan is not set
-# CONFIG_PACKAGE_kmod-openvswitch-vxlan-intree is not set
 CONFIG_PACKAGE_kmod-ovpn-backports=y
 # CONFIG_PACKAGE_kmod-packet-diag is not set
 # CONFIG_PACKAGE_kmod-pf-ring is not set
@@ -5132,7 +5125,6 @@ CONFIG_PACKAGE_python3-multiprocessing=m
 # CONFIG_PACKAGE_python3-mutagen is not set
 CONFIG_PACKAGE_python3-ncurses=m
 # CONFIG_PACKAGE_python3-ncurses-src is not set
-# CONFIG_PACKAGE_python3-netdisco is not set
 # CONFIG_PACKAGE_python3-networkx is not set
 # CONFIG_PACKAGE_python3-newt is not set
 # CONFIG_PACKAGE_python3-numpy is not set
@@ -5320,9 +5312,9 @@ CONFIG_PACKAGE_ucode-mod-uloop=y
 #
 # Compression
 #
-CONFIG_PACKAGE_libbz2=m
+CONFIG_PACKAGE_libbz2=y
 # CONFIG_PACKAGE_liblz4 is not set
-CONFIG_PACKAGE_liblzma=m
+CONFIG_PACKAGE_liblzma=y
 # CONFIG_PACKAGE_libunrar is not set
 # CONFIG_PACKAGE_libzip-gnutls is not set
 # CONFIG_PACKAGE_libzip-mbedtls is not set
@@ -6159,9 +6151,6 @@ CONFIG_PACKAGE_libusbmuxd=y
 # CONFIG_PACKAGE_bind-libs is not set
 # CONFIG_PACKAGE_bluez-libs is not set
 # CONFIG_PACKAGE_boost is not set
-# CONFIG_boost-context-exclude is not set
-# CONFIG_boost-coroutine-exclude is not set
-# CONFIG_boost-fiber-exclude is not set
 # CONFIG_PACKAGE_cJSON is not set
 # CONFIG_PACKAGE_ccid is not set
 # CONFIG_PACKAGE_check is not set
@@ -6209,7 +6198,7 @@ CONFIG_PACKAGE_libaprutil-crypto-openssl=m
 # CONFIG_PACKAGE_libaprutil-dbd-sqlite3 is not set
 # CONFIG_PACKAGE_libaprutil-dbm-gdbm is not set
 CONFIG_PACKAGE_libaprutil-ldap=m
-# CONFIG_PACKAGE_libarchive is not set
+CONFIG_PACKAGE_libarchive=y
 # CONFIG_PACKAGE_libarchive-noopenssl is not set
 # CONFIG_PACKAGE_libasm is not set
 # CONFIG_PACKAGE_libassuan is not set
@@ -6456,6 +6445,7 @@ CONFIG_PACKAGE_libjson-c=y
 # CONFIG_PACKAGE_libkeyutils is not set
 CONFIG_PACKAGE_libkmod=m
 # CONFIG_PACKAGE_libksba is not set
+# CONFIG_PACKAGE_liblcms2 is not set
 # CONFIG_PACKAGE_libldns is not set
 # CONFIG_PACKAGE_libleptonica is not set
 # CONFIG_PACKAGE_libloragw is not set
@@ -6677,6 +6667,7 @@ CONFIG_PACKAGE_libudns=m
 # CONFIG_PACKAGE_libugpio is not set
 CONFIG_PACKAGE_libunistring=y
 # CONFIG_PACKAGE_libunwind is not set
+# CONFIG_PACKAGE_libuplinkdns is not set
 # CONFIG_PACKAGE_libupnp is not set
 # CONFIG_PACKAGE_libupnpp is not set
 # CONFIG_PACKAGE_liburcu is not set
@@ -6961,7 +6952,6 @@ CONFIG_PACKAGE_luci-app-n2n=m
 # CONFIG_PACKAGE_luci-app-omcproxy is not set
 # CONFIG_PACKAGE_luci-app-openclash is not set
 # CONFIG_PACKAGE_luci-app-openlist is not set
-# CONFIG_PACKAGE_luci-app-openthread is not set
 # CONFIG_PACKAGE_luci-app-openvpn-server is not set
 # CONFIG_PACKAGE_luci-app-openwisp is not set
 # CONFIG_PACKAGE_luci-app-oscam is not set
@@ -8171,11 +8161,6 @@ CONFIG_PACKAGE_miniupnpd-nftables=y
 CONFIG_PACKAGE_nftables-json=y
 # CONFIG_PACKAGE_nftables-nojson is not set
 # CONFIG_PACKAGE_openappid is not set
-# CONFIG_PACKAGE_shorewall is not set
-# CONFIG_PACKAGE_shorewall-core is not set
-# CONFIG_PACKAGE_shorewall-lite is not set
-# CONFIG_PACKAGE_shorewall6 is not set
-# CONFIG_PACKAGE_shorewall6-lite is not set
 # CONFIG_PACKAGE_snort3 is not set
 # CONFIG_PACKAGE_xtables-legacy is not set
 CONFIG_PACKAGE_xtables-nft=m
@@ -8504,6 +8489,7 @@ CONFIG_OPENLDAP_DEBUG=y
 # CONFIG_PACKAGE_bird3 is not set
 # CONFIG_PACKAGE_bird3c is not set
 # CONFIG_PACKAGE_bird3cl is not set
+# CONFIG_PACKAGE_bmx7 is not set
 # CONFIG_PACKAGE_cjdns is not set
 # CONFIG_PACKAGE_cjdns-tests is not set
 # CONFIG_PACKAGE_dcb is not set
@@ -8996,6 +8982,7 @@ CONFIG_PACKAGE_uwsgi-syslog-plugin=m
 # CONFIG_PACKAGE_v2ray-plugin is not set
 # CONFIG_PACKAGE_v2raya is not set
 # CONFIG_PACKAGE_xfrpc is not set
+# CONFIG_PACKAGE_xkcptun is not set
 # CONFIG_PACKAGE_xray-plugin is not set
 # end of Web Servers/Proxies
 
@@ -9297,9 +9284,10 @@ CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_openelp is not set
 # CONFIG_PACKAGE_openlist is not set
 # CONFIG_PACKAGE_openthread-br is not set
-# CONFIG_PACKAGE_oscam is not set
 # CONFIG_PACKAGE_oping is not set
+# CONFIG_PACKAGE_oscam is not set
 # CONFIG_PACKAGE_pagekitec is not set
+# CONFIG_PACKAGE_passt is not set
 # CONFIG_PACKAGE_pcapplusplus is not set
 # CONFIG_PACKAGE_pen is not set
 # CONFIG_PACKAGE_phantap is not set
@@ -9434,7 +9422,6 @@ CONFIG_PACKAGE_uclient-fetch=y
 # CONFIG_PACKAGE_v2ray-core is not set
 # CONFIG_PACKAGE_vallumd is not set
 CONFIG_PACKAGE_vlmcsd=m
-# CONFIG_PACKAGE_vnstat is not set
 # CONFIG_PACKAGE_vnstat2 is not set
 # CONFIG_PACKAGE_vxlan is not set
 # CONFIG_PACKAGE_wakeonlan is not set
@@ -9559,7 +9546,7 @@ CONFIG_PACKAGE_uboot-envtools=y
 # Compression
 #
 # CONFIG_PACKAGE_7z is not set
-# CONFIG_PACKAGE_bsdtar is not set
+CONFIG_PACKAGE_bsdtar=y
 # CONFIG_PACKAGE_bsdtar-noopenssl is not set
 # CONFIG_PACKAGE_bzip2 is not set
 # CONFIG_PACKAGE_gzip is not set
@@ -9648,7 +9635,7 @@ CONFIG_PACKAGE_sgdisk=y
 # CONFIG_PACKAGE_micro is not set
 # CONFIG_PACKAGE_nano is not set
 # CONFIG_PACKAGE_nano-full is not set
-# CONFIG_PACKAGE_nano-plus is not set
+# CONFIG_PACKAGE_nano-tiny is not set
 # CONFIG_PACKAGE_vim is not set
 # CONFIG_PACKAGE_vim-full is not set
 # CONFIG_PACKAGE_vim-fuller is not set
@@ -9665,11 +9652,9 @@ CONFIG_PACKAGE_certtool=m
 # CONFIG_PACKAGE_cryptsetup is not set
 # CONFIG_PACKAGE_cryptsetup-ssh is not set
 # CONFIG_PACKAGE_fscrypt is not set
-# CONFIG_PACKAGE_gnupg is not set
 # CONFIG_PACKAGE_gnupg2 is not set
 # CONFIG_PACKAGE_gnupg2-dirmngr is not set
 # CONFIG_PACKAGE_gnutls-utils is not set
-# CONFIG_PACKAGE_gpgv is not set
 # CONFIG_PACKAGE_gpgv2 is not set
 # CONFIG_PACKAGE_integritysetup is not set
 # CONFIG_PACKAGE_keyctl is not set

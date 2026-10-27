@@ -8,14 +8,14 @@
 
 include $(TOPDIR)/rules.mk
 
-# 保留旧名称以兼容你现有的 .config 配置
+# 保留舊名稱以兼容你現有的 .config 配置
 PKG_NAME:=shadowsocks-libev
 PKG_VERSION:=3.3.6
 PKG_RELEASE:=1
 
-# 使用 Git 拉取源码（包含完整的第三方依赖目录）
+# 使用 Git 拉取源碼（包含完整的第三方依賴目錄）
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/shadowsocks/shadowsocks-c.git
+PKG_SOURCE_URL:=https://github.com
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
 PKG_MIRROR_HASH:=skip
 
@@ -28,23 +28,13 @@ PKG_BUILD_PARALLEL:=1
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
+# 保留此定義以相容舊的相依性，但我們不單獨打包它
 define Package/shadowsocks-libev-config
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
-  TITLE:=shadowsocks-libev config scripts
+  TITLE:=shadowsocks-libev config scripts (Dummy)
   URL:=https://github.com
-endef
-
-define Package/shadowsocks-libev-config/conffiles
-/etc/config/shadowsocks-libev
-endef
-
-define Package/shadowsocks-libev-config/install
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/shadowsocks-libev.config $(1)/etc/config/shadowsocks-libev
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/shadowsocks-libev.init $(1)/etc/init.d/shadowsocks-libev
 endef
 
 define Package/shadowsocks-libev/Default
@@ -54,13 +44,19 @@ define Package/shadowsocks-libev/Default
     SUBMENU:=Web Servers/Proxies
     TITLE:=shadowsocks-libev $(1)
     URL:=https://github.com
-    # 【终极修复】：补全所有可能被动态链接的库（包括 libcares 和 libpcre2）
-    DEPENDS:=+libpthread +libev +libmbedtls +libsodium +libpcre2 +libudns +libcares +zlib +shadowsocks-libev-config $(DEPENDS_$(1))
+    # 補全所有可能被動態連結的庫，移除對外部 config 套件的依賴
+    DEPENDS:=+libpthread +libev +libmbedtls +libsodium +libpcre2 +libudns +libcares +zlib $(DEPENDS_$(1))
   endef
 
   define Package/shadowsocks-libev-$(1)/install
 	$$(INSTALL_DIR) $$(1)/usr/bin
 	$$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/bin/$(1) $$(1)/usr/bin
+	
+	# 【核心修正】：讓每個獨立的二進制組件安裝時，都順便塞入啟動腳本與設定檔
+	$$(INSTALL_DIR) $$(1)/etc/config
+	$$(INSTALL_DATA) ./files/shadowsocks-libev.config $$(1)/etc/config/shadowsocks-libev
+	$$(INSTALL_DIR) $$(1)/etc/init.d
+	$$(INSTALL_BIN) ./files/shadowsocks-libev.init $$(1)/etc/init.d/shadowsocks-libev
   endef
 endef
 
@@ -79,7 +75,7 @@ define Package/shadowsocks-libev-ss-rules
   SUBMENU:=Web Servers/Proxies
   TITLE:=shadowsocks-libev ss-rules
   URL:=https://github.com
-  DEPENDS:=+ip +ipset +iptables-mod-tproxy +resolveip +shadowsocks-libev-ss-redir +shadowsocks-libev-config
+  DEPENDS:=+ip +ipset +iptables-mod-tproxy +resolveip +shadowsocks-libev-ss-redir
 endef
 
 define Package/shadowsocks-libev-ss-rules/install
@@ -90,20 +86,20 @@ define Package/shadowsocks-libev-ss-rules/install
 	$(INSTALL_BIN) ./files/ss-rules.defaults $(1)/etc/uci-defaults
 endef
 
-# CMake 编译参数
+# CMake 編譯參數
 CMAKE_OPTIONS += \
-	-DSS_BUILD_EXECUTABLES=ON \
-	-DWITH_EMBEDDED_SRC=ON \
-	-DWITH_STATIC=OFF \
-	-DWITH_DOC_MAN=OFF \
-	-DWITH_DOC_HTML=OFF \
-	-DSS_MINIMAL=OFF
+        -DSS_BUILD_EXECUTABLES=ON \
+        -DWITH_EMBEDDED_SRC=ON \
+        -DWITH_STATIC=OFF \
+        -DWITH_DOC_MAN=OFF \
+        -DWITH_DOC_HTML=OFF \
+        -DSS_MINIMAL=OFF
 
 TARGET_CFLAGS += -flto
 TARGET_LDFLAGS += -Wl,--gc-sections,--as-needed
 
-$(eval $(call BuildPackage,shadowsocks-libev-config))
 $(eval $(call BuildPackage,shadowsocks-libev-ss-rules))
 $(foreach component,$(SHADOWSOCKS_COMPONENTS), \
   $(eval $(call BuildPackage,shadowsocks-libev-$(component))) \
 )
+

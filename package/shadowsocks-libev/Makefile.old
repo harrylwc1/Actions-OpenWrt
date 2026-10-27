@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2017-2020 Yousong Zhou <yszhou4tech@gmail.com>
+# Copyright (C) 2026 Shadowsocks Authors
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,39 +8,32 @@
 
 include $(TOPDIR)/rules.mk
 
-# Checklist when bumping versions
-#
-# - update cipher list by checking src/crypto.c:crypto_init()
-# - check if default mode has changed from being tcp_only
-#
+# 保留旧名称以兼容你现有的 .config 配置
 PKG_NAME:=shadowsocks-libev
-PKG_VERSION:=3.3.5
+PKG_VERSION:=3.3.6
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(PKG_VERSION)
-PKG_HASH:=cfc8eded35360f4b67e18dc447b0c00cddb29cc57a3cec48b135e5fb87433488
+# 使用 Git 拉取源码（包含完整的第三方依赖目录）
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/shadowsocks/shadowsocks-c.git
+PKG_SOURCE_VERSION:=v$(PKG_VERSION)
+PKG_MIRROR_HASH:=skip
 
-PKG_MAINTAINER:=Yousong Zhou <yszhou4tech@gmail.com>
-
+PKG_MAINTAINER:=Shadowsocks Authors
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_LICENSE_FILES:=LICENSE
 
-PKG_FIXUP:=autoreconf
-PKG_INSTALL:=1
-PKG_USE_MIPS16:=0
 PKG_BUILD_PARALLEL:=1
-PKG_BUILD_DEPENDS:=c-ares pcre
 
 include $(INCLUDE_DIR)/package.mk
-
+include $(INCLUDE_DIR)/cmake.mk
 
 define Package/shadowsocks-libev-config
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
   TITLE:=shadowsocks-libev config scripts
-  URL:=https://github.com/shadowsocks/shadowsocks-libev
+  URL:=https://github.com
 endef
 
 define Package/shadowsocks-libev-config/conffiles
@@ -53,26 +47,22 @@ define Package/shadowsocks-libev-config/install
 	$(INSTALL_BIN) ./files/shadowsocks-libev.init $(1)/etc/init.d/shadowsocks-libev
 endef
 
-
 define Package/shadowsocks-libev/Default
   define Package/shadowsocks-libev-$(1)
     SECTION:=net
     CATEGORY:=Network
     SUBMENU:=Web Servers/Proxies
     TITLE:=shadowsocks-libev $(1)
-    URL:=https://github.com/shadowsocks/shadowsocks-libev
-    DEPENDS:=+libev +libmbedtls +libpthread +libsodium +shadowsocks-libev-config $(DEPENDS_$(1))
+    URL:=https://github.com
+    # 【终极修复】：补全所有可能被动态链接的库（包括 libcares 和 libpcre2）
+    DEPENDS:=+libpthread +libev +libmbedtls +libsodium +libpcre2 +libudns +libcares +zlib +shadowsocks-libev-config $(DEPENDS_$(1))
   endef
 
   define Package/shadowsocks-libev-$(1)/install
 	$$(INSTALL_DIR) $$(1)/usr/bin
 	$$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/bin/$(1) $$(1)/usr/bin
   endef
-
 endef
-
-DEPENDS_ss-local = +libpcre
-DEPENDS_ss-server = +libcares +libpcre
 
 SHADOWSOCKS_COMPONENTS:=ss-local ss-redir ss-tunnel ss-server
 define shadowsocks-libev/templates
@@ -88,7 +78,7 @@ define Package/shadowsocks-libev-ss-rules
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
   TITLE:=shadowsocks-libev ss-rules
-  URL:=https://github.com/shadowsocks/shadowsocks-libev
+  URL:=https://github.com
   DEPENDS:=+ip +ipset +iptables-mod-tproxy +resolveip +shadowsocks-libev-ss-redir +shadowsocks-libev-config
 endef
 
@@ -100,31 +90,14 @@ define Package/shadowsocks-libev-ss-rules/install
 	$(INSTALL_BIN) ./files/ss-rules.defaults $(1)/etc/uci-defaults
 endef
 
-define Package/shadowsocks-libev-ss-rules/prerm
-#!/bin/sh
-s=firewall.ss_rules
-uci get "$$s" >/dev/null || exit 0
-uci batch <<-EOF
-	delete $$s
-	commit firewall
-EOF
-endef
-
-define Build/Prepare
-	$(call Build/Prepare/Default)
-	$(FIND) $(PKG_BUILD_DIR) \
-			   -name '*.o' \
-			-o -name '*.lo' \
-			-o -name '.deps' \
-			-o -name '.libs' \
-		| $(XARGS) rm -rvf
-endef
-
-CONFIGURE_ARGS += \
-	--disable-documentation \
-	--disable-silent-rules \
-	--disable-assert \
-	--disable-ssp \
+# CMake 编译参数
+CMAKE_OPTIONS += \
+	-DSS_BUILD_EXECUTABLES=ON \
+	-DWITH_EMBEDDED_SRC=ON \
+	-DWITH_STATIC=OFF \
+	-DWITH_DOC_MAN=OFF \
+	-DWITH_DOC_HTML=OFF \
+	-DSS_MINIMAL=OFF
 
 TARGET_CFLAGS += -flto
 TARGET_LDFLAGS += -Wl,--gc-sections,--as-needed
