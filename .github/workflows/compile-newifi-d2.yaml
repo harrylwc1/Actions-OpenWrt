@@ -31,7 +31,7 @@ on:
     
 env:
   #####change model here ####@# 
-  CONFIG_FILENAME_FOR_2ND_COMPILE: config.newifi-d2
+  CONFIG_FILENAME_FOR_2ND_COMPILE: config.newifi-d2.2
   ROUTER_MODEL: newifi-d2
   TVH: true
   BUILD_KERNEL_MODULES: true
