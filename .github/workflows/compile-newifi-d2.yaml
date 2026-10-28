@@ -304,8 +304,7 @@ jobs:
            sudo rm -rf "$AGENT_TOOLSDIRECTORY"
            #sudo rm -rf $GITHUB_WORKSPACE/lede
            echo cpu core=$(nproc)
-           make -j$(nproc)
-
+           make -j$(nproc) ||  make -j1 V=s 
 
            ##cd ../
            ##cp -f x-wrt/build_dir/target-*/busybox-*/busybox-*/ipkg-install/bin/busybox $DRIVERS_DIR/busybox.$ROUTER_MODEL
