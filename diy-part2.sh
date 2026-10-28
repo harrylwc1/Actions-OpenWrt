@@ -243,8 +243,8 @@ sed -i 's/PKG_VERSION:=4.3.6/PKG_VERSION:=4.3.7/g' $GITHUB_WORKSPACE/x-wrt/feeds
 # 2. 將 PKG_HASH 替換為 4.3.7 對應的正確 Hash 值
 sed -i 's/PKG_HASH:=f100ed80938ff63d305a260b0f0dd32d012ea9b64884b2802d46d862923439b8/PKG_HASH:=47eed73f267fca55946111314f5c94c5/g' $GITHUB_WORKSPACE/x-wrt/feeds/packages/sound/shairport-sync/Makefile
 
-mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/sound/shairport-sync/patches/
-cp  $GITHUB_WORKSPACE/patches/020-ffmpeg7-compatibility.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/sound/shairport-sync/patches/
+#mkdir $GITHUB_WORKSPACE/x-wrt/feeds/packages/sound/shairport-sync/patches/
+#cp  $GITHUB_WORKSPACE/patches/020-ffmpeg7-compatibility.patch $GITHUB_WORKSPACE/x-wrt/feeds/packages/sound/shairport-sync/patches/
 
 #if [ -e $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch ]; then
 #cp $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch $GITHUB_WORKSPACE/x-wrt/target/linux/generic/hack-6.12/
