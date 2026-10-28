@@ -116,26 +116,7 @@ jobs:
       - name: Clear Cache
         if: env.CLEARCACHE == 'true'
         run: |
-          # ---------- 1. 先根据 staging_dir 大小决定 config ----------
-          if [ -d x-wrt/staging_dir ]; then
-            size=$(du -sk x-wrt/staging_dir/ | tail -1 | awk '{print $1}')
-          else
-            size=0
-          fi
 
-          if [ "${size:-0}" -ge 100000 ]; then
-            config_file="x-wrt/config.$ROUTER_MODEL.2"
-            echo "caches restored using config file $config_file"
-            echo "CACHE_RESTORED=TRUE" >> $GITHUB_ENV
-            echo "bin=bin2" >> $GITHUB_ENV
-          else
-            config_file="x-wrt/config.$ROUTER_MODEL.0"
-            echo "caches not found, using config file $config_file"
-            echo "CACHE_RESTORED=FALSE" >> $GITHUB_ENV
-            echo "bin=bin1" >> $GITHUB_ENV
-          fi
-
-          cp "$config_file" "myconfig/$CONFIG_FILENAME_FOR_2ND_COMPILE"
 
           # ---------- 2. 再检查/删除旧缓存 ----------
           gh extension install actions/gh-actions-cache || true
