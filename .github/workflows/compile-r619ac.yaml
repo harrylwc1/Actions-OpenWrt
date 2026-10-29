@@ -459,7 +459,7 @@ jobs:
           # 7. 獲取 Linux 核心版本號（已修正 KERNEL_VER 拼字錯誤）
           echo "=== 正在獲取 KERNEL_VER ==="
                
-          KMOD_FILE=$(find x-wrt/bin/targets -name "*kmod*" | tail -1 || true)
+          KMOD_FILE=$(find x-wrt/bin/targets -name "*kmod-*" | tail -1 || true)
           if [ -n "$KMOD_FILE" ]; then
             echo "$KMOD_FILE" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' > KERNEL_VER
             
