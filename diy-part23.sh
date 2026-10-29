@@ -10,7 +10,7 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-bit="64"
+bit="32"
 cd qsdk
 repo sync
 
