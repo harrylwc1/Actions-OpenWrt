@@ -10,7 +10,7 @@ mkdir compile
 mv fix_repo.sh compile/
 cd compile
 ./fix_repo.sh
-bit="32"
+bit="64"
 cd qsdk
 repo sync
 
@@ -27,6 +27,7 @@ cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.$bit ~/work/Actio
 #cp ~/work/Actions-OpenWrt/Actions-OpenWrt/myconfig/config.qsdk.32bit .config
 cd qsdk
 unzip  ~/work/Actions-OpenWrt/Actions-OpenWrt/iCast.zip -d ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/kernel/
+cp-rf ~/work/Actions-OpenWrt/Actions-OpenWrt/package/rtl8821cu cp ~/work/Actions-OpenWrt/Actions-OpenWrt/compile/qsdk/package/
 make kernel_oldconfig
 make prepare V=s -j4
 make package/iCast/compile V=s -j4
