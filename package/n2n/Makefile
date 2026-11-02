@@ -67,9 +67,9 @@ The supernode for the N2N infrastructure
 endef
 
 define Build/Configure
-        ( cd $(PKG_BUILD_DIR); \
-        ./autogen.sh; \
-        ./configure )
+	( cd $(PKG_BUILD_DIR); \
+	./autogen.sh; \
+	./configure )
 endef
 
 
@@ -78,12 +78,12 @@ define Package/n2n-edge/conffiles
 endef
 
 define Package/n2n-edge/install
-        $(INSTALL_DIR) $(1)/usr/bin
-        $(INSTALL_BIN) $(PKG_BUILD_DIR)/edge $(1)/usr/bin/
-        $(INSTALL_DIR) $(1)/etc/init.d
-        $(INSTALL_BIN) ./files/n2n.init $(1)/etc/init.d/n2n
-        $(INSTALL_DIR) $(1)/etc/config
-        $(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/edge $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/n2n.init $(1)/etc/init.d/n2n
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
 endef
 
 define Package/n2n-supernode
@@ -100,8 +100,8 @@ define Package/n2n-supernode/conffiles
 endef
 
 define Package/n2n-supernode/install
-        $(INSTALL_DIR) $(1)/usr/bin
-        $(INSTALL_BIN) $(PKG_BUILD_DIR)/supernode $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/supernode $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,n2n-edge))
