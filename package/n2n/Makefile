@@ -5,11 +5,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=n2n
-PKG_VERSION:=HEAD
+PKG_VERSION:=0.0.0_git
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 
 # These are defaults for compiling without any environmental overrides
 # (eg, the github action calculates the correct overrides for each build)
@@ -24,9 +24,11 @@ endif
 ifdef N2N_PKG_SOURCE_VERSION
     PKG_SOURCE_VERSION:=$(N2N_PKG_SOURCE_VERSION)
 endif
-ifdef N2N_PKG_VERSION
-    PKG_VERSION:=$(N2N_PKG_VERSION)
-endif
+# Do NOT allow overriding PKG_VERSION with values like HEAD,
+# as apk rejects non-numeric version strings.
+# ifdef N2N_PKG_VERSION
+#     PKG_VERSION:=$(N2N_PKG_VERSION)
+# endif
 
 PKG_MAINTAINER:=Emanuele Faranda <faranda@ntop.org>
 PKG_LICENSE:=GPL3
@@ -65,9 +67,9 @@ The supernode for the N2N infrastructure
 endef
 
 define Build/Configure
-	( cd $(PKG_BUILD_DIR); \
-	./autogen.sh; \
-	./configure )
+        ( cd $(PKG_BUILD_DIR); \
+        ./autogen.sh; \
+        ./configure )
 endef
 
 
@@ -76,12 +78,12 @@ define Package/n2n-edge/conffiles
 endef
 
 define Package/n2n-edge/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/edge $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/n2n.init $(1)/etc/init.d/n2n
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
+        $(INSTALL_DIR) $(1)/usr/bin
+        $(INSTALL_BIN) $(PKG_BUILD_DIR)/edge $(1)/usr/bin/
+        $(INSTALL_DIR) $(1)/etc/init.d
+        $(INSTALL_BIN) ./files/n2n.init $(1)/etc/init.d/n2n
+        $(INSTALL_DIR) $(1)/etc/config
+        $(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
 endef
 
 define Package/n2n-supernode
@@ -98,8 +100,8 @@ define Package/n2n-supernode/conffiles
 endef
 
 define Package/n2n-supernode/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/supernode $(1)/usr/bin/
+        $(INSTALL_DIR) $(1)/usr/bin
+        $(INSTALL_BIN) $(PKG_BUILD_DIR)/supernode $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,n2n-edge))
