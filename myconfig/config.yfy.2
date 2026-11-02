@@ -3002,6 +3002,7 @@ CONFIG_PACKAGE_ipq-wifi-jdcloud_re-cs-06=m
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v1 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v2 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_archer-c60-v3 is not set
+# CONFIG_PACKAGE_ipq-wifi-tplink_deco-m5 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_deco-x80-5g is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_eap225-wall-v2 is not set
 # CONFIG_PACKAGE_ipq-wifi-tplink_eap610-outdoor is not set
@@ -3019,6 +3020,7 @@ CONFIG_PACKAGE_ipq-wifi-jdcloud_re-cs-06=m
 # CONFIG_PACKAGE_ipq-wifi-verizon_cr1000a is not set
 # CONFIG_PACKAGE_ipq-wifi-wallys_dr40x9 is not set
 # CONFIG_PACKAGE_ipq-wifi-wallys_dr5018s is not set
+# CONFIG_PACKAGE_ipq-wifi-wallys_dr6018s is not set
 # CONFIG_PACKAGE_ipq-wifi-xiaomi_aiot-ac2350 is not set
 # CONFIG_PACKAGE_ipq-wifi-xiaomi_ax1800 is not set
 # CONFIG_PACKAGE_ipq-wifi-xiaomi_ax3600 is not set
@@ -3889,7 +3891,6 @@ CONFIG_PACKAGE_kmod-ipt-physdev=m
 # CONFIG_PACKAGE_kmod-ipt-tee is not set
 CONFIG_PACKAGE_kmod-ipt-tproxy=m
 # CONFIG_PACKAGE_kmod-ipt-u32 is not set
-CONFIG_PACKAGE_kmod-iptables=m
 # CONFIG_PACKAGE_kmod-netatop is not set
 CONFIG_PACKAGE_kmod-nf-conncount=y
 CONFIG_PACKAGE_kmod-nf-conntrack=y
@@ -9151,8 +9152,8 @@ CONFIG_PACKAGE_tmate=m
 # CONFIG_PACKAGE_fastd is not set
 # CONFIG_PACKAGE_libreswan is not set
 # CONFIG_PACKAGE_libreswan-nftables is not set
-# CONFIG_PACKAGE_n2n is not set
-# CONFIG_PACKAGE_n2n-utils is not set
+CONFIG_PACKAGE_n2n-edge=m
+CONFIG_PACKAGE_n2n-supernode=m
 # CONFIG_PACKAGE_netbird is not set
 CONFIG_PACKAGE_ocserv=m
 
@@ -11090,4 +11091,4 @@ CONFIG_PACKAGE_usbutils=y
 # end of Font-Utils
 # end of Xorg
 
-CONFIG_OVERRIDE_PKGS="luci-app-filebrowser n2n simple-obfs trojan"
+CONFIG_OVERRIDE_PKGS="luci-app-filebrowser simple-obfs trojan"
