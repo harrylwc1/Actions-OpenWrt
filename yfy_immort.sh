@@ -6,7 +6,7 @@ sudo cp patches/copy_file.sh /usr/bin
 sudo chmod 755 /usr/bin/copy_file.sh
 cp patches/copy_file.sh x-wrt/
 chmod 755 x-wrt/copy_file.sh
-rm -rf $GITHUB_WORKSPACE/package/x-wrt/feeds/packages/net/n2n/
+rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/n2n/
 cp -rf $GITHUB_WORKSPACE/package/n2n $GITHUB_WORKSPACE/x-wrt/package/
 cd x-wrt
 ./scripts/feeds update -a
@@ -177,6 +177,6 @@ unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 cd /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt
 
 sed -i 's/+PACKAGE_icu:icu/+icu/' feeds/packages/net/samba4/Makefile
-rm -rf $GITHUB_WORKSPACE/package/x-wrt/feeds/packages/net/n2n/
+rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/n2n/
 cp -rf $GITHUB_WORKSPACE/package/n2n $GITHUB_WORKSPACE/x-wrt/package/
 exit 0
