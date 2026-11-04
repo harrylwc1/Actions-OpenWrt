@@ -97,9 +97,8 @@ sudo rm -rf  feeds/packages/multimedia/tvheadend/
 #cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/feeds/small/simple-obfs/Makefile
 #cp $GITHUB_WORKSPACE/patches/Makefile.simple-obfs $GITHUB_WORKSPACE/x-wrt/package/simple-obfs/Makefile
 #cp $GITHUB_WORKSPACE/patches/Makefile.ss $GITHUB_WORKSPACE/x-wrt/package/feeds/small/shadowsocks-libev/Makefile
-
-
-
+git clone https://github.com/whzhni1/luci-app-harbor-file-pro.git
+cp -rf luci-app-harbor-file-pro/luci-app-harbor-file-pro $GITHUB_WORKSPACE/x-wrt/package
 TARGET_PATHS="$GITHUB_WORKSPACE/x-wrt/package $GITHUB_WORKSPACE/x-wrt/feeds"
 
 count_hans=0
