@@ -99,6 +99,16 @@ sudo rm -rf  feeds/packages/multimedia/tvheadend/
 #cp $GITHUB_WORKSPACE/patches/Makefile.ss $GITHUB_WORKSPACE/x-wrt/package/feeds/small/shadowsocks-libev/Makefile
 git clone https://github.com/whzhni1/luci-app-harbor-file-pro.git
 cp -rf luci-app-harbor-file-pro/luci-app-harbor-file-pro $GITHUB_WORKSPACE/x-wrt/package
+
+
+# 1. 檢查並安裝 OpenCC
+if ! command -v opencc >/dev/null 2>&1; then
+    echo "找不到 OpenCC。正在安裝..."
+    sudo apt-get update && sudo apt-get install -y opencc
+fi
+
+
+
 TARGET_PATHS="$GITHUB_WORKSPACE/x-wrt/package $GITHUB_WORKSPACE/x-wrt/feeds"
 
 count_hans=0
