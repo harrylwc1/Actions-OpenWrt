@@ -76,6 +76,10 @@ git clone https://github.com/kenzok8/small.git $GITHUB_WORKSPACE/x-wrt/package/s
 sudo rm -rf  $GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/*filebrowser*
 #git clone https://github.com/kenzok78/luci-app-filebrowser.git $GITHUB_WORKSPACE/x-wrt/package/luci-app-filebrowser
 
+git clone https://github.com/whzhni1/luci-app-harbor-file-pro.git
+cp -rf luci-app-harbor-file-pro/luci-app-harbor-file-pro $GITHUB_WORKSPACE/x-wrt/package
+
+
 # ========== luci-app-eqos Makefile ............ ==========
 EQOS_MK="$GITHUB_WORKSPACE/x-wrt/package/openwrt-packages/luci-app-eqos/Makefile"
 if [ -f "$EQOS_MK" ]; then

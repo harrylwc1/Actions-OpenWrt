@@ -91,6 +91,8 @@ if [ $TVH == true ]; then CONFIG_FILE=$CONFIG_FILE0; cp $CONFIG_FILE $myconfig; 
 echo `ls -alt $myconfig`;echo `ls -alt myconfig/config.$ROUTER_MODEL.?`
 #rm -rf  $GITHUB_WORKSPACE/x-wrt/feeds/luci/applications/luci-app-filebrowser
 
+git clone https://github.com/whzhni1/luci-app-harbor-file-pro.git
+cp -rf luci-app-harbor-file-pro/luci-app-harbor-file-pro $GITHUB_WORKSPACE/x-wrt/package
 
 # 1. 檢查並安裝 OpenCC
 if ! command -v opencc >/dev/null 2>&1; then
