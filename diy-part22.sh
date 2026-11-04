@@ -136,7 +136,7 @@ for p in $TARGET_PATHS; do
                     # 建立新資料夾並執行轉換
                     mkdir -p "$(dirname "$d")"
                     echo "轉換中: $s -> $d"
-                    opencc -i "$s" -o "$d" -c s2twp.json
+                    /usr/bin/opencc -i "$s" -o "$d" -c s2twp.json
 
                     # 記錄成功轉換次數
                     if [ "$type" = "hans" ]; then

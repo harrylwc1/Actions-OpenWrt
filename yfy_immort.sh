@@ -132,7 +132,7 @@ for p in $TARGET_PATHS; do
                 else
                     mkdir -p "$(dirname "$d")"
                     echo "轉換中: $s -> $d"
-                    opencc -i "$s" -o "$d" -c s2twp.json
+                    /usr/bin/opencc -i "$s" -o "$d" -c s2twp.json
 
                     if [ "$type" = "hans" ]; then
                         count_hans=$((count_hans + 1))
