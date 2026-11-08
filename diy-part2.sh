@@ -254,6 +254,6 @@ sed -i 's/PKG_HASH:=f100ed80938ff63d305a260b0f0dd32d012ea9b64884b2802d46d8629234
 #cp -f $GITHUB_WORKSPACE/patches/mt7620.mk $GITHUB_WORKSPACE/x-wrt/target/linux/ramips/image/
 sed -i '/define Device\/lenovo_newifi-y1/,/endef/ s/DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2/DEVICE_PACKAGES :=kmod-usb2/' target/linux/ramips/image/mt7620.mk
 if [ "$KERNEL_CONFIG_DIR" = "x-wrt/target/linux/ramips/mt7620" ]; then
-  sed -i '/^[[:space:]]*ppp \\$/d; /^[[:space:]]*ppp-mod-pppoe$/d' include/target.mk
+  sed -i '/^[[:space:]]*ppp \\$/d; /^[[:space:]]*ppp-mod-pppoe$/d'  $GITHUB_WORKSPACE/x-wrt/include/target.mk
 fi
 exit 0
