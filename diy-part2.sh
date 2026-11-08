@@ -251,5 +251,7 @@ sed -i 's/PKG_HASH:=f100ed80938ff63d305a260b0f0dd32d012ea9b64884b2802d46d8629234
 #if [ -e $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch ]; then
 #cp $GITHUB_WORKSPACE/patches/999-Z-0036-dsa-drop-more-bridge-offload.patch $GITHUB_WORKSPACE/x-wrt/target/linux/generic/hack-6.12/
 #fi
-cp -f $GITHUB_WORKSPACE/patches/mt7260.mk $GITHUB_WORKSPACE/x-wrt/target/linux/ramips/image/
+#cp -f $GITHUB_WORKSPACE/patches/mt7620.mk $GITHUB_WORKSPACE/x-wrt/target/linux/ramips/image/
+sed -i '/define Device\/lenovo_newifi-y1/,/endef/ s/DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2/DEVICE_PACKAGES :=kmod-usb2/' target/linux/ramips/image/mt7620.mk
+
 exit 0
