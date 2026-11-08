@@ -378,7 +378,7 @@ jobs:
            sudo rm -rf "$AGENT_TOOLSDIRECTORY"
            #sudo rm -rf $GITHUB_WORKSPACE/lede
            echo cpu core=$(nproc)
-           make -j$(nproc)
+           make -j$(nproc)||  make -j1 V=s 
            
 
            ##cd ../
