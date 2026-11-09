@@ -100,6 +100,16 @@
 	};
 };
 
+/* 【核心修正 1】手動定義 sdhci_pins 群組，避免 dtsi 找不到標籤的問題 */
+&pinctrl {
+	sdhci_pins: sdhci {
+		sdhci {
+			groups = "nd_sd";
+			function = "sdhci";
+		};
+	};
+};
+
 &state_default {
 	gpio {
 		groups = "i2c", "uartf", "rgmii1", "rgmii2", "ephy", "wled";
@@ -122,15 +132,15 @@
 &sdhci {
 	status = "okay";
 
-	/* 【核心修正】指定硬體控制器接管 "sd" 引腳群組 */
+	/* 【核心修正 2】指向我們剛剛手動建立的 sdhci_pins 標籤 */
 	pinctrl-names = "default";
-	pinctrl-0 = <&sd_pins>;
+	pinctrl-0 = <&sdhci_pins>;
 
-	/* 【核心修正】解決電壓報錯的強制參數 */
+	/* 強制 3.3V 電壓配置，解決原先 volts 報錯 */
 	bus-width = <4>;
-	no-1-8-v;    /* 強制跳過 1.8V 探測，只使用 3.3V */
-	disable-wp;  /* 停用硬體寫入保護引腳偵測（Q7 硬體未接） */
-	broken-cd;   /* 啟用軟體定時輪詢偵測卡片（Q7 硬體未接 Card Detect） */
+	no-1-8-v;
+	disable-wp;
+	broken-cd;
 };
 
 &ehci {
