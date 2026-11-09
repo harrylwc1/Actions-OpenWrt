@@ -40,14 +40,6 @@
 			linux,code = <KEY_RESTART>;
 		};
 	};
-
-	reg_3p3v: regulator-3p3v {
-		compatible = "regulator-fixed";
-		regulator-name = "3P3V";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		regulator-always-on;
-	};
 };
 
 &gpio1 {
@@ -110,7 +102,7 @@
 
 &state_default {
 	gpio {
-		groups = "i2c", "uartf", "rgmii1", "rgmii2", "wled";
+		groups = "i2c", "uartf", "rgmii1", "rgmii2", "ephy", "wled";
 		function = "gpio";
 	};
 };
@@ -129,11 +121,16 @@
 
 &sdhci {
 	status = "okay";
+
+	/* 【核心修正】指定硬體控制器接管 "sd" 引腳群組 */
+	pinctrl-names = "default";
+	pinctrl-0 = <&sd_pins>;
+
+	/* 【核心修正】解決電壓報錯的強制參數 */
 	bus-width = <4>;
-	broken-cd;
-	no-1-8-v;
-	vmmc-supply = <&reg_3p3v>;
-	vqmmc-supply = <&reg_3p3v>;
+	no-1-8-v;    /* 強制跳過 1.8V 探測，只使用 3.3V */
+	disable-wp;  /* 停用硬體寫入保護引腳偵測（Q7 硬體未接） */
+	broken-cd;   /* 啟用軟體定時輪詢偵測卡片（Q7 硬體未接 Card Detect） */
 };
 
 &ehci {
@@ -143,3 +140,4 @@
 &ohci {
 	status = "okay";
 };
+
