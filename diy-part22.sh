@@ -40,6 +40,7 @@ sudo rm -rf $GITHUB_WORKSPACE/x-wrt/package/small/clashoo/
 unzip  $GITHUB_WORKSPACE/iCast.zip -d $GITHUB_WORKSPACE/x-wrt/package/kernel/
 unzip  $GITHUB_WORKSPACE/clashoo.zip -d $GITHUB_WORKSPACE/x-wrt/package/small/
 unzip $GITHUB_WORKSPACE/luci-app-filemanager.zip -d $GITHUB_WORKSPACE/x-wrt/package/
+unzip $GITHUB_WORKSPACE/vlmcsd.zip -d $GITHUB_WORKSPACE/x-wrt/package/
 
 #kernel 5.4.154 
 #git checkout 2f04012b20515eec74563de74d0528e603aa6f89
