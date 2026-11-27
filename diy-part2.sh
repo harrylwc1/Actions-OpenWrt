@@ -71,8 +71,9 @@ sed -i 's/10d7c8083482800c816d2a781bfc5b3fe5343d88c1eec2b635c64a9996310c06/7fd5a
 cd $GITHUB_WORKSPACE/x-wrt/feeds/small/v2ray-plugin/
 rm Makefile
 wget https://raw.githubusercontent.com/kenzok8/small/82eac7940f75b6ed59523c728adca179ab001aaf/v2ray-plugin/Makefile
-cp -r $GITHUB_WORKSPACE/lede/feeds/packages/net/vlmcsd/ $GITHUB_WORKSPACE/x-wrt/package/
-cp $GITHUB_WORKSPACE/patches/Makefile.vlmcsd $GITHUB_WORKSPACE/x-wrt/package/vlmcsd/Makefile
+rm -rf $GITHUB_WORKSPACE/x-wrt/package/vlmcsd
+unzip $GITHUB_WORKSPACE/vlmcsd.zip -d $GITHUB_WORKSPACE/x-wrt/package/
+
 cd $GITHUB_WORKSPACE/ 
 cp $GITHUB_WORKSPACE/patches/*.patch $GITHUB_WORKSPACE/x-wrt/
 git clone https://github.com/sbwml/luci-app-alist x-wrt/package/alist
