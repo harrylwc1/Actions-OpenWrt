@@ -1,5 +1,5 @@
 echo "set paste" >> ~/.vimrc
-git clone -b main https://github.com/VIKINGYFY/immortalwrt x-wrt
+git clone https://github.com/VIKINGYFY/immortalwrt x-wrt
 cp myconfig/config.yfy.2 x-wrt/.config
 
 sudo cp patches/copy_file.sh /usr/bin
