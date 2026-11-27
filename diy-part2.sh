@@ -258,5 +258,6 @@ if [ "$KERNEL_CONFIG_DIR" = "x-wrt/target/linux/ramips/mt7620" ]; then
   sed -i '/^[[:space:]]*ppp \\$/d; /^[[:space:]]*ppp-mod-pppoe$/d'  $GITHUB_WORKSPACE/x-wrt/include/target.mk
   #cp $GITHUB_WORKSPACE/patches/mt7620a_zte_q7.dts $GITHUB_WORKSPACE/x-wrt/target/linux/ramips/dts/
 fi
+sed -i 's/TARGET_CFLAGS +=/TARGET_CFLAGS += -Wno-error=unterminated-string-initialization/g' $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/nginx/Makefile
 
 exit 0
