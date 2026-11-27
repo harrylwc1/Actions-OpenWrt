@@ -188,4 +188,6 @@ cd /home/runner/work/Actions-OpenWrt/Actions-OpenWrt/x-wrt
 sed -i 's/+PACKAGE_icu:icu/+icu/' feeds/packages/net/samba4/Makefile
 rm -rf $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/n2n/
 cp -rf $GITHUB_WORKSPACE/package/n2n $GITHUB_WORKSPACE/x-wrt/package/
+sed -i 's/TARGET_CFLAGS +=/TARGET_CFLAGS += -Wno-error=unterminated-string-initialization/g' $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/nginx/Makefile
+
 exit 0
