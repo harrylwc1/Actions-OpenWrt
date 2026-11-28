@@ -260,4 +260,15 @@ if [ "$KERNEL_CONFIG_DIR" = "x-wrt/target/linux/ramips/mt7620" ]; then
 fi
 sed -i 's/TARGET_CFLAGS +=/TARGET_CFLAGS += -Wno-error=unterminated-string-initialization/g' $GITHUB_WORKSPACE/x-wrt/feeds/packages/net/nginx/Makefile
 
+cd  $GITHUB_WORKSPACE/x-wrt
+
+# 修复 protobuf-29.5 在 MIPS (GCC 15) 下 [[clang::musttail]] 尾调用编译报错
+cat << 'EOF' >> feeds/packages/libs/protobuf/protobuf/Makefile
+
+define Hooks/ProtobufFixMusttail
+	find $(PKG_BUILD_DIR)/src -type f -exec sed -i 's/\[\[clang::musttail\]\]//g' {} +
+endef
+Hooks/Prepare/Post += Hooks/ProtobufFixMusttail
+EOF
+
 exit 0
