@@ -262,13 +262,17 @@ sed -i 's/TARGET_CFLAGS +=/TARGET_CFLAGS += -Wno-error=unterminated-string-initi
 
 cd  $GITHUB_WORKSPACE/x-wrt
 
-# 修复 protobuf-29.5 在 MIPS (GCC 15) 下 [[clang::musttail]] 尾调用编译报错
-cat << 'EOF' >> feeds/packages/libs/protobuf/protobuf/Makefile
+# 修复 protobuf 在 MIPS/MIPSEL 架构下的编译报错（自动创建补丁或提前修改源码）
+if [ -f "feeds/packages/libs/protobuf/protobuf/Makefile" ]; then
+  # 1. 如果存在旧的编译缓存，先清理
+  rm -rf build_dir/target-mips*/protobuf-*
 
-define Hooks/ProtobufFixMusttail
-	find $(PKG_BUILD_DIR)/src -type f -exec sed -i 's/\[\[clang::musttail\]\]//g' {} +
-endef
-Hooks/Prepare/Post += Hooks/ProtobufFixMusttail
-EOF
+  # 2. 直接在 diy-part2.sh 阶段触发解压并替换 [[clang::musttail]]
+  if grep -qE "^CONFIG_(mips|mipsel)=y" .config; then
+    make package/protobuf/prepare -j1
+    find build_dir/target-mips*/protobuf-*/src -type f -exec sed -i 's/\[\[clang::musttail\]\]//g' {} +
+  fi
+fi
+
 
 exit 0
